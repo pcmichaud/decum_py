@@ -144,12 +144,12 @@ def reimburse_loan(benfs,prices,p_h,dims,rates):
     return b_its
 
 def load_house_prices(file_d='house_prices_real.csv',file_b='home_values.csv'):
-    df = pd.read_csv('inputs/'+file_d,header=None)
+    df = pd.read_csv('inputs/'+file_d)
     df.columns = ['cma_name','g','sig','pval']
     df = df.drop(labels='pval',axis=1)
     df['cma'] = np.arange(1,12)
     df.set_index('cma',inplace=True)
-    df_b = pd.read_csv('inputs/'+file_b,header=None)
+    df_b = pd.read_csv('inputs/'+file_b)
     df_b.columns = ['cma','base_value']
     df_b.set_index('cma',inplace=True)
     df = df.merge(df_b,left_index=True,right_index=True,how='left')

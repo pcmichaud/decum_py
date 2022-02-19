@@ -76,7 +76,7 @@ def solve_df(npartitions=4):
     # load data
     data = init_data()
     data[['value_'+str(x) for x in range(13)]] = np.nan
-    data = data.iloc[:24,:]
+    data = data.iloc[:8,:]
     #data = data.iloc[0,:]
     #data = func(data)
     list_df = np.array_split(data, npartitions)

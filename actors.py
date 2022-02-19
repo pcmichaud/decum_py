@@ -81,7 +81,7 @@ def load_shifters(file='pf_rp.csv'):
     df = pd.read_csv('inputs/'+file,dtype=dtypes)
     df.set_index('respid',inplace=True)
     return df
-def load_survival(file='expectations.csv'):
+def load_survival(file='survival_expectations.csv'):
     dtypes = {'respid':'Int64','xi':'float64',
               'xi_sp':'float64','miss_psurv85':'Int64',
               'sp_miss_psurv85':'Int64'}
@@ -125,7 +125,6 @@ def load_hp(file='hp.csv'):
 
 def load_hp_sp(file='hp_sp.csv'):
     df = pd.read_csv('inputs/'+file)
-    df = df.rename({'id':'respid'},axis=1)
     df.set_index('respid',inplace=True)
     df = df[df['gamma(2,1)']!=-9.0]
     return df
