@@ -53,7 +53,7 @@ class set_prefs(object):
                  beq_money=0, pref_home=0):
         self.varepsilon = varepsilon
         if live_fast==1:
-            self.varepsilon += d_varepsilon
+            self.varepsilon -= d_varepsilon
         self.gamma = gamma
         if risk_averse==1:
             self.gamma += d_gamma

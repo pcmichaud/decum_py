@@ -10,7 +10,7 @@ def init_data():
     df_hp, df_hp_sp, df_survival_bias = load_survival()
     df_house_bias = load_house_expectations()
     # parameters of the scenarios
-    df_prices, df_benfs = load_scenarios()
+    df_prices, df_benfs, df_probs = load_scenarios()
     # merge datasets
     df = df_hh.merge(df_rp,left_index=True,right_index=True,how='left')
     df = df.merge(df_sp,left_index=True,right_index=True,how='left')
@@ -23,6 +23,7 @@ def init_data():
     df = df.merge(df_house_bias,left_index=True,right_index=True,how='left')
     df = df.merge(df_prices,left_index=True,right_index=True,how='left')
     df = df.merge(df_benfs,left_index=True,right_index=True,how='left')
+    df = df.merge(df_probs,left_index=True,right_index=True,how='left')
     # assign costs
     df_nh, df_hc = load_costs()
     df_house_prices = load_house_prices()
@@ -98,7 +99,8 @@ def load_house_expectations(file='house_expectations.csv'):
     df = pd.read_csv('inputs/'+file)
     df.set_index('respid',inplace=True)
     return df
-def load_scenarios(price_file='prices.csv',benfs_file='benefits.csv'):
+def load_scenarios(price_file='prices.csv',benfs_file='benefits.csv', 
+        probs_file='prob.csv'):
     df_prices = pd.read_csv('inputs/'+price_file)
     df_prices.set_index('respid',inplace=True)
     for c in df_prices.columns:
@@ -110,13 +112,18 @@ def load_scenarios(price_file='prices.csv',benfs_file='benefits.csv'):
     for c in df_benfs.columns:
             df_benfs[c] = np.where(df_benfs[c]==-999, 0, df_benfs[c])
             df_benfs[c] *= 1e-3
-    return df_prices, df_benfs
+    df_probs = pd.read_csv('inputs/'+probs_file)
+    df_probs.set_index('respid',inplace=True)
+    for c in df_probs.columns:
+        df_probs[c] = np.where(df_probs[c]==-999,np.nan,df_probs[c])
+        df_probs[c] = np.where(df_probs[c]==0,0.01,df_probs[c])
+        df_probs[c] = np.where(df_probs[c]==1,0.99,df_probs[c])
+    return df_prices, df_benfs, df_probs
 
 def load_know(file='know.csv'):
     df = pd.read_csv('inputs/'+file,dtype='Int64')
     df.set_index('respid',inplace=True)
     return df
-
 def load_hp(file='hp.csv'):
     df = pd.read_csv('inputs/'+file)
     df = df.rename({'id':'respid'},axis=1)

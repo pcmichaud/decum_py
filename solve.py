@@ -7,7 +7,7 @@ from numba import njit, float64, int64
 from numba.types import Tuple
 
 def setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp, surv_bias,
-                  sp_surv_bias):
+                  sp_surv_bias,miss_par=0.0,sp_miss_par=0.0):
     # create rates
     n = 5
     rates = set_rates(n)
@@ -32,12 +32,12 @@ def setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp, surv_bias,
     # health transitions
     gammas, deltas = parse_surv(hp)
     q1 = transition_rates(rp['age'], gammas, deltas, surv_bias['xi'],
-                          surv_bias['miss_psurv85'], 0.0, dims.T)
+                          surv_bias['miss_psurv85'], miss_par, dims.T)
     if hh['married'] == 1:
         gammas, deltas = parse_surv(hp_sp)
         q1_sp = transition_rates(sp['sp_age'], gammas, deltas,
                                  sp_surv_bias['xi_sp'],
-                                 sp_surv_bias['sp_miss_psurv85'], 0.0, dims.T)
+                                 sp_surv_bias['sp_miss_psurv85'], sp_miss_par, dims.T)
         q1_ij = joint_surv_rates(q1, q1_sp, dims.n_s, dims.T)
     else :
         q1_ij = q1[:, :, :]
@@ -179,7 +179,7 @@ def v_t_fun_eu(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
             parallel=False, cache=True)
 def core_t_fun(p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij, married,
                base_value, dims, rates, prefs, prices, benfs):
-    tol = 1e-5
+    tol = 1e-3
     r = 0.61803399
     c = 1-r
     vs = np.empty(dims.n_adm,dtype=np.float64)
@@ -375,7 +375,7 @@ def v_fun_eu(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
 def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij,
              qs_ij, married, base_value, dims, rates,
              prefs, prices, benfs, nextv):
-    tol = 1e-5
+    tol = 1e-3
     r = 0.61803399
     c = 1-r
     vs = np.empty(dims.n_adm,dtype=np.float64)
