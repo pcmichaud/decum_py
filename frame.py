@@ -3,7 +3,7 @@ import multiprocessing as mp
 from functools import partial
 
 def func_solve(row,theta):
-    n = 1
+    n = 5
     hh = dict(row[['wgt','cma','married','own','wealth_total',
                    'mort_balance','home_value']])
     rp = dict(row[['age','totinc','retinc','hlth']])
