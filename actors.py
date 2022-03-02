@@ -8,7 +8,10 @@ def init_data():
     df_shifters = load_shifters()
     df_know = load_know()
     df_hp, df_hp_sp, df_survival_bias = load_survival()
+
     df_house_bias = load_house_expectations()
+
+
     # parameters of the scenarios
     df_prices, df_benfs, df_probs = load_scenarios()
     # merge datasets
@@ -75,7 +78,6 @@ def load_sp(file='sp.csv'):
     df['sp_totinc'] *= 1e-3
     df['sp_retinc'] *= 1e-3
     return df
-
 def load_shifters(file='pf_rp.csv'):
     dtypes = {'respid':'Int64','pref_beq_money':'Int64',
               'pref_home':'Int64','pref_live_fast':'Int64','pref_risk_averse':'Int64'}
@@ -90,6 +92,7 @@ def load_survival(file='survival_expectations.csv'):
     df.set_index('respid',inplace=True)
     for c in ['xi','xi_sp']:
         df[c] = np.where(df[c]==-9.0,np.nan,df[c])
+        df[c] = df[c].clip(lower=-5.0,upper=5.0)
     for c in ['miss_psurv85','sp_miss_psurv85']:
         df[c] = np.where(df[c]==-9.0,np.nan,df[c])
     df_hp = load_hp()
@@ -98,6 +101,8 @@ def load_survival(file='survival_expectations.csv'):
 def load_house_expectations(file='house_expectations.csv'):
     df = pd.read_csv('inputs/'+file)
     df.set_index('respid',inplace=True)
+    df['mu'] = df['mu'].clip(upper=1.5)
+    df['zeta'] = df['zeta'].clip(upper=1.5)
     return df
 def load_scenarios(price_file='prices.csv',benfs_file='benefits.csv', 
         probs_file='prob.csv'):

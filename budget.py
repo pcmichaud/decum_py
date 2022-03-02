@@ -31,9 +31,9 @@ spec_rates = [
 class set_rates(object):
     def __init__(self, n, rate=0.03, r_r=0.0949, r_d=0.017, r_h=0.01,
               xi_d=0.9622,phi_d = 0.1,x_min = 18.2, tau_s0 = 1.5,tau_s1 = 0.05,
-              tau_b0 = 0.5,tau_b1 = 0.01,omega_d = 0.65,omega_rm = 0.55,
+              tau_b0 = 0.5,tau_b1 = 0.01,omega_d = 0.65, omega_rm = 0.55,
               omega_r = 0.329, omega_h0 = 0.65,omega_h1 = 0.8,
-              phi = 0.035,eqscale = 0.55):
+              phi = 0.035, eqscale = 0.55):
         self.rate = rate * float(n)
         self.r_r = r_r * float(n)
         self.r_d = r_d * float(n)
@@ -47,10 +47,10 @@ class set_rates(object):
         self.tau_b0 = tau_b0
         self.tau_b1 = tau_b1
         self.omega_d = omega_d
-        self.omega_rm = omega_rm
+        self.omega_rm = 0.0 #omega_rm
         self.omega_r = omega_r
-        self.omega_h0 = omega_h0
-        self.omega_h1 = omega_h1
+        self.omega_h0 = 0.0 #omega_h0
+        self.omega_h1 = 0.0 #omega_h1
         self.eqscale = eqscale
         return
 
@@ -118,7 +118,7 @@ def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
         if s_i == 2:
             z += dims.n * benfs.ltc
         if s_i < 2:
-            z += dims.n * prices.ltc
+            z -= dims.n * prices.ltc
     x = w0 + w_h + y + z - med
     x_back = x
     x_f = 0.0

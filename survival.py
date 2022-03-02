@@ -57,19 +57,18 @@ def joint_surv_rates(q1, q1_sp, n_s, T):
     qs_ij = np.zeros((n_s, n_s, T),
                      dtype=np.float64)
     for i in range(T):
-        for j in range(4):
-            for k in range(4):
-                qs_ij[j*4:j*4 + 4,k*4:k*4 + 4,i] = q1[j, k, i] * q1_sp[:, :, i]
+        qs_ij[:,:,i] = np.kron(q1[:,:,i],q1_sp[:,:,i])
     return qs_ij
 
 def adjust_surv(q, time_t, n_s, T, n):
     qs = np.zeros((n_s, n_s, T), dtype=np.float64)
     for i in range(len(time_t)):
         k = time_t[i]
-        qs[:,:,k] = q[:, :, k]
-        for j in range(k + 1,k + n):
-            qs[:, :, k] = qs[:, :, k] @ q[:, :, j]
-    qs[:, n_s-1, -1:] = 1.0
+        qs[: , :,k] = q[:, :, k]
+        for j in range(n):
+            qs[:, :, k] = qs[:, :, k] @ q[:, :, k + j]
+    qs[:, n_s-1, T-1] = 1.0
+    qs[:, :n_s-1,T-1] = 0.0
     return qs
 
 

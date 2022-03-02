@@ -44,12 +44,13 @@ spec_prefs = [
     ('beta',float64)
 ]
 
+
 @jitclass(spec_prefs)
 class set_prefs(object):
-    def __init__(self, varepsilon= 8.0, d_varepsilon=0.0, gamma = 0.4,
-                d_gamma=0.0, rho = 0.85, b_x = 0.04, d_b_x = 0.0, b_k = 150.0,
-                 nu_c0 = 1.0, nu_c1 = 0.5, nu_c2 = 0.32, nu_h0 = 3.0, nu_h1 =
-                 0.2, d_nu_h = 0.0, beta = 0.97, live_fast=0, risk_averse=0,
+    def __init__(self, varepsilon= 4.0, d_varepsilon=1.0, gamma = 0.5,
+                d_gamma=1.5, rho = 0.7, b_x = 0.0, d_b_x = 5.0, b_k = 110.7,
+                 nu_c0 = 1.0, nu_c1 = 0.5, nu_c2 = 0.32, nu_h0 = 1.0, nu_h1 =
+                 0.3, d_nu_h = 0.5, beta = 0.97, live_fast=0, risk_averse=0,
                  beq_money=0, pref_home=0):
         self.varepsilon = varepsilon
         if live_fast==1:

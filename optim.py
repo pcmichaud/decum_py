@@ -1,6 +1,6 @@
 import pandas as pd  
 from frame import *
-from statsmodels.regression.linear_model import OLS as ols
+import statsmodels.api as sm
 
 def within_difference(data):
 	mean_data = data.mean(axis=1)
@@ -75,7 +75,7 @@ def extract_pars(theta):
 	return pars 
 
 
-def concentrated_distance(theta, grad, data, npartitions=50):	
+def concentrated_distance_within(theta, grad, data, npartitions=50):	
 	# get params 
 	pars = extract_pars(theta)
 	# get dataset with solved expected utilities
@@ -114,21 +114,70 @@ def concentrated_distance(theta, grad, data, npartitions=50):
 	sum_distance = 0.0
 	y = df.loc[~df['w_odd_1'].isna(),['w_odd_'+str(s) for s in range(1,5)]].stack().values
 	X = df.loc[~df['w_odd_1'].isna(),['w_value_'+str(s) for s in range(1,5)]].stack().values
-	model = ols(y,X,missing='drop')
+	model = sm.OLS(y,X,missing='drop')
 	results = model.fit()
 	sigmas[0] = results.params[0]
 	sum_distance += results.ssr
 	y = df.loc[~df['w_odd_5'].isna(),['w_odd_'+str(s) for s in range(5,9)]].stack().values
 	X = df.loc[~df['w_odd_5'].isna(),['w_value_'+str(s) for s in range(5,9)]].stack().values
-	model = ols(y,X,missing='drop')
+	model = sm.OLS(y,X,missing='drop')
 	results = model.fit()
 	sigmas[1] = results.params[0]
 	sum_distance += results.ssr
 	y = df.loc[~df['w_odd_9'].isna(),['w_odd_'+str(s) for s in range(9,12)]].stack().values
 	X = df.loc[~df['w_odd_9'].isna(),['w_value_'+str(s) for s in range(9,12)]].stack().values
-	model = ols(y,X,missing='drop')
+	model = sm.OLS(y,X,missing='drop')
 	results = model.fit()
 	sigmas[2] = results.params[0]
+	sum_distance += results.ssr
+	print('- function call summary')
+	print('ssd = ', sum_distance, ' sigmas = ',sigmas)
+	print('pars = ',pars)
+	return sum_distance 
+
+def concentrated_distance_levels(theta, grad, data, npartitions=50):	
+	# get params 
+	pars = extract_pars(theta)
+	# get dataset with solved expected utilities
+	df = solve_df(data, npartitions=npartitions, theta=pars)
+	# take difference in value with respect to baseline 
+	scns = [s for s in range(1,13)]
+	for s in scns:
+		df['d_value_'+str(s)] = df['value_'+str(s)] - df['value_0']
+	# take exp odds transform of probabilities
+	s = 1
+	for i in range(1,5):
+		df['odd_'+str(s)] = np.log(df['prob_scn_ann_'+str(i)])/(1.0 - df['prob_scn_ann_'+str(i)])
+		s += 1
+	for i in range(1,5):
+		df['odd_'+str(s)] = np.log(df['prob_scn_ltci_'+str(i)])/(1.0 - df['prob_scn_ltci_'+str(i)])
+		s += 1
+	for i in range(1,5):
+		df['odd_'+str(s)] = np.log(df['prob_scn_rmr_'+str(i)])/(1.0 - df['prob_scn_rmr_'+str(i)])
+		s += 1
+	# perform OLS to obtain estimates of sigma per product
+	sigmas = [0.0,0.0,0.0]
+	sum_distance = 0.0
+	y = df.loc[~df['odd_1'].isna(),['odd_'+str(s) for s in range(1,5)]].stack().values
+	X = df.loc[~df['odd_1'].isna(),['d_value_'+str(s) for s in range(1,5)]].stack().values
+	X = sm.add_constant(X)
+	model = sm.OLS(y,X,missing='drop')
+	results = model.fit()
+	sigmas[0] = results.params[1]
+	sum_distance += results.ssr
+	y = df.loc[~df['odd_5'].isna(),['odd_'+str(s) for s in range(5,9)]].stack().values
+	X = df.loc[~df['odd_5'].isna(),['d_value_'+str(s) for s in range(5,9)]].stack().values
+	X = sm.add_constant(X)
+	model = sm.OLS(y,X,missing='drop')
+	results = model.fit()
+	sigmas[1] = results.params[1]
+	sum_distance += results.ssr
+	y = df.loc[~df['odd_9'].isna(),['odd_'+str(s) for s in range(9,12)]].stack().values
+	X = df.loc[~df['odd_9'].isna(),['d_value_'+str(s) for s in range(9,12)]].stack().values
+	X = sm.add_constant(X)
+	model = sm.OLS(y,X,missing='drop')
+	results = model.fit()
+	sigmas[2] = results.params[1]
 	sum_distance += results.ssr
 	print('- function call summary')
 	print('ssd = ', sum_distance, ' sigmas = ',sigmas)

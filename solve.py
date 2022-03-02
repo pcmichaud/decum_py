@@ -7,9 +7,8 @@ from numba import njit, float64, int64
 from numba.types import Tuple
 
 def setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp, surv_bias,
-                  sp_surv_bias,miss_par=0.0,sp_miss_par=0.0):
+                  sp_surv_bias,miss_par=0.0,sp_miss_par=0.0, n = 5):
     # create rates
-    n = 5
     rates = set_rates(n)
     # create dimensions
     dims = set_dims(hh['married'], rates.omega_d, n = n)
@@ -44,12 +43,132 @@ def setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp, surv_bias,
     qs_ij = adjust_surv(q1_ij, dims.time_t, dims.n_s, dims.T, dims.n)
     return p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates
 
+def get_rules(hh, rp, sp, base_value, prices, benfs,
+              p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its, nu_ij_c, nu_ij_h,
+              rates, dims, prefs):
+    v_t = np.zeros((dims.n_states, dims.T),dtype='float64')
+    c_t = np.zeros((dims.n_states, 2, dims.T),dtype='float64')
+    condv_t = np.zeros((dims.n_states, 2, dims.T),dtype='float64')
+
+    # solve final year for admissible states
+    v_last, c_last, condv_last = core_t_fun(p_h, p_r, b_its,
+                f_h, nu_ij_c, nu_ij_h, med_ij, y_ij, hh['married'],
+                base_value, dims, rates, prefs, prices, benfs)
+    # map those to all states
+    v_t[dims.to_states[:],dims.t_last] = v_last[:]
+    c_t[dims.to_states[:],0,dims.t_last] = c_last[:,0]
+    c_t[dims.to_states[:],1,dims.t_last] = c_last[:,1]
+    condv_t[dims.to_states[:],0,dims.t_last] = condv_last[:,0]
+    condv_t[dims.to_states[:],1,dims.t_last] = condv_last[:,1]
+    # solve remaining years
+    for i in reversed(range(dims.nper-1)):
+        j = dims.time_t[i]
+        #print(i,j,j+dims.n)
+        nextv = v_t[:,j+dims.n].reshape((dims.n_d,dims.n_w,dims.n_s,
+                                          dims.n_e,2),order='F')
+        v_last, c_last, condv_last = core_fun(j, p_h, p_r,b_its,
+                f_h, nu_ij_c, nu_ij_h, med_ij, y_ij, qs_ij, hh['married'],
+                base_value, dims, rates, prefs, prices, benfs, nextv)
+        v_t[dims.to_states[:],j] = v_last[:]
+        c_t[dims.to_states[:],0,j] = c_last[:,0]
+        c_t[dims.to_states[:],1,j] = c_last[:,1]
+        condv_t[dims.to_states[:],0,j] = condv_last[:,0]
+        condv_t[dims.to_states[:],1,j] = condv_last[:,1]
+    return c_t, condv_t
+
+def get_sim_path(cons_rules, cond_values, hh, rp, sp, base_value, prices, benfs,
+              p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its, nu_ij_c, nu_ij_h,
+              rates, dims, prefs):
+    # for solution, set array for path
+    cons_path = np.empty(dims.nper,dtype=np.float64)
+    cons_path[:] = np.nan 
+    own_path = np.empty(dims.nper,dtype=np.float64)
+    own_path[:] = np.nan
+    wlth_path = np.empty(dims.nper,dtype=np.float64)
+    wlth_path[:] = np.nan
+    # find current state
+    i_h = hh['own']
+    i_e = 2
+    i_s = rp['hlth']-1
+    d_t = hh['mort_balance']
+    w_t = hh['wealth_total']
+    if hh['married']==1:
+        i_s = i_s * 4 + sp['sp_hlth'] - 1
+    vopt = np.zeros(2,dtype=np.float64) 
+    copt = np.zeros(2,dtype=np.float64) 
+    sub = np.empty((2,2),dtype=np.float64)
+    for i in range(dims.nper):
+        t = dims.time_t[i]   
+        # figure out where in continuous space
+        if i_h==1:
+            d_low, d_up, du = scale(d_t, dims.d_h[:,i_e,t])
+        else :
+            d_low = 0
+            d_up = 0
+            du = 0.0
+        ww_space = dims.w_space[d_low,:,i_s,i_e,i_h,t]
+        w_low, w_up, wu = scale(w_t,ww_space)
+        wlth_path[i] = w_t
+        # get decisions by interpolation over continuous state 
+        for i_hh in range(2):
+            v = cond_values[:,i_hh, t].reshape((dims.n_d, dims.n_w, dims.n_s,
+                                            dims.n_e, 2),order='F')
+            sub[0,0] = v[d_low,w_low,i_s,i_e,i_h]
+            sub[0,1] = v[d_low,w_up,i_s,i_e,i_h]
+            sub[1,0] = v[d_up,w_low,i_s,i_e,i_h]
+            sub[1,1] = v[d_up,w_up,i_s,i_e,i_h]  
+            vopt[i_hh] = interp2d(du, wu, sub)  
+        if vopt[1] > vopt[0]:
+            own_path[i] = 1
+        else :
+            own_path[i] = 0 
+        c = cons_rules[:,int(own_path[i]), t].reshape((dims.n_d, dims.n_w, dims.n_s,
+                                            dims.n_e, 2),order='F')
+        sub[0,0] = c[d_low,w_low,i_s,i_e,i_h]
+        sub[0,1] = c[d_low,w_up,i_s,i_e,i_h]
+        sub[1,0] = c[d_up,w_low,i_s,i_e,i_h]
+        sub[1,1] = c[d_up,w_up,i_s,i_e,i_h]      
+        cons_path[i] = interp2d(du, wu, sub)
+        # update state to next year
+        i_hh = int(own_path[i])
+        # update wealth 
+        cash = x_fun(d_t,w_t,i_h,dims.s_i[i_s],dims.s_j[i_s],hh['married'],i_hh,
+                t, p_h[i_e,t],p_r[i_e,t], b_its[i_e,t], med_ij[i_s], y_ij[i_s,t],
+                dims,rates, prices, benfs)
+        w_p = cash[0] - cons_path[i]
+        if w_p >= 0.0:
+            w_p *= np.exp(rates.rate)
+        else :
+            r_b = i_h*rates.r_h + (1.0-i_h)*rates.r_r
+            w_p *= np.exp(r_b)
+        # update mortgage
+        d_p = i_hh*(rates.xi_d*i_h*d_t
+                    + (1.0 - i_h)*rates.omega_d*p_h[i_e,t])  
+        # change in house price shock
+        i_ee = np.random.choice(np.arange(dims.n_e),p=f_h)      
+        # determine change in health state 
+        q_ss = qs_ij[i_s,:,t]
+        i_ss = np.random.choice(dims.s_ij,p=q_ss)
+        if i_ss==(dims.n_s-1):
+            # check if household stil exist
+            break 
+        else :
+            # make switch, given survival
+            i_h = i_hh 
+            i_e = i_ee 
+            i_s = i_ss 
+            w_t = w_p 
+            d_t = d_p 
+
+    return cons_path, own_path, wlth_path
+
+    
 def get_value(hh, rp, sp, base_value, prices, benfs,
               p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its, nu_ij_c, nu_ij_h,
               rates, dims, prefs):
     v_t = np.zeros((dims.n_states, dims.T),dtype='float64')
     # solve final year for admissible states
-    v_last = core_t_fun(p_h, p_r, b_its,
+    v_last = core_t_fun_fast(p_h, p_r, b_its,
                 f_h, nu_ij_c, nu_ij_h, med_ij, y_ij, hh['married'],
                 base_value, dims, rates, prefs, prices, benfs)
     # map those to all states
@@ -60,7 +179,7 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
         #print(i,j,j+dims.n)
         nextv = v_t[:,j+dims.n].reshape((dims.n_d,dims.n_w,dims.n_s,
                                           dims.n_e,2),order='F')
-        v_last = core_fun(j, p_h, p_r,b_its,
+        v_last = core_fun_fast(j, p_h, p_r,b_its,
                 f_h, nu_ij_c, nu_ij_h, med_ij, y_ij, qs_ij, hh['married'],
                 base_value, dims, rates, prefs, prices, benfs, nextv)
         v_t[dims.to_states[:],j] = v_last[:]
@@ -177,9 +296,9 @@ def v_t_fun_eu(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
             set_prices.class_type.instance_type,
             set_benfs.class_type.instance_type), fastmath=True,
             parallel=False, cache=True)
-def core_t_fun(p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij, married,
+def core_t_fun_fast(p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij, married,
                base_value, dims, rates, prefs, prices, benfs):
-    tol = 1e-3
+    tol = 1e-4
     r = 0.61803399
     c = 1-r
     vs = np.empty(dims.n_adm,dtype=np.float64)
@@ -258,6 +377,109 @@ def core_t_fun(p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij, married,
         else :
             vs[z] = vopt[0]
     return vs
+
+@njit(Tuple((float64[:],float64[:,:],float64[:,:]))(float64[:,:],
+            float64[:,:],float64[:,:],float64[:],float64[:],
+            float64[:],float64[:], float64[:,:],int64, float64,
+            set_dims.class_type.instance_type,
+            set_rates.class_type.instance_type,
+            set_prefs.class_type.instance_type,
+            set_prices.class_type.instance_type,
+            set_benfs.class_type.instance_type), fastmath=True,
+            parallel=False, cache=True)
+def core_t_fun(p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij, married,
+               base_value, dims, rates, prefs, prices, benfs):
+    tol = 1e-4
+    r = 0.61803399
+    c = 1-r
+    vs = np.empty(dims.n_adm,dtype=np.float64)
+    condvs = np.empty((dims.n_adm,2),dtype=np.float64)
+    cs = np.empty((dims.n_adm,2),dtype=np.float64)
+    vopt = np.empty(2, dtype=np.float64)
+    copt = np.empty(2, dtype=np.float64)
+    for z in range(dims.n_adm):
+        i_d = dims.adm[z,0]
+        i_w = dims.adm[z,1]
+        i_s = dims.adm[z,2]
+        i_e = dims.adm[z,3]
+        i_h = dims.adm[z,4]
+        t_last = dims.t_last
+        d0 = dims.d_h[i_d, i_e, t_last]
+        w0 = dims.w_space[i_d, i_w, i_s, i_e, i_h, t_last]
+        vopt[:] = 0.0
+        copt[:] = 0.0 
+        for i_hh in range(2):
+            if dims.ij_h[i_s]==0 and i_hh==1:
+                continue
+            cash = x_fun(d0,w0,i_h,dims.s_i[i_s],dims.s_j[i_s],married,i_hh,
+                         t_last, p_h[i_e,t_last],p_r[i_e,t_last],
+                         b_its[i_e,t_last], med_ij[i_s],y_ij[i_s,t_last],
+                         dims,rates,prices, benfs)
+            if i_h==0:
+                x_w = rates.omega_r * y_ij[i_s,t_last]
+                r_b = rates.r_r
+            else :
+                x_w = min(rates.omega_h0*p_h[i_e,t_last],
+                          rates.omega_h1*max(p_h[i_e,t_last]-d0,0.0))
+                r_b = rates.r_h
+            c_max = max(x_w*np.exp(-r_b) + cash[0],0.0)
+            afford = 1
+            if c_max <= 0.0 and i_hh==1:
+                afford = 0
+                continue
+            ax = 0.25*c_max
+            bx = 0.5*c_max
+            cx = c_max
+            x0 = ax
+            x3 = cx
+            if (np.abs(cx-bx)>np.abs(bx-ax)):
+                x1 = bx
+                x2 = bx + c*(cx - bx)
+            else :
+                x2 = bx
+                x1 = bx - c*(bx - ax)
+
+            f1  = -v_t_fun_ez(x1, cash[0], z, i_hh, p_h, b_its, f_h,
+                          nu_ij_c, nu_ij_h,  base_value, prefs, dims, rates)
+            f2  = -v_t_fun_ez(x2, cash[0], z, i_hh, p_h, b_its, f_h,
+                          nu_ij_c, nu_ij_h,  base_value, prefs, dims, rates)
+            while (np.abs(x3-x0) > tol*(np.abs(x1)+np.abs(x2))):
+                if f2 < f1:
+                    x0 = x1
+                    x1 = x2
+                    x2 = r*x1 + c*x3
+                    f0 = f1
+                    f1 = f2
+                    f2  = -v_t_fun_ez(x2, cash[0], z, i_hh, p_h, b_its, f_h,
+                          nu_ij_c, nu_ij_h,  base_value, prefs, dims, rates)
+                else :
+                    x3 = x2
+                    x2 = x1
+                    x1 = r*x2 + c*x0
+                    f3 = f2
+                    f2 = f1
+                    f1  = -v_t_fun_ez(x1, cash[0], z, i_hh, p_h, b_its, f_h,
+                          nu_ij_c, nu_ij_h,  base_value, prefs, dims, rates)
+            if f1<f2:
+                vopt[i_hh] = -f1
+                copt[i_hh] = x1
+            else :
+                vopt[i_hh] = -f2
+                copt[i_hh] = x2
+        if dims.ij_h[i_s]==1 and afford==1:
+            if vopt[1] > vopt[0]:
+                vs[z] = vopt[1]
+               
+            else :
+                vs[z] = vopt[0]
+                
+        else :
+            vs[z] = vopt[0]
+            vopt[1] = -999.0
+            copt[1] = copt[0]
+        cs[z,:] = copt[:]
+        condvs[z,:] = vopt[:]
+    return vs, cs, condvs
 
 @njit(float64(float64,float64,int64, int64, int64,float64[:,:],
               float64[:,:],float64[:],float64[:],float64[:], float64[:,:,:],
@@ -372,10 +594,10 @@ def v_fun_eu(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
             set_prices.class_type.instance_type,
             set_benfs.class_type.instance_type, float64[:,:,:,:,:]),
             fastmath=True, parallel=False, cache=True)
-def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij,
+def core_fun_fast(t, p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij,
              qs_ij, married, base_value, dims, rates,
              prefs, prices, benfs, nextv):
-    tol = 1e-3
+    tol = 1e-4
     r = 0.61803399
     c = 1-r
     vs = np.empty(dims.n_adm,dtype=np.float64)
@@ -462,3 +684,113 @@ def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij,
         else :
             vs[z] = vopt[0]
     return vs
+
+@njit(Tuple((float64[:],float64[:,:],float64[:,:]))(int64,float64[:,:],
+            float64[:,:],float64[:,:],float64[:],float64[:],
+            float64[:],float64[:], float64[:,:], float64[:,:,:], int64, float64,
+            set_dims.class_type.instance_type,
+            set_rates.class_type.instance_type,
+            set_prefs.class_type.instance_type,
+            set_prices.class_type.instance_type,
+            set_benfs.class_type.instance_type, float64[:,:,:,:,:]),
+            fastmath=True, parallel=False, cache=True)
+def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij,
+             qs_ij, married, base_value, dims, rates,
+             prefs, prices, benfs, nextv):
+    tol = 1e-4
+    r = 0.61803399
+    c = 1-r
+    vs = np.empty(dims.n_adm,dtype=np.float64)
+    cs = np.empty((dims.n_adm,2),dtype=np.float64)
+    condvs = np.empty((dims.n_adm,2),dtype=np.float64)
+    vopt = np.empty(2, dtype=np.float64)
+    copt = np.empty(2, dtype=np.float64)
+    for z in range(dims.n_adm):
+        i_d = dims.adm[z,0]
+        i_w = dims.adm[z,1]
+        i_s = dims.adm[z,2]
+        i_e = dims.adm[z,3]
+        i_h = dims.adm[z,4]
+        d0 = dims.d_h[i_d, i_e, t]
+        w0 = dims.w_space[i_d, i_w, i_s, i_e, i_h, t]
+        vopt[:] = 0.0
+        copt[:] = 0.0
+        afford = 1
+        for i_hh in range(2):
+            if dims.ij_h[i_s]==0 and i_hh==1:
+                continue
+            cash = x_fun(d0,w0,i_h,dims.s_i[i_s],dims.s_j[i_s],married,i_hh,
+                         t, p_h[i_e,t],p_r[i_e,t],
+                         b_its[i_e,t], med_ij[i_s], y_ij[i_s,t],
+                         dims,rates, prices, benfs)
+            if i_h==0:
+                x_w = rates.omega_r * y_ij[i_s,t]
+                r_b = rates.r_r
+            else :
+                x_w = min(rates.omega_h0*p_h[i_e,t],
+                          rates.omega_h1*max(p_h[i_e,t]-d0,0.0))
+                r_b = rates.r_h
+            c_max = max(x_w*np.exp(-r_b) + cash[0],0.0)
+            afford = 1
+            if c_max <= 0.0 and i_hh==1:
+                afford = 0
+                continue
+            ax = 0.25*c_max
+            bx = 0.5*c_max
+            cx = c_max
+            x0 = ax
+            x3 = cx
+            if (np.abs(cx-bx)>np.abs(bx-ax)):
+                x1 = bx
+                x2 = bx + c*(cx - bx)
+            else :
+                x2 = bx
+                x1 = bx - c*(bx - ax)
+
+            f1  = -v_fun_ez(x1, cash[0], z, t,  i_hh, p_h, b_its, f_h,
+                          nu_ij_c, nu_ij_h, qs_ij,  base_value, prefs, dims,
+                                                  rates,
+                         nextv)
+            f2  = -v_fun_ez(x2, cash[0], z, t,  i_hh, p_h, b_its, f_h,
+                          nu_ij_c, nu_ij_h, qs_ij, base_value, prefs, dims,
+                                                  rates,
+                         nextv)
+            while (np.abs(x3-x0) > tol*(np.abs(x1)+np.abs(x2))):
+                if f2 < f1:
+                    x0 = x1
+                    x1 = x2
+                    x2 = r*x1 + c*x3
+                    f0 = f1
+                    f1 = f2
+                    f2  = -v_fun_ez(x2, cash[0], z, t,  i_hh, p_h, b_its, f_h,
+                          nu_ij_c, nu_ij_h,  qs_ij, base_value, prefs, dims,
+                                 rates,
+                                 nextv)
+                else :
+                    x3 = x2
+                    x2 = x1
+                    x1 = r*x2 + c*x0
+                    f3 = f2
+                    f2 = f1
+                    f1  = -v_fun_ez(x1, cash[0], z, t, i_hh, p_h, b_its, f_h,
+                          nu_ij_c, nu_ij_h,  qs_ij, base_value, prefs, dims,
+                                 rates,
+                                 nextv)
+            if f1<f2:
+                vopt[i_hh] = -f1
+                copt[i_hh] = x1
+            else :
+                vopt[i_hh] = -f2
+                copt[i_hh] = x2
+        if dims.ij_h[i_s]==1 and afford==1:
+            if vopt[1] > vopt[0]:
+                vs[z] = vopt[1]
+            else :
+                vs[z] = vopt[0]
+        else :
+            vs[z] = vopt[0]
+            vopt[1] = -999.0
+            copt[1] = copt[0]
+        cs[z,:] = copt[:]
+        condvs[z,:] = vopt[:] 
+    return vs, cs, condvs
