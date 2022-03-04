@@ -11,7 +11,6 @@ def init_data():
 
     df_house_bias = load_house_expectations()
 
-
     # parameters of the scenarios
     df_prices, df_benfs, df_probs = load_scenarios()
     # merge datasets

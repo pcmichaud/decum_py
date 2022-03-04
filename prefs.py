@@ -5,28 +5,30 @@ from numba.types import Tuple
 from budget import *
 from space import *
 
-@njit(float64(float64,float64,float64,float64,float64,int64),fastmath=True, cache=True)
-def ez_fun(u,ev,beta,varepsilon,gamma,n):
-    present = (1.0 - beta**n) * (u**(1.0 - varepsilon))
+@njit(float64(float64,float64,float64,float64,float64),fastmath=True, cache=True)
+def ez_fun(u,ev,beta,varepsilon,gamma):
+    present = (1.0 - beta) * (u**(1.0 - varepsilon))
     if ev!=0.0:
         if gamma != 1.0:
-            future = (beta**n) * (ev ** ((1.0 - varepsilon) / (1.0 - gamma)))
+            future = (beta) * (ev ** ((1.0 - varepsilon) / (1.0 - gamma)))
         else :
-            future = (beta**n) * (np.exp(ev) ** (1.0 - varepsilon))
+            future = (beta) * (np.exp(ev) ** (1.0 - varepsilon))
     else :
         future = 0.0
     ez = (present + future)**(1.0 / (1.0 - varepsilon))
     return ez
 
-@njit(float64(float64,float64,float64,float64,float64,int64),fastmath=True, cache=True)
-def eu_fun(u,ev,beta,varepsilon,gamma,n):
+@njit(float64(float64,float64,float64,float64,float64),fastmath=True, cache=True)
+def eu_fun(u,ev,beta,varepsilon,gamma):
     present = (u**(1.0-gamma))/(1.0-gamma)
-    future = (beta**n) * ev
+    future = beta * ev
     eu = present + future
     return eu
 
-@njit(float64(float64,float64,float64,float64,float64),fastmath=True,cache=True)
-def ces_fun(cons,amen,nu_c,nu_h,rho):
+@njit(float64(float64,float64,float64,float64,float64,float64),fastmath=True,cache=True)
+def ces_fun(cons,amen,nu_c,nu_h,rho, eqscale):
+    cons_eq = cons/eqscale
+    amen_eq = amen/eqscale
     ces = (nu_c * (cons**(1.0 - rho)) + nu_h * (amen**(1.0 - rho)))**(1.0 / (1.0 - rho))
     return ces
 
@@ -47,10 +49,10 @@ spec_prefs = [
 
 @jitclass(spec_prefs)
 class set_prefs(object):
-    def __init__(self, varepsilon= 4.0, d_varepsilon=1.0, gamma = 0.5,
-                d_gamma=1.5, rho = 0.7, b_x = 0.0, d_b_x = 5.0, b_k = 110.7,
-                 nu_c0 = 1.0, nu_c1 = 0.5, nu_c2 = 0.32, nu_h0 = 1.0, nu_h1 =
-                 0.3, d_nu_h = 0.5, beta = 0.97, live_fast=0, risk_averse=0,
+    def __init__(self, varepsilon= 0.75, d_varepsilon=0.5, gamma = 0.25,
+                d_gamma = 0.5, rho = 0.1, b_x = 0.0, d_b_x = 0.001, b_k = 1e3,
+                 nu_c0 = 1.0, nu_c1 = 0.5, nu_c2 = 0.2, nu_h0 = 0.05, nu_h1 =
+                 0.05, d_nu_h = 0.0, beta = 0.97, live_fast=0, risk_averse=0,
                  beq_money=0, pref_home=0):
         self.varepsilon = varepsilon
         if live_fast==1:
@@ -75,16 +77,16 @@ class set_prefs(object):
         return
 
 @njit(Tuple((float64[:], float64[:]))(int64, int64[:], int64[:],
-    set_dims.class_type.instance_type, set_prefs.class_type.instance_type),fastmath=True, cache=True)
-def update_nus(married, s_i, s_j, dims, prefs):
+    set_dims.class_type.instance_type, set_prefs.class_type.instance_type, float64),fastmath=True, cache=True)
+def update_nus(married, s_i, s_j, dims, prefs, eqscale):
     nu_ij_c = np.empty(dims.n_s)
     nu_ij_h = np.empty(dims.n_s)
     nu_c = np.array([prefs.nu_c0, prefs.nu_c1, prefs.nu_c2, 0.0])
     nu_h = np.array([prefs.nu_h0, prefs.nu_h1, 0.0, 0.0])
     if married==1:
         for i in range(dims.n_s):
-            nu_ij_c[i] = nu_c[s_i[i]] + nu_c[s_j[i]]
-            nu_ij_h[i] = nu_h[s_i[i]] + nu_h[s_j[i]]
+            nu_ij_c[i] = nu_c[s_i[i]] + eqscale*nu_c[s_j[i]]
+            nu_ij_h[i] = nu_h[s_i[i]] + eqscale*nu_h[s_j[i]]
     else :
         for i in range(dims.n_s):
             nu_ij_c[i] = nu_c[s_i[i]]

@@ -29,26 +29,26 @@ spec_rates = [
 
 @jitclass(spec_rates)
 class set_rates(object):
-    def __init__(self, n, rate=0.03, r_r=0.0949, r_d=0.017, r_h=0.01,
+    def __init__(self, rate=0.03, r_r=0.0949, r_d=0.017, r_h=0.01,
               xi_d=0.9622,phi_d = 0.1,x_min = 18.2, tau_s0 = 1.5,tau_s1 = 0.05,
-              tau_b0 = 0.5,tau_b1 = 0.01,omega_d = 0.65, omega_rm = 0.55,
+              tau_b0 = 0.5,tau_b1 = 0.01, omega_d = 0.65, omega_rm = 0.55,
               omega_r = 0.329, omega_h0 = 0.65,omega_h1 = 0.8,
               phi = 0.035, eqscale = 0.55):
-        self.rate = rate * float(n)
-        self.r_r = r_r * float(n)
-        self.r_d = r_d * float(n)
-        self.r_h = r_h * float(n) + r_d
-        self.xi_d = xi_d ** float(n)
-        self.phi = phi * float(n)
+        self.rate = rate 
+        self.r_r = r_r 
+        self.r_d = r_d 
+        self.r_h = r_h  + r_d
+        self.xi_d = xi_d 
+        self.phi = phi 
         self.phi_d = phi_d
-        self.x_min = x_min * float(n)
+        self.x_min = x_min 
         self.tau_s0 = tau_s0
         self.tau_s1 = tau_s1
         self.tau_b0 = tau_b0
         self.tau_b1 = tau_b1
-        self.omega_d = omega_d
+        self.omega_d = 0.0 #omega_d
         self.omega_rm = 0.0 #omega_rm
-        self.omega_r = omega_r
+        self.omega_r = 0.0 #omega_r
         self.omega_h0 = 0.0 #omega_h0
         self.omega_h1 = 0.0 #omega_h1
         self.eqscale = eqscale
@@ -63,10 +63,10 @@ spec_prices = [
 
 @jitclass(spec_prices)
 class set_prices(object):
-    def __init__(self, ann, ltc, rmr, n):
+    def __init__(self, ann, ltc, rmr):
         self.ann = ann
         self.ltc = ltc
-        self.rmr = rmr * n
+        self.rmr = rmr 
         return
 
 spec_benfs = [
@@ -77,7 +77,7 @@ spec_benfs = [
 
 @jitclass(spec_benfs)
 class set_benfs(object):
-    def __init__(self,ann, ltc, rmr, n):
+    def __init__(self,ann, ltc, rmr):
         self.ann = ann
         self.ltc = ltc
         self.rmr = rmr
@@ -109,18 +109,17 @@ def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
     mc = h0 * (1.0 - h1) * mc_s + (1.0 - h0) * h1 * mc_b
     w_h = h0 * (p_h - d0 * np.exp(rates.r_d))
     if tt==0:
-        z = - prices.ann - prices.ltc * dims.n \
+        z = - prices.ann - prices.ltc  \
             + h0 * h1  * benfs.rmr
     else :
         z = -h0 * (1.0 - h1) * b_its
         if s_i <= 2:
-            z += dims.n * benfs.ann
+            z += benfs.ann
         if s_i == 2:
-            z += dims.n * benfs.ltc
+            z += benfs.ltc
         if s_i < 2:
-            z -= dims.n * prices.ltc
+            z -= prices.ltc
     x = w0 + w_h + y + z - med
-    x_back = x
     x_f = 0.0
     if s_i<=2:
         x_f += rates.x_min
@@ -128,7 +127,6 @@ def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
         if s_j<=2:
             x_f += rates.x_min * rates.eqscale
     tr = max(x_f - x + (1.0-h1) * p_r, 0.0)
-
     x += tr - c_h - mc
     return x, tr
 
@@ -136,8 +134,8 @@ def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
         set_dims.class_type.instance_type, set_rates.class_type.instance_type),fastmath=True, cache=True)
 def reimburse_loan(benfs,prices,p_h,dims,rates):
     b_its = np.empty((dims.n_e,dims.T))
-    rate = rates.rate/float(dims.n)
-    pi_r = prices.rmr/float(dims.n)
+    rate = rates.rate
+    pi_r = prices.rmr
     for i in range(dims.T):
         for j in range(dims.n_e):
             b_its[j,i] = min(benfs.rmr * np.exp((rate+pi_r)*float(i)),p_h[j,i])
@@ -149,7 +147,7 @@ def load_house_prices(file_d='house_prices_real.csv',file_b='home_values.csv'):
     df = df.drop(labels='pval',axis=1)
     df['cma'] = np.arange(1,12)
     df.set_index('cma',inplace=True)
-    df_b = pd.read_csv('inputs/'+file_b)
+    df_b = pd.read_csv('inputs/'+file_b,header=None)
     df_b.columns = ['cma','base_value']
     df_b.set_index('cma',inplace=True)
     df = df.merge(df_b,left_index=True,right_index=True,how='left')
@@ -185,12 +183,12 @@ def house_prices(g,sig,base_h,home_value,rates,dims):
     set_dims.class_type.instance_type),fastmath=True, cache=True)
 def set_income(married,totinc,retinc,sp_totinc,sp_retinc,dims):
     y = np.empty(dims.T)
-    y[:] = retinc * float(dims.n)
-    y[0] = totinc * float(dims.n)
+    y[:] = retinc 
+    y[0] = totinc 
     sp_y = np.empty(dims.T)
     if married ==1:
-        sp_y[:] = sp_retinc * float(dims.n)
-        sp_y[0] = sp_totinc * float(dims.n)
+        sp_y[:] = sp_retinc 
+        sp_y[0] = sp_totinc 
     else :
         sp_y[:] = 0.0
     y_ij = np.empty((dims.n_s, dims.T))
@@ -230,7 +228,6 @@ def set_medexp(married, hc, nh, dims):
             med_ij[i] = hc[n_hc] + nh[n_nh]
             if i==dims.n_s-1:
                 med_ij[i] = 0.0
-        med_ij[i] *= float(dims.n)
     return med_ij
 
 def load_costs(file_nh='ncare_costs.csv',file_hc='hcare_costs.csv'):

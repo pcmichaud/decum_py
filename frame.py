@@ -3,7 +3,6 @@ import multiprocessing as mp
 from functools import partial
 
 def func_solve(row,theta):
-    n = 5
     hh = dict(row[['wgt','cma','married','own','wealth_total',
                    'mort_balance','home_value']])
     rp = dict(row[['age','totinc','retinc','hlth']])
@@ -35,18 +34,18 @@ def func_solve(row,theta):
         'pref_home'])        
         p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
             setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                      surv_bias,sp_surv_bias,miss_par=-1.0,sp_miss_par=-2.0,n=n)
+                      surv_bias,sp_surv_bias,miss_par=-1.0,sp_miss_par=-2.0)
     else :
         prefs = set_prefs(varepsilon=theta[0],d_varepsilon=theta[1],
         gamma=theta[2],d_gamma=theta[3],rho=theta[4],b_x=theta[5],d_b_x=theta[6],b_k=theta[7],nu_c1=theta[8],nu_c2=theta[9],nu_h0=theta[10],nu_h1=theta[11],d_nu_h=theta[12],live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
         p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
             setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                      surv_bias,sp_surv_bias,miss_par=theta[13],sp_miss_par=theta[14],n=n)
-    nu_ij_c,nu_ij_h = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs)
+                      surv_bias,sp_surv_bias,miss_par=theta[13],sp_miss_par=theta[14])
+    nu_ij_c,nu_ij_h = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
     for i in range(13):
         f_prices, f_benfs = set_scenario(row,i)
-        i_prices = set_prices(f_prices[0], f_prices[1], f_prices[2], dims.n)
-        i_benfs = set_benfs(f_benfs[0], f_benfs[1], f_benfs[2], dims.n)
+        i_prices = set_prices(f_prices[0], f_prices[1], f_prices[2])
+        i_benfs = set_benfs(f_benfs[0], f_benfs[1], f_benfs[2])
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         row['value_' + str(i)] = get_value(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
@@ -54,7 +53,6 @@ def func_solve(row,theta):
     return row
 
 def func_simulate(row,theta):
-    n = 1
     hh = dict(row[['wgt','cma','married','own','wealth_total',
                    'mort_balance','home_value']])
     rp = dict(row[['age','totinc','retinc','hlth']])
@@ -80,35 +78,52 @@ def func_simulate(row,theta):
     else:
         hp_sp = None
         sp_surv_bias = None
-
     if theta is None:
         prefs = set_prefs(live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row[
         'pref_home'])        
         p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
             setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                      surv_bias,sp_surv_bias,miss_par=-1.0,sp_miss_par=-2.0,n=n)
+                      surv_bias,sp_surv_bias,miss_par=-1.0,sp_miss_par=-2.0)
     else :
         prefs = set_prefs(varepsilon=theta[0],d_varepsilon=theta[1],
         gamma=theta[2],d_gamma=theta[3],rho=theta[4],b_x=theta[5],d_b_x=theta[6],b_k=theta[7],nu_c1=theta[8],nu_c2=theta[9],nu_h0=theta[10],nu_h1=theta[11],d_nu_h=theta[12],live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
         p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
             setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                      surv_bias,sp_surv_bias,miss_par=theta[13],sp_miss_par=theta[14],n=n)
-    nu_ij_c,nu_ij_h = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs)
+                      surv_bias,sp_surv_bias,miss_par=theta[13],sp_miss_par=theta[14])
+    nu_ij_c,nu_ij_h = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs,rates.eqscale)
 
     # first solve 
-    i_prices = set_prices(0.0, 0.0, 0.0, dims.n)
-    i_benfs = set_benfs(0.0, 0.0, 0.0, dims.n)
+    i_prices = set_prices(0.0, 0.0, 0.0)
+    i_benfs = set_benfs(0.0, 0.0, 0.0)
     b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
     cons_rules, cond_values = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
                                          nu_ij_c, nu_ij_h, rates, dims, prefs)   
+    #print(np.mean(cons_rules[:,1,0]),np.mean(cons_rules[:,1,dims.t_last]))
+    # debias survival and home prices 
+    # health transitions
+    gammas, deltas = parse_surv(hp)
+    q1 = transition_rates(rp['age'], gammas, deltas, 0.0,
+                          surv_bias['miss_psurv85'], 0.0, dims.T)
+    if hh['married'] == 1:
+        gammas, deltas = parse_surv(hp_sp)
+        q1_sp = transition_rates(sp['sp_age'], gammas, deltas,
+                                 0.0,
+                                 sp_surv_bias['sp_miss_psurv85'], 0.0, dims.T)
+        qs_ij = joint_surv_rates(q1, q1_sp, dims.n_s, dims.T)
+    else :
+        qs_ij = q1[:, :, :]
+    # house prices 
+    #p_h, f_h, p_r = house_prices(row['g'], row['sig'], base_value, hh['home_value'], rates,
+    #                             dims)
+    #b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
 
-    cons_path, own_path, wlth_path     = get_sim_path(cons_rules, cond_values, hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+    cons_path, own_path, wlth_path     = get_sim_path(row['seed'],cons_rules, cond_values, hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
                                          nu_ij_c, nu_ij_h, rates, dims, prefs)
-    row[['cons_' + str(i) for i in range(dims.nper)]] = cons_path 
-    row[['own_' + str(i) for i in range(dims.nper)]] = own_path 
-    row[['wlth_' + str(i) for i in range(dims.nper)]] = wlth_path 
+    row[['cons_' + str(i) for i in range(dims.T)]] = cons_path 
+    row[['own_' + str(i) for i in range(dims.T)]] = own_path 
+    row[['wlth_' + str(i) for i in range(dims.T)]] = wlth_path 
     return row
 
 def set_scenario(row,scn):
@@ -154,9 +169,10 @@ def solve_df(data, npartitions=12,theta=None):
 def simulate_df(data, npartitions=12,theta=None):
     # load data
     df = data.loc[:,:] 
-    df[['cons_'+str(x) for x in range(40)]] = np.nan
-    df[['own_'+str(x) for x in range(40)]] = np.nan
-    df[['wlth_'+str(x) for x in range(40)]] = np.nan
+    df[['cons_'+str(x) for x in range(45)]] = np.nan
+    df[['own_'+str(x) for x in range(45)]] = np.nan
+    df[['wlth_'+str(x) for x in range(45)]] = np.nan
+    df['seed'] = np.random.shuffle(df.index.to_numpy())
     list_df = np.array_split(df, npartitions)
     compress_compute_chunks = partial(compute_sim_chunks,theta=theta)
     with mp.Pool(processes=npartitions) as pool:
