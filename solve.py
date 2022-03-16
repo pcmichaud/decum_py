@@ -5,9 +5,9 @@ from survival import *
 from prefs import *
 from numba import njit, float64, int64
 from numba.types import Tuple
-import os, time 
+import os, time
 from functools import partial
-from scipy.optimize import golden 
+from scipy.optimize import golden
 
 def setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp, surv_bias,
                   sp_surv_bias,miss_par=0.0,sp_miss_par=0.0):
@@ -59,7 +59,7 @@ def get_rules(hh, rp, sp, base_value, prices, benfs,
     v_last, c_last, condv_last = core_fun(dims.t_last, p_h, p_r, b_its,
                 f_h, nu_ij_c, nu_ij_h, med_ij, y_ij, qs_ij, hh['married'],
                 base_value, dims, rates, prefs, prices, benfs, nextv, cc_last, 1)
-    
+
     # map those to all states
     v_t[dims.to_states[:],dims.t_last] = v_last[:]
     c_t[dims.to_states[:],0,dims.t_last] = c_last[:,0]
@@ -98,7 +98,7 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
     v_last, c_last, condv_last = core_fun(dims.t_last, p_h, p_r, b_its,
                 f_h, nu_ij_c, nu_ij_h, med_ij, y_ij, qs_ij, hh['married'],
                 base_value, dims, rates, prefs, prices, benfs, nextv, cc_last, 1)
-    
+
     # map those to all states
     v_t[dims.to_states[:],dims.t_last] = v_last[:]
     c_t[dims.to_states[:],0,dims.t_last] = c_last[:,0]
@@ -133,7 +133,7 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
         d_low = 0
         d_up = 0
         du = 0.0
-    ww_space = dims.w_space[d_low,:,s_init,e_init,h_init,0]
+    ww_space = dims.w_space[d_up,:,s_init,e_init,h_init,0]
     w_low, w_up, wu = scale(hh['wealth_total'],ww_space)
     v = v_t[:, 0].reshape((dims.n_d, dims.n_w, dims.n_s,
                                         dims.n_e, 2),order='F')
@@ -150,7 +150,7 @@ def get_sim_path(seed, cons_rules, cond_values, hh, rp, sp, base_value, prices, 
               rates, dims, prefs):
     # for solution, set array for path
     cons_path = np.empty(dims.T,dtype=np.float64)
-    cons_path[:] = np.nan 
+    cons_path[:] = np.nan
     own_path = np.empty(dims.T,dtype=np.float64)
     own_path[:] = np.nan
     wlth_path = np.empty(dims.T, dtype=np.float64)
@@ -163,8 +163,8 @@ def get_sim_path(seed, cons_rules, cond_values, hh, rp, sp, base_value, prices, 
     w_t = hh['wealth_total']
     if hh['married']==1:
         i_s = i_s * 4 + sp['sp_hlth'] - 1
-    vopt = np.zeros(2,dtype=np.float64) 
-    copt = np.zeros(2,dtype=np.float64) 
+    vopt = np.zeros(2,dtype=np.float64)
+    copt = np.zeros(2,dtype=np.float64)
     sub = np.empty((2,2),dtype=np.float64)
     np.random.seed()
     for t in range(dims.T):
@@ -178,29 +178,29 @@ def get_sim_path(seed, cons_rules, cond_values, hh, rp, sp, base_value, prices, 
         ww_space = dims.w_space[d_low,:,i_s,i_e,i_h,t]
         wlth_path[t] = max(w_t,ww_space[0])
         w_low, w_up, wu = scale(w_t,ww_space)
-        # get decisions by interpolation over continuous state 
+        # get decisions by interpolation over continuous state
         for i_hh in range(2):
             v = cond_values[:,i_hh, t].reshape((dims.n_d, dims.n_w, dims.n_s,
                                             dims.n_e, 2),order='F')
             sub[0,0] = v[d_low,w_low,i_s,i_e,i_h]
             sub[0,1] = v[d_low,w_up,i_s,i_e,i_h]
             sub[1,0] = v[d_up,w_low,i_s,i_e,i_h]
-            sub[1,1] = v[d_up,w_up,i_s,i_e,i_h]  
-            vopt[i_hh] = interp2d(du, wu, sub)  
+            sub[1,1] = v[d_up,w_up,i_s,i_e,i_h]
+            vopt[i_hh] = interp2d(du, wu, sub)
         if vopt[1] > vopt[0]:
             own_path[t] = 1
         else :
-            own_path[t] = 0 
+            own_path[t] = 0
         c = cons_rules[:,int(own_path[t]), t].reshape((dims.n_d, dims.n_w, dims.n_s,
                                             dims.n_e, 2),order='F')
         sub[0,0] = c[d_low,w_low,i_s,i_e,i_h]
         sub[0,1] = c[d_low,w_up,i_s,i_e,i_h]
         sub[1,0] = c[d_up,w_low,i_s,i_e,i_h]
-        sub[1,1] = c[d_up,w_up,i_s,i_e,i_h]      
+        sub[1,1] = c[d_up,w_up,i_s,i_e,i_h]
         cons_path[t] = interp2d(du, wu, sub)
         # update state to next year
         i_hh = int(own_path[t])
-        # update wealth 
+        # update wealth
         cash = x_fun(d_t,w_t,i_h,dims.s_i[i_s],dims.s_j[i_s],hh['married'],i_hh,
                 t, p_h[i_e,t],p_r[i_e,t], b_its[i_e,t], med_ij[i_s], y_ij[i_s,t],
                 dims,rates, prices, benfs)
@@ -209,29 +209,29 @@ def get_sim_path(seed, cons_rules, cond_values, hh, rp, sp, base_value, prices, 
             w_p *= np.exp(rates.rate)
         else :
             r_b = i_h*rates.r_h + (1.0-i_h)*rates.r_r
-            w_p *= np.exp(r_b)   
+            w_p *= np.exp(r_b)
         # update mortgage
         d_p = i_hh*(rates.xi_d*i_h*d_t
-                    + (1.0 - i_h)*rates.omega_d*p_h[i_e,t])  
+                    + (1.0 - i_h)*rates.omega_d*p_h[i_e,t])
         # change in house price shock
-        i_ee = np.random.choice(np.arange(dims.n_e),p=f_h)      
-        # determine change in health state 
+        i_ee = np.random.choice(np.arange(dims.n_e),p=f_h)
+        # determine change in health state
         q_ss = qs_ij[i_s,:,t]
         i_ss = np.random.choice(dims.s_ij,p=q_ss)
         if i_ss==(dims.n_s-1):
             # check if household stil exist
-            break 
+            break
         else :
             # make switch, given survival
-            i_h = i_hh 
-            i_e = i_ee 
-            i_s = i_ss 
-            w_t = w_p 
-            d_t = d_p 
+            i_h = i_hh
+            i_e = i_ee
+            i_s = i_ss
+            w_t = w_p
+            d_t = d_p
 
     return cons_path, own_path, wlth_path
 
-    
+
 """ def get_value(hh, rp, sp, base_value, prices, benfs,
               p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its, nu_ij_c, nu_ij_h,
               rates, dims, prefs):
@@ -424,8 +424,8 @@ def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij,
                 x_w = rates.omega_r * y_ij[i_s,t]
                 r_b = rates.r_r
             else :
-                x_w = min(rates.omega_h0*p_h[i_e,t],
-                          rates.omega_h1*max(p_h[i_e,t]-d0,0.0))
+                x_w = min(min(rates.omega_h0*p_h[i_e,t],
+                          rates.omega_h1*max(p_h[i_e,t]-d0,0.0)),rates.omega_r * y_ij[i_s,t])
                 r_b = rates.r_h
             c_max = max(x_w*np.exp(-r_b) + cash[0],0.0)
             afford = 1
@@ -439,18 +439,18 @@ def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij,
                         vs_[i_c] = v_t_fun_ez(cs_[i_c]**2,cash[0],z,i_hh,p_h,b_its,f_h, nu_ij_c,nu_ij_h, base_value, prefs, dims, rates)
                 else :
                     for i_c in range(n_c):
-                        vs_[i_c] = v_fun_ez(cs_[i_c]**2,cash[0],z,t,i_hh,p_h,b_its,f_h, nu_ij_c,nu_ij_h, qs_ij, base_value, prefs, dims, rates, nextv)                    
+                        vs_[i_c] = v_fun_ez(cs_[i_c]**2,cash[0],z,t,i_hh,p_h,b_its,f_h, nu_ij_c,nu_ij_h, qs_ij, base_value, prefs, dims, rates, nextv)
                 imax = np.argmax(vs_)
                 copt[i_hh] = cs_[imax]**2
                 vopt[i_hh] = vs_[imax]
             else :
                 copt[i_hh] = clast[z,i_hh]
                 if t==dims.t_last:
-                    vopt[i_hh] = v_t_fun_ez(copt[i_hh],cash[0],z,i_hh,p_h,b_its,f_h, 
+                    vopt[i_hh] = v_t_fun_ez(copt[i_hh],cash[0],z,i_hh,p_h,b_its,f_h,
                         nu_ij_c,nu_ij_h, base_value,prefs, dims, rates)
                 else :
-                    vopt[i_hh] = v_fun_ez(copt[i_hh],cash[0],z,t,i_hh,p_h,b_its,f_h, 
-                        nu_ij_c,nu_ij_h, qs_ij,base_value,prefs, dims, rates, nextv)                    
+                    vopt[i_hh] = v_fun_ez(copt[i_hh],cash[0],z,t,i_hh,p_h,b_its,f_h,
+                        nu_ij_c,nu_ij_h, qs_ij,base_value,prefs, dims, rates, nextv)
         if dims.ij_h[i_s]==1 and afford==1:
             if vopt[1] > vopt[0]:
                 vs[z] = vopt[1]
@@ -461,6 +461,6 @@ def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c, nu_ij_h,  med_ij, y_ij,
             vopt[1] = -999.0
             copt[1] = copt[0]
         cs[z,:] = copt[:]
-        condvs[z,:] = vopt[:] 
+        condvs[z,:] = vopt[:]
     return vs, cs, condvs
 

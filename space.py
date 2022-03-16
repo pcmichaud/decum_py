@@ -129,7 +129,8 @@ class set_dims(object):
                                     a = rates.omega_h0 * p_h[e, j]
                                     b = rates.omega_h1 * max(p_h[e, j] - d0,
                                                              0.0)
-                                    x_w = -min(a, b)
+                                    c = rates.omega_r * y[s]
+                                    x_w = -min(min(a, b),c)
                                 self.w_space[d,:,s,e,h,j] = \
                                                 np.linspace(x_w,self.w_max,
                                                                        self.n_w)

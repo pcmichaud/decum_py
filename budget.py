@@ -29,28 +29,28 @@ spec_rates = [
 
 @jitclass(spec_rates)
 class set_rates(object):
-    def __init__(self, rate=0.03, r_r=0.0949, r_d=0.017, r_h=0.01,
+    def __init__(self, rate=0.01, r_r=0.0949, r_d=0.02, r_h=0.02,
               xi_d=0.9622,phi_d = 0.1,x_min = 18.2, tau_s0 = 1.5,tau_s1 = 0.05,
               tau_b0 = 0.5,tau_b1 = 0.01, omega_d = 0.65, omega_rm = 0.55,
               omega_r = 0.329, omega_h0 = 0.65,omega_h1 = 0.8,
               phi = 0.035, eqscale = 0.55):
-        self.rate = rate 
-        self.r_r = r_r 
-        self.r_d = r_d 
+        self.rate = rate
+        self.r_r = r_r
+        self.r_d = rate + r_d
         self.r_h = r_h  + r_d
-        self.xi_d = xi_d 
-        self.phi = phi 
+        self.xi_d = xi_d
+        self.phi = phi
         self.phi_d = phi_d
-        self.x_min = x_min 
+        self.x_min = x_min
         self.tau_s0 = tau_s0
         self.tau_s1 = tau_s1
         self.tau_b0 = tau_b0
         self.tau_b1 = tau_b1
-        self.omega_d = 0.0 #omega_d
-        self.omega_rm = 0.0 #omega_rm
-        self.omega_r = 0.0 #omega_r
-        self.omega_h0 = 0.0 #omega_h0
-        self.omega_h1 = 0.0 #omega_h1
+        self.omega_d = omega_d
+        self.omega_rm = omega_rm
+        self.omega_r = omega_r
+        self.omega_h0 = omega_h0
+        self.omega_h1 = omega_h1
         self.eqscale = eqscale
         return
 
@@ -66,7 +66,7 @@ class set_prices(object):
     def __init__(self, ann, ltc, rmr):
         self.ann = ann
         self.ltc = ltc
-        self.rmr = rmr 
+        self.rmr = rmr
         return
 
 spec_benfs = [
@@ -91,7 +91,7 @@ def beq_fun(d, w, i_hh, p_h, b_its, tau_s0, tau_s1):
         mc_s = tau_s0 + tau_s1 * p_h
         p = p_h - d - mc_s - b_its
         beq += p
-    beq = max(beq,1.0)
+    beq = max(beq,0.0)
     return beq
 
 @njit(Tuple((float64,float64))(float64,float64,int64,int64,
@@ -183,12 +183,12 @@ def house_prices(g,sig,base_h,home_value,rates,dims):
     set_dims.class_type.instance_type),fastmath=True, cache=True)
 def set_income(married,totinc,retinc,sp_totinc,sp_retinc,dims):
     y = np.empty(dims.T)
-    y[:] = retinc 
-    y[0] = totinc 
+    y[:] = retinc
+    y[0] = totinc
     sp_y = np.empty(dims.T)
     if married ==1:
-        sp_y[:] = sp_retinc 
-        sp_y[0] = sp_totinc 
+        sp_y[:] = sp_retinc
+        sp_y[0] = sp_totinc
     else :
         sp_y[:] = 0.0
     y_ij = np.empty((dims.n_s, dims.T))
