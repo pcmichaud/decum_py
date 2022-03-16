@@ -49,10 +49,10 @@ spec_prefs = [
 
 @jitclass(spec_prefs)
 class set_prefs(object):
-    def __init__(self, varepsilon= 0.85, d_varepsilon=0.1, gamma = 0.25,
-                d_gamma = 0.5, rho = 0.65, b_x = 0.05, d_b_x = 0.05, b_k = 5e2,
-                 nu_c0 = 1.0, nu_c1 = 0.6, nu_c2 = 0.3, nu_h0 = 0.1, nu_h1 =
-                 0.1, d_nu_h = 0.1, beta = 0.97, live_fast=0, risk_averse=0,
+    def __init__(self, varepsilon= 0.614, d_varepsilon=0.016, gamma = 0.058,
+                d_gamma = 0.11, rho = 0.515, b_x = 0.0012, d_b_x = 0.000724, b_k = 2.61e3,
+                 nu_c0 = 1.0, nu_c1 = 0.67, nu_c2 = 0.0094, nu_h0 = 0.0959, nu_h1 =
+                 0.019, d_nu_h = 0.00415, beta = 0.97, live_fast=0, risk_averse=0,
                  beq_money=0, pref_home=0):
         self.varepsilon = varepsilon
         if live_fast==1:
