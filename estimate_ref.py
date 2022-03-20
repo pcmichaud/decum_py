@@ -4,7 +4,7 @@ from numba import set_num_threads
 import pandas as pd
 import nlopt  as nl
 from functools import partial
-
+import numpy as np
 
 if __name__ == '__main__':
 	warnings.simplefilter(action='ignore')
@@ -42,3 +42,5 @@ if __name__ == '__main__':
 	opt_pars = extract_pars(theta)
 	print('estimates = ', opt_pars)
 	print('final distance = ', distance)
+        np.save('output/estimates.npy',opt_pars)
+
