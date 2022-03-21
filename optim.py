@@ -135,6 +135,74 @@ def concentrated_distance_within(theta, grad, data, npartitions=50):
 	print('pars = ',pars)
 	return sum_distance 
 
+def residuals_within(theta, sigmas, data, npartitions=50):	
+	# get params 
+	pars = extract_pars(theta)
+	# get dataset with solved expected utilities
+	df = solve_df(data, npartitions=npartitions, theta=pars)
+	# take difference in value with respect to baseline 
+	scns = [s for s in range(1,13)]
+	for s in scns:
+		df['d_value_'+str(s)] = df['value_'+str(s)] - df['value_0']
+	# for each set of products, take within differences
+	df[['w_value_'+str(s) for s in range(1,5)]] = within_difference(df[['d_value_' 
+							+str(s) for s in range(1,5)]])
+	df[['w_value_'+str(s) for s in range(5,9)]] = within_difference(df[['d_value_' 
+							+str(s) for s in range(5,9)]])
+	df[['w_value_'+str(s) for s in range(9,13)]] = within_difference(df[['d_value_' 
+							+str(s) for s in range(9,13)]])
+	# take exp odds transform of probabilities
+	s = 1
+	for i in range(1,5):
+		df['odd_'+str(s)] = np.log(df['prob_scn_ann_'+str(i)])/(1.0 - df['prob_scn_ann_'+str(i)])
+		s += 1
+	for i in range(1,5):
+		df['odd_'+str(s)] = np.log(df['prob_scn_ltci_'+str(i)])/(1.0 - df['prob_scn_ltci_'+str(i)])
+		s += 1
+	for i in range(1,5):
+		df['odd_'+str(s)] = np.log(df['prob_scn_rmr_'+str(i)])/(1.0 - df['prob_scn_rmr_'+str(i)])
+		s += 1
+	# take within deviations
+	df[['w_odd_'+str(s) for s in range(1,5)]] = within_difference(df[['odd_' 
+							+str(s) for s in range(1,5)]])
+	df[['w_odd_'+str(s) for s in range(5,9)]] = within_difference(df[['odd_' 
+							+str(s) for s in range(5,9)]])
+	df[['w_odd_'+str(s) for s in range(9,13)]] = within_difference(df[['odd_' 
+							+str(s) for s in range(9,13)]])
+	residuals = pd.DataFrame(index=df.index,columns=[x for x in range(1,13)])
+	for s in range(1,5):
+		residuals.loc[:,s] = df.loc[:,'w_odd_'+str(s)] - sigmas[0]* df.loc[:,'w_value_'+str(s)]
+	for s in range(5,9):
+		residuals.loc[:,s] = df.loc[:,'w_odd_'+str(s)] - sigmas[1]* df.loc[:,'w_value_'+str(s)]
+	for s in range(9,13):
+		residuals.loc[:,s] = df.loc[:,'w_odd_'+str(s)] - sigmas[2]* df.loc[:,'w_value_'+str(s)]
+	return residuals
+
+def g_within(theta, sigmas, data, npartitions=50):	
+	# get params 
+	pars = extract_pars(theta)
+	# get dataset with solved expected utilities
+	df = solve_df(data, npartitions=npartitions, theta=pars)
+	# take difference in value with respect to baseline 
+	scns = [s for s in range(1,13)]
+	for s in scns:
+		df['d_value_'+str(s)] = df['value_'+str(s)] - df['value_0']
+	# for each set of products, take within differences
+	df[['w_value_'+str(s) for s in range(1,5)]] = within_difference(df[['d_value_' 
+							+str(s) for s in range(1,5)]])
+	df[['w_value_'+str(s) for s in range(5,9)]] = within_difference(df[['d_value_' 
+							+str(s) for s in range(5,9)]])
+	df[['w_value_'+str(s) for s in range(9,13)]] = within_difference(df[['d_value_' 
+							+str(s) for s in range(9,13)]])
+	gs = pd.DataFrame(index=df.index,columns=[x for x in range(1,13)])
+	for s in range(1,5):
+		gs.loc[:,s] = sigmas[0]* df.loc[:,'w_value_'+str(s)]
+	for s in range(5,9):
+		gs.loc[:,s] = sigmas[1]* df.loc[:,'w_value_'+str(s)]
+	for s in range(9,13):
+		gs.loc[:,s] = sigmas[2]* df.loc[:,'w_value_'+str(s)]
+	return gs
+
 def concentrated_distance_levels(theta, grad, data, npartitions=50):	
 	# get params 
 	pars = extract_pars(theta)

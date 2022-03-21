@@ -301,9 +301,9 @@ def v_t_fun_ez(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
             b_e = beq_fun(d_t,w_t,i_hh,p_h[i_ee,t],
                           b_its[i_ee,t],rates.tau_s0,rates.tau_s1)
             if prefs.gamma == 1.0:
-                beq += f_h[i_ee]*np.log(prefs.b_x*(b_e + prefs.b_k))
+                beq += prefs.b_x*f_h[i_ee]*np.log((b_e + prefs.b_k))
             else :
-                beq += f_h[i_ee]*((prefs.b_x*(b_e + prefs.b_k))**(
+                beq += prefs.b_x*f_h[i_ee]*(((b_e + prefs.b_k))**(
                 1.0-prefs.gamma))
     amen = i_hh * p_h[2, 0]
     eqscale = 1.0
@@ -367,13 +367,13 @@ def v_fun_ez(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
             else :
                 if prefs.b_x > 0.0 and beq > 0.0:
                     if prefs.gamma != 1.0:
-                        pvv = ((prefs.b_x * (beq + prefs.b_k)) ** (
+                        pvv = prefs.b_x *(( (beq + prefs.b_k)) ** (
                                 1.0 - prefs.gamma))
                         if pvv>1e6:
                             pvv = 1e6
                         ev += f_h[i_ee] * q_ss[i_ss] * pvv
                     else :
-                        ev += f_h[i_ee] * q_ss[i_ss] * np.log(prefs.b_x * (
+                        ev += f_h[i_ee] * q_ss[i_ss] * prefs.b_x *np.log( (
                             beq + prefs.b_k))
     amen = i_hh * p_h[2,0]
     eqscale = 1.0
