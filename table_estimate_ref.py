@@ -33,9 +33,9 @@ Ainv = np.linalg.inv(A)
 cov = Ainv @ B @ Ainv 
 se = np.sqrt(np.diag(cov))
 
-labels= ['$\\varepsilon$','$\\Delta\\varepsilon$','$\\sigma$','$\\Delta\\sigma$',
+labels= ['$\\varepsilon$','$\\Delta\\varepsilon$','$\\gamma$','$\\Delta\\gamma$',
          '$\\rho$','$b_x$','$\\Delta b_x$','$b_k$','$\\nu_{c,2}$','$\\nu_{c,3}$',
-         '$\\nu_{h,1}$','$\\nu_{h,2}$','$\\Delta \\nu_{h}$','miss r','miss sp']
+         '$\\nu_{h}$', '$\\Delta \\nu_{h}$','miss r','miss sp']
 
 table = pd.DataFrame(index=labels,columns=['point','se'])
 

@@ -30,15 +30,13 @@ def set_theta(pars):
 	theta[8] = np.log(pars[8])
 	# nu_c2 
 	theta[9] = np.log(pars[9])
-	# nu_h0 
+	# nu_h
 	theta[10] = np.log(pars[10])
-	# nu_h1 
-	theta[11] = np.log(pars[11])
 	# d_nu_h 
-	theta[12] = np.log(pars[12])
+	theta[11] = np.log(pars[11])
 	# miss_prob
+	theta[12] = pars[12]
 	theta[13] = pars[13]
-	theta[14] = pars[14]
 	return theta 
 
 def extract_pars(theta):
@@ -63,15 +61,13 @@ def extract_pars(theta):
 	pars[8] = np.exp(theta[8])
 	# nu_c2 
 	pars[9] = np.exp(theta[9])
-	# nu_h0 
+	# nu_h 
 	pars[10] = np.exp(theta[10])
-	# nu_h1 
-	pars[11] = np.exp(theta[11])
 	# d_nu_h 
-	pars[12] = np.exp(theta[12])
+	pars[11] = np.exp(theta[11])
 	# miss_prob
+	pars[12] = theta[12]
 	pars[13] = theta[13]
-	pars[14] = theta[14]
 	return pars 
 
 

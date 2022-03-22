@@ -27,9 +27,9 @@ def eu_fun(u,ev,beta,varepsilon,gamma):
 
 @njit(float64(float64,float64,float64,float64,float64,float64),fastmath=True,cache=True)
 def ces_fun(cons,amen,nu_c,nu_h,rho, eqscale):
-    cons_eq = cons/eqscale
-    amen_eq = amen/eqscale
-    ces = (nu_c * (cons**(1.0 - rho)) + nu_h * (amen**(1.0 - rho)))**(1.0 / (1.0 - rho))
+    cons_eq = cons
+    amen_eq = amen
+    ces = (nu_c/eqscale) *(  (cons**(1.0 - rho)) + nu_h * (amen**(1.0 - rho)))**(1.0 / (1.0 - rho))
     return ces
 
 spec_prefs = [
@@ -41,8 +41,7 @@ spec_prefs = [
     ('nu_c0',float64),
     ('nu_c1',float64),
     ('nu_c2',float64),
-    ('nu_h0',float64),
-    ('nu_h1',float64),
+    ('nu_h',float64),
     ('beta',float64)
 ]
 
@@ -51,8 +50,7 @@ spec_prefs = [
 class set_prefs(object):
     def __init__(self, varepsilon= 0.614, d_varepsilon=0.016, gamma = 0.058,
                 d_gamma = 0.11, rho = 0.515, b_x = 0.0012, d_b_x = 0.000724, b_k = 2.61e3,
-                 nu_c0 = 1.0, nu_c1 = 0.67, nu_c2 = 0.0094, nu_h0 = 0.0959, nu_h1 =
-                 0.019, d_nu_h = 0.00415, beta = 0.97, live_fast=0, risk_averse=0,
+                 nu_c0 = 1.0, nu_c1 = 0.67, nu_c2 = 0.0094, nu_h = 0.0959, d_nu_h = 0.00415, beta = 0.97, live_fast=0, risk_averse=0,
                  beq_money=0, pref_home=0):
         self.varepsilon = varepsilon
         if live_fast==1:
@@ -68,30 +66,24 @@ class set_prefs(object):
         self.nu_c0 = nu_c0
         self.nu_c1 = nu_c1
         self.nu_c2 = nu_c2
-        self.nu_h0 = nu_h0
-        self.nu_h1 = nu_h1
+        self.nu_h = nu_h
         if pref_home==1:
-            self.nu_h0 += d_nu_h
-            self.nu_h1 += d_nu_h
+            self.nu_h += d_nu_h
         self.beta = beta
         return
 
-@njit(Tuple((float64[:], float64[:]))(int64, int64[:], int64[:],
+@njit(float64[:](int64, int64[:], int64[:],
     set_dims.class_type.instance_type, set_prefs.class_type.instance_type, float64),fastmath=True, cache=True)
 def update_nus(married, s_i, s_j, dims, prefs, eqscale):
     nu_ij_c = np.empty(dims.n_s)
-    nu_ij_h = np.empty(dims.n_s)
     nu_c = np.array([prefs.nu_c0, prefs.nu_c1, prefs.nu_c2, 0.0])
-    nu_h = np.array([prefs.nu_h0, prefs.nu_h1, 0.0, 0.0])
     if married==1:
         for i in range(dims.n_s):
-            nu_ij_c[i] = nu_c[s_i[i]] + eqscale*nu_c[s_j[i]]
-            nu_ij_h[i] = nu_h[s_i[i]] + eqscale*nu_h[s_j[i]]
+            nu_ij_c[i] = nu_c[s_i[i]] + nu_c[s_j[i]]
     else :
         for i in range(dims.n_s):
             nu_ij_c[i] = nu_c[s_i[i]]
-            nu_ij_h[i] = nu_h[s_i[i]]
-    return nu_ij_c, nu_ij_h
+    return nu_ij_c
 
 
 

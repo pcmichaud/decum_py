@@ -37,11 +37,11 @@ def func_solve(row,theta):
                           surv_bias,sp_surv_bias,miss_par=-0.85,sp_miss_par=0.6)
     else :
         prefs = set_prefs(varepsilon=theta[0],d_varepsilon=theta[1],
-        gamma=theta[2],d_gamma=theta[3],rho=theta[4],b_x=theta[5],d_b_x=theta[6],b_k=theta[7],nu_c1=theta[8],nu_c2=theta[9],nu_h0=theta[10],nu_h1=theta[11],d_nu_h=theta[12],live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
+        gamma=theta[2],d_gamma=theta[3],rho=theta[4],b_x=theta[5],d_b_x=theta[6],b_k=theta[7],nu_c1=theta[8],nu_c2=theta[9],nu_h=theta[10],d_nu_h=theta[11],live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
         p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
             setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                      surv_bias,sp_surv_bias,miss_par=theta[13],sp_miss_par=theta[14])
-    nu_ij_c,nu_ij_h = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
+                      surv_bias,sp_surv_bias,miss_par=theta[12],sp_miss_par=theta[13])
+    nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
     for i in range(13):
         f_prices, f_benfs = set_scenario(row,i)
         i_prices = set_prices(f_prices[0], f_prices[1], f_prices[2])
@@ -49,7 +49,7 @@ def func_solve(row,theta):
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         row['value_' + str(i)] = get_value(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
-                                         nu_ij_c, nu_ij_h, rates, dims, prefs)
+                                         nu_ij_c, rates, dims, prefs)
     return row
 
 def func_simulate(row,theta):

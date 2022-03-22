@@ -9,35 +9,44 @@ import numpy as np
 if __name__ == '__main__':
 	warnings.simplefilter(action='ignore')
 	data = init_data()
-	data = data.sample(n=250)
+	data = data.sample(n=250,random_state=1234)
 	maxeval=10000
 	pars = np.array([0.614,
 			0.016,
 			0.5,
-			0.108,
+			0.1,
 			0.515,
-			0.001,
-			0.0007,
-			2617.0,
-			0.669,
-			0.009,
-			0.096,
-			0.019,
-			0.004,
-			-0.835,
-			0.601])
+			0.05,
+			0.05,
+			500.0,
+			0.6,
+			0.2,
+			0.1,
+			0.025,
+			-0.8,
+			0.5])
 	partial_distance = partial(concentrated_distance_within,data=data,npartitions=250)
-	eps = np.linspace(0.5,5.0,5)
-	ssds = []
-	for ep in eps: 
-		pars_g = pars[:]
-		pars_g[0] = ep
-		theta = set_theta(pars)
-		n_free_theta = theta.shape[0]
-		grad = 0.0
-		ssd = partial_distance(theta,grad)
-		ssds.append(ssd)
-		print(ep,ssd)
+	theta = set_theta(pars)
+	grad = 0.0
+	ssd = partial_distance(theta,grad)
+	
+	#eps = np.linspace(0.5,0.95,4)
+	#gammas = np.linspace(0.5,0.95,4)
+	#rhos = np.linspace(0.45,0.90,3)
+	#bxs = np.linspace(0,0.5,5)
+	#for ep in eps: 
+""" 		for gamma in gammas:
+			for rho in rhos:
+				for bx in bxs:
+					pars_g = pars[:]
+					pars_g[0] = ep
+					pars_g[2] = gamma 
+					pars_g[4] = rho
+					pars_g[5] = bx
+					theta = set_theta(pars_g)
+					grad = 0.0
+					ssd = partial_distance(theta,grad)
+					print('*** - ',ep,gamma,rho,bx, ssd) """
 
 		
 
