@@ -8,7 +8,6 @@ from matplotlib import pyplot as plt
 from scipy.stats import ttest_ind 
 
 
-
 # Load values which are compared by run_ref.py
 df = pd.read_csv('output/values_full.csv')
 pd.set_option('display.max_rows', 500)
@@ -40,7 +39,11 @@ for c in probs.columns:
     probs[c] = np.log(probs[c]/(1.0-probs[c]))
 
 # sigmas
-sigmas = [0.032036111577690526, 0.44885211797694485, 0.06445417371634762]
+sigmas = np.load('output/sigmas_ref.npy') 
+
+df['sigma_ann'] = np.where(df['know_ann']==1,sigmas[0,1],sigmas[0,0])
+df['sigma_ltc'] = np.where(df['know_ltci']==1,sigmas[1,1],sigmas[1,0])
+df['sigma_rmr'] = np.where(df['know_rmr']==1,sigmas[2,1],sigmas[2,0])
 
 
 # deltas 
@@ -48,7 +51,7 @@ deltas = pd.DataFrame(index=probs.index,columns=['ann','ltc','rmr'])
 j = 0
 for p in ['ann','ltc','rmr']:
     labs = [p+'_'+str(i) for i in range(1,5)]
-    deltas['delta_'+p] = probs[labs].mean(axis=1) - sigmas[j]*values[labs].mean(axis=1) 
+    deltas['delta_'+p] = -(probs[labs].mean(axis=1) - df['sigma_'+p]*values[labs].mean(axis=1))
     j +=1
 
 print(deltas.describe().transpose())
@@ -65,15 +68,16 @@ def ecdf(a):
 
 # figures 
 plt.figure()
-for p in ['ann','ltc','rmr']:
+colors = ['mediumseagreen','indianred','cornflowerblue']
+for i,p in enumerate(['ann','ltc','rmr']):
     x, y = ecdf(deltas['delta_'+p])
     x = np.insert(x, 0, x[0])
     y = np.insert(y, 0, 0.)
-    plt.plot(x, y, drawstyle='steps-post',label=p)
+    plt.plot(x, y, drawstyle='steps-post',label=p,color=colors[i])
 plt.legend()
 plt.ylabel('cdf')
 plt.xlabel('$\\delta$')
-plt.savefig('output/deltas_full.png',dpi=1200)
+plt.savefig('output/deltas_full.eps',format='eps')
 plt.show()
 
 # stats by characteristics

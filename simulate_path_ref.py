@@ -67,6 +67,6 @@ for v in vars_list:
 		for a in ax.flat:
 			a.set(xlabel='time', ylabel='mean - rate')
 		plt.tight_layout() 
-		plt.savefig('output/simulated_path_ref_'+v+'.png',dpi=1200)
+		plt.savefig('output/simulated_path_ref_'+v+'.eps',format='eps')
 		
 

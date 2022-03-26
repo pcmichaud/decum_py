@@ -9,22 +9,22 @@ import numpy as np
 if __name__ == '__main__':
 	warnings.simplefilter(action='ignore')
 	data = init_data()
-	data = data.sample(n=250)
+	#data = data.sample(n=250)
 	maxeval=10000
 	pars = np.array([0.614,
 			0.016,
-			1.584,
+			0.65,
 			0.108,
-			0.515,
-			0.001,
-			0.0007,
-			2617.0,
+			0.65,
+			0.05,
+			0.05,
+			500.0,
 			0.669,
-			0.009,
-			0.096,
-			0.004,
-			-0.835,
-			0.601])
+			0.1,
+			0.1,
+			0.05,
+			0.1,
+			0.1])
 	theta = set_theta(pars)
 	n_free_theta = theta.shape[0]
 	dx = np.zeros(n_free_theta)
@@ -41,5 +41,5 @@ if __name__ == '__main__':
 	opt_pars = extract_pars(theta)
 	print('estimates = ', opt_pars)
 	print('final distance = ', distance)
-        #np.save('output/estimates_test.npy',opt_pars)
+	np.save('output/estimates_ref',opt_pars)
 
