@@ -106,3 +106,5 @@ test_stats.append(test_stat[0])
 table['t-value'] = test_stats
 print(table)
 table.round(3).to_latex('output/deltas_by_product.tex')
+
+#### compute overall means and sd for Results Table
