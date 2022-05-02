@@ -155,6 +155,9 @@ def get_sim_path(seed, cons_rules, cond_values, hh, rp, sp, base_value, prices, 
     own_path[:] = np.nan
     wlth_path = np.empty(dims.T, dtype=np.float64)
     wlth_path[:] = np.nan
+    home_path = np.empty(dims.T, dtype=np.float64)
+    home_path[:] = np.nan
+
     # find current state
     i_h = hh['own']
     i_e = 2
@@ -177,6 +180,7 @@ def get_sim_path(seed, cons_rules, cond_values, hh, rp, sp, base_value, prices, 
             du = 0.0
         ww_space = dims.w_space[d_low,:,i_s,i_e,i_h,t]
         wlth_path[t] = max(w_t,ww_space[0])
+        home_path[t] = i_h*(p_h[i_e,t] - d_t)
         w_low, w_up, wu = scale(w_t,ww_space)
         # get decisions by interpolation over continuous state
         for i_hh in range(2):
@@ -229,7 +233,7 @@ def get_sim_path(seed, cons_rules, cond_values, hh, rp, sp, base_value, prices, 
             w_t = w_p
             d_t = d_p
 
-    return cons_path, own_path, wlth_path
+    return cons_path, own_path, wlth_path, home_path
 
 
 

@@ -108,3 +108,4 @@ print(table)
 table.round(3).to_latex('output/deltas_by_product.tex')
 
 #### compute overall means and sd for Results Table
+print(df[deltas].describe())

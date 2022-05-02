@@ -118,12 +118,13 @@ def func_simulate(row,theta):
     #                             dims)
     #b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
 
-    cons_path, own_path, wlth_path     = get_sim_path(row['seed'],cons_rules, cond_values, hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+    cons_path, own_path, wlth_path, home_path     = get_sim_path(row['seed'],cons_rules, cond_values, hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
                                          nu_ij_c,rates, dims, prefs)
     row[['cons_' + str(i) for i in range(dims.T)]] = cons_path
     row[['own_' + str(i) for i in range(dims.T)]] = own_path
     row[['wlth_' + str(i) for i in range(dims.T)]] = wlth_path
+    row[['home_' + str(i) for i in range(dims.T)]] = home_path
     return row
 
 def set_scenario(row,scn):
@@ -172,6 +173,7 @@ def simulate_df(data, npartitions=12,theta=None):
     df[['cons_'+str(x) for x in range(45)]] = np.nan
     df[['own_'+str(x) for x in range(45)]] = np.nan
     df[['wlth_'+str(x) for x in range(45)]] = np.nan
+    df[['home_'+str(x) for x in range(45)]] = np.nan
     df['seed'] = np.random.shuffle(df.index.to_numpy())
     list_df = np.array_split(df, npartitions)
     compress_compute_chunks = partial(compute_sim_chunks,theta=theta)
