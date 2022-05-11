@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 import statsmodels.api as sm
 lowess = sm.nonparametric.lowess
 
-df = pd.read_csv('output/simulated_full.csv')
+df = pd.read_csv('output/simulated_nokappa.csv')
 df['qinc'] = pd.qcut(df['totinc'],q=4)
 for a in np.arange(40):
 	df['surv_'+str(a)] = np.where(~df['cons_'+str(a)].isna(),1,0)

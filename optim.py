@@ -8,72 +8,158 @@ def within_difference(data):
 		data.loc[:,c] = data[c] - mean_data.loc[:]
 	return data
 
-def set_theta(pars):
-	theta = np.zeros(pars.shape[0])
+def set_theta(pars, isfree):
+	theta = np.zeros(int(np.sum(isfree)))
+	i = 0
 	# varepsilon
-	theta[0] = np.log(pars[0])
+	if isfree[0]==1:
+		theta[i] = np.log(pars[0])
+		i += 1
 	# d_varepsilon 
-	theta[1] = np.log(pars[1])
+	if isfree[1]==1:
+		theta[i] = np.log(pars[1])
+		i += 1
 	# gamma 
-	theta[2] = np.log(pars[2])
+	if isfree[2]==1:
+		theta[i] = np.log(pars[2])
+		i +=1
 	# d_gamma 
-	theta[3] = np.log(pars[3])
+	if isfree[3]==1:
+		theta[i] = np.log(pars[3])
+		i +=1
 	# rho 
-	theta[4] = np.log(pars[4]/(1.0-pars[4]))
+	if isfree[4]==1:
+		theta[i] = np.log(pars[4]/(1.0-pars[4]))
+		i +=1 
 	# b_x 
-	theta[5] = np.log(pars[5])
+	if isfree[5]==1:
+		theta[i] = np.log(pars[5])
+		i +=1 
 	# d_b_x 
-	theta[6] = np.log(pars[6])
+	if isfree[6]==1:
+		theta[i] = np.log(pars[6])
+		i +=1 
 	# b_k
-	theta[7] = np.log(pars[7])
+	if isfree[7]==1:
+		theta[i] = np.log(pars[7])
+		i +=1 
 	# nu_c1
-	theta[8] = np.log(pars[8])
+	if isfree[8]==1:
+		theta[i] = np.log(pars[8])
+		i +=1
 	# nu_c2 
-	theta[9] = np.log(pars[9])
+	if isfree[9]==1:
+		theta[i] = np.log(pars[9])
+		i +=1
 	# nu_h
-	theta[10] = np.log(pars[10])
+	if isfree[10]==1:
+		theta[i] = np.log(pars[10])
+		i +=1
 	# d_nu_h 
-	theta[11] = np.log(pars[11])
+	if isfree[11]==1:
+		theta[i] = np.log(pars[11])
+		i +=1
 	# miss_prob
-	theta[12] = pars[12]
-	theta[13] = pars[13]
+	if isfree[12]==1:
+		theta[i] = pars[12]
+		i +=1 
+	if isfree[13]==1:
+		theta[i] = pars[13]
+		i +=1 
 	return theta 
 
-def extract_pars(theta):
-	pars = np.zeros(theta.shape[0])
+def extract_pars(theta, isfree, ipars):
+	pars = np.zeros(ipars.shape[0])
+	i = 0
 	# varepsilon
-	pars[0] = np.exp(theta[0])
+	if isfree[0]==1:
+		pars[0] = np.exp(theta[i])
+		i +=1
+	else :
+		pars[0] = ipars[0]
 	# d_varepsilon 
-	pars[1] = np.exp(theta[1])
+	if isfree[1]==1:
+		pars[1] = np.exp(theta[i])
+		i +=1
+	else :
+		pars[1] = ipars[1]
 	# gamma 
-	pars[2] = np.exp(theta[2])
+	if isfree[2]==1:
+		pars[2] = np.exp(theta[i])
+		i +=1 
+	else :
+		pars[2] = ipars[2]
 	# d_gamma 
-	pars[3] = np.exp(theta[3])
+	if isfree[3]==1:
+		pars[3] = np.exp(theta[i])
+		i +=1 
+	else :
+		pars[3] = ipars[3]
 	# rho 
-	pars[4] = np.exp(theta[4])/(1.0+np.exp(theta[4]))
+	if isfree[4]==1:
+		pars[4] = np.exp(theta[i])/(1.0+np.exp(theta[i]))
+		i +=1
+	else :
+		pars[4] = ipars[4]
 	# b_x 
-	pars[5] = np.exp(theta[5])
+	if isfree[5]==1:
+		pars[5] = np.exp(theta[i])
+		i +=1
+	else :
+		pars[5] = ipars[5]
 	# d_b_x 
-	pars[6] = np.exp(theta[6])
+	if isfree[6]==1:
+		pars[6] = np.exp(theta[i])
+		i +=1 
+	else :
+		pars[6] = ipars[6]
 	# b_k
-	pars[7] = np.exp(theta[7])
+	if isfree[7]==1:
+		pars[7] = np.exp(theta[i])
+		i +=1 
+	else :
+		pars[7] = ipars[7]
 	# nu_c1
-	pars[8] = np.exp(theta[8])
+	if isfree[8]==1:
+		pars[8] = np.exp(theta[i])
+		i +=1
+	else :
+		pars[8] = ipars[8]
 	# nu_c2 
-	pars[9] = np.exp(theta[9])
+	if isfree[9]==1:
+		pars[9] = np.exp(theta[i])
+		i +=1 
+	else :
+		pars[9] = ipars[9]
 	# nu_h 
-	pars[10] = np.exp(theta[10])
+	if isfree[10]==1:
+		pars[10] = np.exp(theta[i])
+		i +=1 
+	else :
+		pars[10] = ipars[10]
 	# d_nu_h 
-	pars[11] = np.exp(theta[11])
+	if isfree[11]==1:
+		pars[11] = np.exp(theta[i])
+		i +=1 
+	else :
+		pars[11] = ipars[11]
 	# miss_prob
-	pars[12] = theta[12]
-	pars[13] = theta[13]
+	if isfree[12]==1:
+		pars[12] = theta[i]
+		i +=1 
+	else :
+		pars[12] = ipars[12]
+	if isfree[13]==1:
+		pars[13] = theta[i]
+		i +=1 
+	else :
+		pars[13] = ipars[13]
 	return pars 
 
 
-def concentrated_distance_within(theta, grad, data, npartitions=50):	
+def concentrated_distance_within(theta, grad, data, isfree, ipars, scn_name, npartitions=50):	
 	# get params 
-	pars = extract_pars(theta)
+	pars = extract_pars(theta,isfree,ipars)
 	# get dataset with solved expected utilities
 	df = solve_df(data, npartitions=npartitions, theta=pars)
 	# take difference in value with respect to baseline 
@@ -135,12 +221,12 @@ def concentrated_distance_within(theta, grad, data, npartitions=50):
 	print('- function call summary')
 	print('ssd = ', sum_distance, ' sigmas = ',sigmas)
 	print('pars = ',pars)
-	np.save('output/sigmas_ref',sigmas)
+	np.save('output/sigmas_'+scn_name,sigmas)
 	return sum_distance 
 
-def residuals_within(theta, sigmas, data, npartitions=50):	
+def residuals_within(theta, sigmas, data, isfree, ipars, npartitions=50):	
 	# get params 
-	pars = extract_pars(theta)
+	pars = extract_pars(theta,isfree,ipars)
 	# get dataset with solved expected utilities
 	df = solve_df(data, npartitions=npartitions, theta=pars)
 	# take difference in value with respect to baseline 
@@ -184,9 +270,9 @@ def residuals_within(theta, sigmas, data, npartitions=50):
 		residuals.loc[:,s] = df.loc[:,'w_odd_'+str(s)] - df['sigma_rmr']* df.loc[:,'w_value_'+str(s)]
 	return residuals
 
-def g_within(theta, sigmas, data, npartitions=50):	
+def g_within(theta, sigmas, data, isfree, ipars, npartitions=50):	
 	# get params 
-	pars = extract_pars(theta)
+	pars = extract_pars(theta,isfree,ipars)
 	# get dataset with solved expected utilities
 	df = solve_df(data, npartitions=npartitions, theta=pars)
 	# take difference in value with respect to baseline 

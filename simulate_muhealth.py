@@ -6,7 +6,7 @@ import pandas as pd
 if __name__ == '__main__':
     warnings.simplefilter(action='ignore')
     data = init_data()
-    theta = np.load('output/estimates_ref.npy')
+    theta = np.load('output/estimates_nokappa.npy')
     theta[8:9] = 1.0
     values = simulate_df(data, npartitions=250,theta=theta)
     print(values[['cons_'+str(x) for x in range(45)]].describe().transpose())

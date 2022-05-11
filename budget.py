@@ -91,7 +91,7 @@ def beq_fun(d, w, i_hh, p_h, b_its, tau_s0, tau_s1):
         mc_s = tau_s0 + tau_s1 * p_h
         p = p_h - d - mc_s - b_its
         beq += p
-    beq = max(beq,0.0)
+    beq = max(beq,0.01)
     return beq
 
 @njit(Tuple((float64,float64))(float64,float64,int64,int64,

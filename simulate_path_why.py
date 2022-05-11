@@ -8,7 +8,7 @@ lowess = sm.nonparametric.lowess
 
 dfs = []
 
-scns = ['full','nobequest','transfers']
+scns = ['nokappa','nobequest','transfers','muhealth','medrisk']
 for scn in scns:
 	df = pd.read_csv('output/simulated_'+scn+'.csv')
 	df['qinc'] = pd.qcut(df['totinc'],q=3)
@@ -38,7 +38,7 @@ plt.figure()
 for i,scn in enumerate(scns):
 	df = dfs[i]
 	d_m, d_low, d_up = smooth_profile(df[['wlth_'+str(x) for x in range(cut_time)]],df['married'])
-	if scn=='full':
+	if scn=='nokappa':
 		plt.plot(ages,d_m[:,0],color=colors[i],label=scn)
 	else :
 		plt.plot(ages,d_m[:,0],color=colors[i],linestyle='dashed',label=scn)
@@ -54,7 +54,7 @@ plt.figure()
 for i,scn in enumerate(scns):
 	df = dfs[i]
 	d_m, d_low, d_up = smooth_profile(df[['wlth_'+str(x) for x in range(cut_time)]],df['married'])
-	if scn=='full':
+	if scn=='nokappa':
 		plt.plot(ages,d_m[:,1],color=colors[i],label=scn)
 	else :
 		plt.plot(ages,d_m[:,1],color=colors[i],linestyle='dashed',label=scn)
@@ -71,7 +71,7 @@ plt.figure()
 for i,scn in enumerate(scns):
 	df = dfs[i]
 	d_m, d_low, d_up = smooth_profile(df[['totwlth_'+str(x) for x in range(cut_time)]],df['married'])
-	if scn=='full':
+	if scn=='nokappa':
 		plt.plot(ages,d_m[:,0],color=colors[i],label=scn)
 	else :
 		plt.plot(ages,d_m[:,0],color=colors[i],linestyle='dashed',label=scn)
@@ -87,7 +87,7 @@ plt.figure()
 for i,scn in enumerate(scns):
 	df = dfs[i]
 	d_m, d_low, d_up = smooth_profile(df[['totwlth_'+str(x) for x in range(cut_time)]],df['married'])
-	if scn=='full':
+	if scn=='nokappa':
 		plt.plot(ages,d_m[:,1],color=colors[i],label=scn)
 	else :
 		plt.plot(ages,d_m[:,1],color=colors[i],linestyle='dashed',label=scn)

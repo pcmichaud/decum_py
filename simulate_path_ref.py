@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 import statsmodels.api as sm
 lowess = sm.nonparametric.lowess
 
-df = pd.read_csv('output/simulated_full.csv')
+df = pd.read_csv('output/simulated_nokappa.csv')
 
 df['qinc'] = pd.qcut(df['totinc'],q=4)
 df['qhome'] = pd.qcut(df['home_value'],q=4)
@@ -69,6 +69,6 @@ for v in vars_list:
 		for a in ax.flat:
 			a.set(xlabel='time', ylabel='mean - rate')
 		plt.tight_layout() 
-		plt.savefig('output/simulated_path_ref_'+v+'.eps',format='eps')
+		plt.savefig('output/simulated_path_nokappa_'+v+'.png',format='png')
 		
 

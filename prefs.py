@@ -19,6 +19,19 @@ def ez_fun(u,ev,beta,varepsilon,gamma):
     return ez
 
 @njit(float64(float64,float64,float64,float64,float64),fastmath=True, cache=True)
+def bo_fun(u,ev,beta,varepsilon,gamma):
+    present = (1.0 - beta) * (u**(1.0 - varepsilon))
+    if ev!=0.0:
+        if gamma != 1.0:
+            future = (beta) * (ev ** ((1.0 - varepsilon) / (1.0 - gamma)))
+        else :
+            future = (beta) * (np.exp(ev) ** (1.0 - varepsilon))
+    else :
+        future = 0.0
+    ez = (present + future)**(1.0 / (1.0 - varepsilon))
+    return ez
+
+@njit(float64(float64,float64,float64,float64,float64),fastmath=True, cache=True)
 def eu_fun(u,ev,beta,varepsilon,gamma):
     present = (u**(1.0-gamma))/(1.0-gamma)
     future = beta * ev

@@ -13,7 +13,8 @@ if __name__ == '__main__':
 	# estimates from reference scenario
 	sigmas = np.load('output/sigmas_ref.npy')
 	pars = np.load('output/estimates_ref.npy')
-	theta = set_theta(pars)
+	isfree = np.ones(pars.shape[0])
+	theta = set_theta(pars,isfree)
 	# sizes
 	n_free_theta = theta.shape[0]
 	n_sigmas = sigmas.shape[0]*sigmas.shape[1]
@@ -21,20 +22,18 @@ if __name__ == '__main__':
 	nresp = len(data)
 	K = 12
 	eps = 1e-4
-	es = residuals_within(theta, sigmas, data, npartitions=n_part)
+	es = residuals_within(theta, sigmas, data, isfree, pars, npartitions=n_part)
 	es.to_csv('output/within_residuals_ref.csv')
 	es = es.stack()
-
 	print(es.head(50))
-
-	theta = set_theta(pars)
-	gs = g_within(theta, sigmas, data, npartitions=n_part).stack()
+	theta = set_theta(pars,isfree)
+	gs = g_within(theta, sigmas, data, isfree, pars, npartitions=n_part).stack()
 	grad = pd.DataFrame(index=es.index,columns=[x for x in range(J)])
 	for j in range(n_free_theta):
 		print(j)
 		theta_up = theta[:]
 		theta_up[j] += eps
-		gs_up = g_within(theta_up, sigmas, data, npartitions=n_part).stack()
+		gs_up = g_within(theta_up, sigmas, data, isfree, pars, npartitions=n_part).stack()
 		grad[j] = (gs_up - gs)/eps
 	print(grad.head(50))
 	j_start = n_free_theta
@@ -43,7 +42,7 @@ if __name__ == '__main__':
 		for k in range(2):
 			sigmas_up = sigmas[:,:]
 			sigmas_up[j,k] += eps
-			gs_up = g_within(theta, sigmas_up, data, npartitions=n_part).stack()
+			gs_up = g_within(theta, sigmas_up, data, isfree, pars, npartitions=n_part).stack()
 			grad[j_start+jj] = (gs_up - gs)/eps
 			jj +=1
 	print(grad.head(50))
