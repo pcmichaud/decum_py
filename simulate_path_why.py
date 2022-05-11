@@ -17,6 +17,7 @@ for scn in scns:
 		df['totwlth_'+str(a)] = df['wlth_'+str(a)] + df['home_'+str(a)]
 	dfs.append(df)
 vars_list = ['married']
+scns = ['baseline','no bequest','low transfers','state-independent $\\nu_c$','no med risk']
 cut_time = 30
 
 def smooth_profile(data,byvar):
@@ -38,7 +39,7 @@ plt.figure()
 for i,scn in enumerate(scns):
 	df = dfs[i]
 	d_m, d_low, d_up = smooth_profile(df[['wlth_'+str(x) for x in range(cut_time)]],df['married'])
-	if scn=='nokappa':
+	if scn=='baseline':
 		plt.plot(ages,d_m[:,0],color=colors[i],label=scn)
 	else :
 		plt.plot(ages,d_m[:,0],color=colors[i],linestyle='dashed',label=scn)
@@ -54,7 +55,7 @@ plt.figure()
 for i,scn in enumerate(scns):
 	df = dfs[i]
 	d_m, d_low, d_up = smooth_profile(df[['wlth_'+str(x) for x in range(cut_time)]],df['married'])
-	if scn=='nokappa':
+	if scn=='baseline':
 		plt.plot(ages,d_m[:,1],color=colors[i],label=scn)
 	else :
 		plt.plot(ages,d_m[:,1],color=colors[i],linestyle='dashed',label=scn)
@@ -71,7 +72,7 @@ plt.figure()
 for i,scn in enumerate(scns):
 	df = dfs[i]
 	d_m, d_low, d_up = smooth_profile(df[['totwlth_'+str(x) for x in range(cut_time)]],df['married'])
-	if scn=='nokappa':
+	if scn=='baseline':
 		plt.plot(ages,d_m[:,0],color=colors[i],label=scn)
 	else :
 		plt.plot(ages,d_m[:,0],color=colors[i],linestyle='dashed',label=scn)
@@ -87,7 +88,7 @@ plt.figure()
 for i,scn in enumerate(scns):
 	df = dfs[i]
 	d_m, d_low, d_up = smooth_profile(df[['totwlth_'+str(x) for x in range(cut_time)]],df['married'])
-	if scn=='nokappa':
+	if scn=='baseline':
 		plt.plot(ages,d_m[:,1],color=colors[i],label=scn)
 	else :
 		plt.plot(ages,d_m[:,1],color=colors[i],linestyle='dashed',label=scn)

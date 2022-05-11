@@ -1,13 +1,13 @@
 %!PS-Adobe-3.0 EPSF-3.0
 %%Title: simulated_path_why_finwlth_couples.eps
 %%Creator: Matplotlib v3.5.0, https://matplotlib.org/
-%%CreationDate: Wed May 11 15:33:27 2022
+%%CreationDate: Wed May 11 16:49:43 2022
 %%Orientation: portrait
 %%BoundingBox: 75 223 537 569
 %%HiResBoundingBox: 75.600000 223.200000 536.400000 568.800000
 %%EndComments
 %%BeginProlog
-/mpldict 11 dict def
+/mpldict 12 dict def
 mpldict begin
 /_d { bind def } bind def
 /m { moveto } _d
@@ -37,10 +37,18 @@ mpldict begin
 /FontMatrix [0.00048828125 0 0 0.00048828125 0 0] def
 /FontBBox [-2090 -948 3673 2524] def
 /FontType 3 def
-/Encoding [/space /zero /one /two /three /four /five /six /eight /a /b /c /d /e /f /g /h /i /k /l /m /n /o /p /q /r /s /t /u /w] def
-/CharStrings 31 dict dup begin
+/Encoding [/space /hyphen /zero /one /two /three /four /five /six /eight /a /b /c /d /e /f /g /h /i /k /l /m /n /o /p /q /r /s /t /u /w] def
+/CharStrings 32 dict dup begin
 /.notdef 0 def
 /space{651 0 0 0 0 0 sc
+ce} _d
+/hyphen{739 0 100 479 639 643 sc
+100 643 m
+639 643 l
+639 479 l
+100 479 l
+100 643 l
+
 ce} _d
 /zero{1303 0 135 -29 1167 1520 sc
 651 1360 m
@@ -759,6 +767,77 @@ end readonly def
 } _d
 
 FontName currentdict end definefont pop
+%!PS-Adobe-3.0 Resource-Font
+%%Creator: Converted from TrueType to Type 3 by Matplotlib.
+10 dict begin
+/FontName /DejaVuSans-Oblique def
+/PaintType 0 def
+/FontMatrix [0.00048828125 0 0 0.00048828125 0 0] def
+/FontBBox [-2080 -717 3398 2187] def
+/FontType 3 def
+/Encoding [/c /nu] def
+/CharStrings 3 dict dup begin
+/.notdef 0 def
+/c{1126 0 94 -29 1098 1147 sc
+1098 1077 m
+1061 895 l
+1017 927 970 951 920 967 c
+871 983 819 991 766 991 c
+707 991 651 981 598 960 c
+545 939 501 910 465 872 c
+408 814 363 746 332 668 c
+301 590 285 509 285 426 c
+285 325 310 250 360 201 c
+411 152 487 127 590 127 c
+641 127 694 135 751 150 c
+808 165 868 188 930 219 c
+895 37 l
+842 15 787 -1 730 -12 c
+674 -23 616 -29 557 -29 c
+408 -29 294 8 214 82 c
+134 157 94 263 94 401 c
+94 517 115 624 156 721 c
+198 819 260 907 342 985 c
+398 1038 464 1079 539 1106 c
+614 1133 697 1147 786 1147 c
+838 1147 890 1141 941 1129 c
+992 1118 1045 1100 1098 1077 c
+
+ce} _d
+/nu{1144 0 183 0 1093 1120 sc
+307 0 m
+183 1120 l
+381 1120 l
+487 180 l
+583 263 676 361 765 476 c
+832 562 875 642 892 717 c
+900 752 902 803 899 870 c
+896 949 867 1033 814 1120 c
+1000 1120 l
+1000 1120 l
+1035 1061 1059 990 1073 907 c
+1086 831 1088 767 1078 715 c
+1053 584 983 461 870 344 c
+722 192 600 77 503 0 c
+307 0 l
+
+ce} _d
+end readonly def
+
+/BuildGlyph {
+ exch begin
+ CharStrings exch
+ 2 copy known not {pop /.notdef} if
+ true 3 1 roll get exec
+ end
+} _d
+
+/BuildChar {
+ 1 index /Encoding get exch get
+ 1 index /BuildGlyph get exec
+} _d
+
+FontName currentdict end definefont pop
 end
 %%EndProlog
 mpldict begin
@@ -1405,15 +1484,15 @@ grestore
 0 setlinecap
 0.800 setgray
 gsave
-64.6 222.768625 m
-149.553125 222.768625 l
-150.886458 222.768625 151.553125 223.435292 151.553125 224.768625 c
-151.553125 297.128 l
-151.553125 298.461333 150.886458 299.128 149.553125 299.128 c
-64.6 299.128 l
-63.266667 299.128 62.6 298.461333 62.6 297.128 c
-62.6 224.768625 l
-62.6 223.435292 63.266667 222.768625 64.6 222.768625 c
+64.6 43.016 m
+202.6 43.016 l
+203.933333 43.016 204.6 43.682667 204.6 45.016 c
+204.6 118.7035 l
+204.6 120.036833 203.933333 120.7035 202.6 120.7035 c
+64.6 120.7035 l
+63.266667 120.7035 62.6 120.036833 62.6 118.7035 c
+62.6 45.016 l
+62.6 43.682667 63.266667 43.016 64.6 43.016 c
 cl
 gsave
 1.000 setgray
@@ -1426,110 +1505,154 @@ grestore
 2 setlinecap
 0.000 0.000 1.000 setrgbcolor
 gsave
-66.6 291.03425 m
-76.6 291.03425 l
-86.6 291.03425 l
+66.6 112.60975 m
+76.6 112.60975 l
+86.6 112.60975 l
 stroke
 grestore
 0.000 setgray
 gsave
 
-94.600000 287.534250 translate
+94.600000 109.109750 translate
 0.000000 rotate
-0.000000 0 m /n glyphshow
-6.337891 0 m /o glyphshow
-12.456055 0 m /k glyphshow
-18.122070 0 m /a glyphshow
-24.250000 0 m /p glyphshow
-30.597656 0 m /p glyphshow
-36.945312 0 m /a glyphshow
+0.000000 0 m /b glyphshow
+6.347656 0 m /a glyphshow
+12.475586 0 m /s glyphshow
+17.685547 0 m /e glyphshow
+23.837891 0 m /l glyphshow
+26.616211 0 m /i glyphshow
+29.394531 0 m /n glyphshow
+35.732422 0 m /e glyphshow
 grestore
 0 setlinecap
 [5.55 2.4] 0 setdash
 0.000 0.500 0.000 setrgbcolor
 gsave
-66.6 276.362375 m
-76.6 276.362375 l
-86.6 276.362375 l
+66.6 97.937875 m
+76.6 97.937875 l
+86.6 97.937875 l
 stroke
 grestore
 0.000 setgray
 gsave
 
-94.600000 272.862375 translate
+94.600000 94.437875 translate
 0.000000 rotate
 0.000000 0 m /n glyphshow
 6.337891 0 m /o glyphshow
-12.456055 0 m /b glyphshow
-18.803711 0 m /e glyphshow
-24.956055 0 m /q glyphshow
-31.303711 0 m /u glyphshow
-37.641602 0 m /e glyphshow
-43.793945 0 m /s glyphshow
-49.003906 0 m /t glyphshow
+12.456055 0 m /space glyphshow
+15.634766 0 m /b glyphshow
+21.982422 0 m /e glyphshow
+28.134766 0 m /q glyphshow
+34.482422 0 m /u glyphshow
+40.820312 0 m /e glyphshow
+46.972656 0 m /s glyphshow
+52.182617 0 m /t glyphshow
 grestore
 1.000 0.000 0.000 setrgbcolor
 gsave
-66.6 261.6905 m
-76.6 261.6905 l
-86.6 261.6905 l
+66.6 83.266 m
+76.6 83.266 l
+86.6 83.266 l
 stroke
 grestore
 0.000 setgray
 gsave
 
-94.600000 258.190500 translate
+94.600000 79.766000 translate
 0.000000 rotate
-0.000000 0 m /t glyphshow
-3.920898 0 m /r glyphshow
-8.032227 0 m /a glyphshow
-14.160156 0 m /n glyphshow
-20.498047 0 m /s glyphshow
-25.708008 0 m /f glyphshow
-29.228516 0 m /e glyphshow
-35.380859 0 m /r glyphshow
-39.492188 0 m /s glyphshow
+0.000000 0 m /l glyphshow
+2.778320 0 m /o glyphshow
+8.896484 0 m /w glyphshow
+17.075195 0 m /space glyphshow
+20.253906 0 m /t glyphshow
+24.174805 0 m /r glyphshow
+28.286133 0 m /a glyphshow
+34.414062 0 m /n glyphshow
+40.751953 0 m /s glyphshow
+45.961914 0 m /f glyphshow
+49.482422 0 m /e glyphshow
+55.634766 0 m /r glyphshow
+59.746094 0 m /s glyphshow
 grestore
 0.000 0.750 0.750 setrgbcolor
 gsave
-66.6 247.018625 m
-76.6 247.018625 l
-86.6 247.018625 l
+66.6 68.187875 m
+76.6 68.187875 l
+86.6 68.187875 l
 stroke
 grestore
 0.000 setgray
 gsave
-
-94.600000 243.518625 translate
+94.600000 64.687875 translate
 0.000000 rotate
-0.000000 0 m /m glyphshow
-9.741211 0 m /u glyphshow
-16.079102 0 m /h glyphshow
-22.416992 0 m /e glyphshow
-28.569336 0 m /a glyphshow
-34.697266 0 m /l glyphshow
-37.475586 0 m /t glyphshow
-41.396484 0 m /h glyphshow
+/DejaVuSans 10.0 selectfont
+0.000000 0.406250 moveto
+/s glyphshow
+5.209961 0.406250 moveto
+/t glyphshow
+9.130859 0.406250 moveto
+/a glyphshow
+15.258789 0.406250 moveto
+/t glyphshow
+19.179688 0.406250 moveto
+/e glyphshow
+25.332031 0.406250 moveto
+/hyphen glyphshow
+28.940430 0.406250 moveto
+/i glyphshow
+31.718750 0.406250 moveto
+/n glyphshow
+38.056641 0.406250 moveto
+/d glyphshow
+44.404297 0.406250 moveto
+/e glyphshow
+50.556641 0.406250 moveto
+/p glyphshow
+56.904297 0.406250 moveto
+/e glyphshow
+63.056641 0.406250 moveto
+/n glyphshow
+69.394531 0.406250 moveto
+/d glyphshow
+75.742188 0.406250 moveto
+/e glyphshow
+81.894531 0.406250 moveto
+/n glyphshow
+88.232422 0.406250 moveto
+/t glyphshow
+92.153320 0.406250 moveto
+/space glyphshow
+/DejaVuSans-Oblique 10.0 selectfont
+95.332031 0.406250 moveto
+/nu glyphshow
+/DejaVuSans-Oblique 7.0 selectfont
+100.917969 -1.234375 moveto
+/c glyphshow
 grestore
 0.750 0.000 0.750 setrgbcolor
 gsave
-66.6 232.34675 m
-76.6 232.34675 l
-86.6 232.34675 l
+66.6 52.594125 m
+76.6 52.594125 l
+86.6 52.594125 l
 stroke
 grestore
 0.000 setgray
 gsave
 
-94.600000 228.846750 translate
+94.600000 49.094125 translate
 0.000000 rotate
-0.000000 0 m /m glyphshow
-9.741211 0 m /e glyphshow
-15.893555 0 m /d glyphshow
-22.241211 0 m /r glyphshow
-26.352539 0 m /i glyphshow
-29.130859 0 m /s glyphshow
-34.340820 0 m /k glyphshow
+0.000000 0 m /n glyphshow
+6.337891 0 m /o glyphshow
+12.456055 0 m /space glyphshow
+15.634766 0 m /m glyphshow
+25.375977 0 m /e glyphshow
+31.528320 0 m /d glyphshow
+37.875977 0 m /space glyphshow
+41.054688 0 m /r glyphshow
+45.166016 0 m /i glyphshow
+47.944336 0 m /s glyphshow
+53.154297 0 m /k glyphshow
 grestore
 
 end
