@@ -5,10 +5,15 @@ from optim import *
 from matplotlib import pyplot as plt
 import statsmodels.api as sm
 lowess = sm.nonparametric.lowess
-
 dfs = []
 
-scns = ['nomiss','nobequest']
+
+
+
+
+
+
+scns = ['nomiss','nobequest', 'transfers','muhealth','medrisk']
 for scn in scns:
 	df = pd.read_csv('output/simulated_'+scn+'.csv')
 	df['qinc'] = pd.qcut(df['totinc'],q=3)
@@ -17,9 +22,7 @@ for scn in scns:
 		df['totwlth_'+str(a)] = df['wlth_'+str(a)] + df['home_'+str(a)]
 	dfs.append(df)
 vars_list = ['married']
-#scns = ['baseline','no bequest','low transfers','state-independent $\\nu_c$','no med risk']
-scns = ['baseline','no bequest']
-#
+scns = ['baseline','no bequest','low transfers','state-independent $\\nu_c$','no med risk']
 cut_time = 30
 
 def smooth_profile(data,byvar):

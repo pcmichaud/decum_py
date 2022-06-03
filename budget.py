@@ -27,6 +27,10 @@ spec_rates = [
     ('eqscale',float64)
 ]
 
+
+
+
+
 @jitclass(spec_rates)
 class set_rates(object):
     def __init__(self, rate=0.01, r_r=0.0949, r_d=0.02, r_h=0.02,
