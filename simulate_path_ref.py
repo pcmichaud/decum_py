@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 import statsmodels.api as sm
 lowess = sm.nonparametric.lowess
 
-df = pd.read_csv('output/simulated_nokappa.csv')
+df = pd.read_csv('output/simulated_bo.csv')
 
 df['qinc'] = pd.qcut(df['totinc'],q=4)
 df['qhome'] = pd.qcut(df['home_value'],q=4)

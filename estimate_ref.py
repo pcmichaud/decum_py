@@ -18,13 +18,13 @@ if __name__ == '__main__':
 			0.65,
 			0.05,
 			0.05,
-			500.0,
+			200.0,
 			0.669,
 			0.1,
 			0.1,
 			0.05,
-			0.1,
-			0.1])
+			0.0,
+			0.0])
 	isfree = np.ones(pars.shape[0])
 	theta = set_theta(pars,isfree)
 	n_free_theta = theta.shape[0]
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 	dx = np.zeros(n_free_theta)
 	for i in range(n_free_theta):
 		dx[i] = np.abs(theta[i])*0.25
-	partial_distance = partial(concentrated_distance_within,data=data,isfree=isfree,ipars=pars,npartitions=250, scn_name='ref')
+	partial_distance = partial(concentrated_distance_within,data=data,isfree=isfree,ipars=pars,npartitions=250, scn_name='ref2')
 	opt = nl.opt('LN_NEWUOA',n_free_theta)
 	opt.set_min_objective(partial_distance)
 	opt.set_initial_step(dx)
@@ -43,5 +43,5 @@ if __name__ == '__main__':
 	opt_pars = extract_pars(theta, isfree, pars)
 	print('estimates = ', opt_pars)
 	print('final distance = ', distance)
-	np.save('output/estimates_ref',opt_pars)
+	np.save('output/estimates_ref2',opt_pars)
 

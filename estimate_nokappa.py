@@ -23,10 +23,12 @@ if __name__ == '__main__':
 			0.1,
 			0.1,
 			0.05,
-			0.1,
-			0.1])
+			0.0,
+			0.0])
 	isfree = np.ones(pars.shape[0])
 	isfree[7] = 0
+        isfree[12] = 0
+        isfree[13] = 0
 	theta = set_theta(pars,isfree)
 	n_free_theta = theta.shape[0]
 	print('number of parameters = ',pars.shape[0],', number of free parameters = ',n_free_theta)

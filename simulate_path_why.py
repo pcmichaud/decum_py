@@ -1,6 +1,6 @@
 from tkinter import N
-import numpy as np 
-import pandas as pd 
+import numpy as np
+import pandas as pd
 from optim import *
 from matplotlib import pyplot as plt
 import statsmodels.api as sm
@@ -8,7 +8,7 @@ lowess = sm.nonparametric.lowess
 
 dfs = []
 
-scns = ['nokappa','nobequest','transfers','muhealth','medrisk']
+scns = ['nomiss','nobequest']
 for scn in scns:
 	df = pd.read_csv('output/simulated_'+scn+'.csv')
 	df['qinc'] = pd.qcut(df['totinc'],q=3)
@@ -17,7 +17,9 @@ for scn in scns:
 		df['totwlth_'+str(a)] = df['wlth_'+str(a)] + df['home_'+str(a)]
 	dfs.append(df)
 vars_list = ['married']
-scns = ['baseline','no bequest','low transfers','state-independent $\\nu_c$','no med risk']
+#scns = ['baseline','no bequest','low transfers','state-independent $\\nu_c$','no med risk']
+scns = ['baseline','no bequest']
+#
 cut_time = 30
 
 def smooth_profile(data,byvar):
@@ -48,7 +50,7 @@ plt.ylabel('financial wealth')
 plt.legend()
 plt.show()
 plt.savefig('output/simulated_path_why_finwlth_singles.eps',format='eps')
-		
+
 
 colors = ['b','g','r','c','m']
 plt.figure()
@@ -81,7 +83,7 @@ plt.ylabel('total wealth')
 plt.legend()
 plt.show()
 plt.savefig('output/simulated_path_why_totwlth_singles.eps',format='eps')
-		
+
 
 colors = ['b','g','r','c','m']
 plt.figure()
@@ -97,4 +99,6 @@ plt.ylabel('total wealth')
 plt.legend()
 plt.show()
 plt.savefig('output/simulated_path_why_totwlth_couples.eps',format='eps')
-		
+
+
+

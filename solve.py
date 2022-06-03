@@ -85,7 +85,7 @@ def get_rules(hh, rp, sp, base_value, prices, benfs,
     return c_t, condv_t
 
 def get_value(hh, rp, sp, base_value, prices, benfs,
-              p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its, nu_ij_c, 
+              p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its, nu_ij_c,
               rates, dims, prefs):
     v_t = np.zeros((dims.n_states, dims.T),dtype='float64')
     c_t = np.zeros((dims.n_states, 2, dims.T),dtype='float64')
@@ -98,7 +98,7 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
     v_last, c_last, condv_last = core_fun(dims.t_last, p_h, p_r, b_its,
                 f_h, nu_ij_c, med_ij, y_ij, qs_ij, hh['married'],
                 base_value, dims, rates, prefs, prices, benfs, nextv, cc_last, 1)
-
+    #print('done with last year',v_last[:50])
     # map those to all states
     v_t[dims.to_states[:],dims.t_last] = v_last[:]
     c_t[dims.to_states[:],0,dims.t_last] = c_last[:,0]
@@ -110,6 +110,7 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
         isolve = 0
         if t in dims.time_t:
             isolve = 1
+
         nextv = v_t[:,t+1].reshape((dims.n_d,dims.n_w,dims.n_s,
                                           dims.n_e,2),order='F')
         cc_last = np.copy(c_last)
@@ -284,6 +285,46 @@ def v_t_fun_ez(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
     vopt = (present + future)**(1.0/(1.0-vareps))
     return vopt
 
+@njit(float64(float64,float64,int64,int64,float64[:,:],
+              float64[:,:],float64[:],float64[:],
+              float64,set_prefs.class_type.instance_type,
+              set_dims.class_type.instance_type,
+              set_rates.class_type.instance_type),fastmath=True, cache=True)
+def v_t_fun_bo(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
+            base_value, prefs, dims, rates):
+    t = dims.t_last
+    i_d,i_w,i_s,i_e, i_h = dims.adm[z,:]
+    d0 = dims.d_h[i_d,i_e,t]
+    w_t = x - cons
+    if w_t >= 0.0:
+        w_t *= np.exp(rates.rate)
+    else :
+        r_b = i_h*rates.r_h + (1.0-i_h)*rates.r_r
+        w_t *= np.exp(r_b)
+    d_t = i_hh*(rates.xi_d*i_h*d0
+                + (1.0 - i_h)*rates.omega_d*p_h[i_e,t])
+    beq = 0.0
+    if prefs.b_x>0.0:
+        for i_ee in range(dims.n_e):
+            b_e = beq_fun(d_t,w_t,i_hh,p_h[i_ee,t],
+                          b_its[i_ee,t],rates.tau_s0,rates.tau_s1)
+            b_e = prefs.b_x/(1.0-prefs.varepsilon)*((prefs.b_k + b_e)**(1-prefs.varepsilon)
+                    - (prefs.b_k)**(1-prefs.varepsilon))
+            beq += f_h[i_ee]*np.exp(-prefs.gamma*(1.0-prefs.beta)*b_e)
+    else :
+        beq = 1.0
+    amen = i_h * p_h[2, 0]
+    eqscale = 1.0
+    if dims.n_s==16 and dims.a_j[i_s]==1:
+        eqscale += rates.eqscale
+    u = ces_fun(cons, amen, nu_ij_c[i_s], prefs.nu_h, prefs.rho, eqscale)
+    beta = prefs.beta
+    vareps = prefs.varepsilon
+    gamma = prefs.gamma
+    present = (1.0-beta)*(u**(1.0-vareps)-1.0)/(1.0-vareps)
+    vopt = present - (beta/gamma)*np.log(beq)
+    return vopt
+
 @njit(float64(float64,float64,int64, int64, int64,float64[:,:],
               float64[:,:],float64[:],float64[:],float64[:,:,:],
               float64, set_prefs.class_type.instance_type,
@@ -309,9 +350,7 @@ def v_fun_ez(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
         for i_ss in range(dims.n_s):
             ww_space = dims.w_space[d_low,:,i_ss,i_ee,i_hh,t+1]
             w_low, w_up, wu = scale(w_t, ww_space)
-            beq = 0.0
-            if prefs.b_x > 0.0:
-                beq = beq_fun(d_t,w_t,i_hh,p_h[i_ee,t+1],b_its[i_ee,t+1],
+            beq = beq_fun(d_t,w_t,i_hh,p_h[i_ee,t+1],b_its[i_ee,t+1],
                               rates.tau_s0, rates.tau_s1)
             v = nextv[:,:,i_ss,i_ee,i_hh]
             if i_ss < (dims.n_s-1):
@@ -341,6 +380,56 @@ def v_fun_ez(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
         eqscale += rates.eqscale
     u = ces_fun(cons, amen, nu_ij_c[i_s], prefs.nu_h, prefs.rho,eqscale)
     vopt = ez_fun(u, ev, prefs.beta, prefs.varepsilon, prefs.gamma)
+    return vopt
+
+
+@njit(float64(float64,float64,int64, int64, int64,float64[:,:],
+              float64[:,:],float64[:],float64[:],float64[:,:,:],
+              float64, set_prefs.class_type.instance_type,
+              set_dims.class_type.instance_type,
+              set_rates.class_type.instance_type, float64[:,:,:,:,:]),
+      fastmath=True, cache=True)
+def v_fun_bo(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
+            qs_ij, base_value, prefs, dims, rates, nextv):
+    i_d,i_w,i_s,i_e, i_h = dims.adm[z,:]
+    d0 = dims.d_h[i_d,i_e,t]
+    w_t = x - cons
+    if w_t >= 0.0:
+        w_t *= np.exp(rates.rate)
+    else :
+        r_b = i_h*rates.r_h + (1.0-i_h)*rates.r_r
+        w_t *= np.exp(r_b)
+    d_t = i_hh*(rates.xi_d*i_h*d0
+                + (1.0 - i_h)*rates.omega_d*p_h[i_e,t])
+    q_ss = qs_ij[i_s,:,t]
+    ev = 0.0
+    for i_ee in range(dims.n_e):
+        d_low, d_up, du = scale(d_t, dims.d_h[:,i_ee,t+1])
+        for i_ss in range(dims.n_s):
+            ww_space = dims.w_space[d_low,:,i_ss,i_ee,i_hh,t+1]
+            w_low, w_up, wu = scale(w_t, ww_space)
+            beq = beq_fun(d_t,w_t,i_hh,p_h[i_ee,t+1],b_its[i_ee,t+1],
+                              rates.tau_s0, rates.tau_s1)
+            v = nextv[:,:,i_ss,i_ee,i_hh]
+            if i_ss < (dims.n_s-1):
+                pv = v[d_low,w_low] + du*(-v[d_low,w_low]+v[d_up,w_low]) + \
+                     wu*(-v[d_low,w_low] + v[d_low,w_up]) + \
+                     wu*du*(v[d_low, w_low] - v[d_up,w_low]
+                            - v[d_low,w_up] + v[d_up,w_up])
+                pvv = np.exp(-prefs.gamma*pv)
+                ev += f_h[i_ee] * q_ss[i_ss] * pvv
+            else :
+                pvv = (prefs.b_x/(1-prefs.varepsilon)) * ((beq + prefs.b_k) ** (
+                                1.0 - prefs.varepsilon) - (prefs.b_k) ** (
+                                1.0 - prefs.varepsilon))
+                ev += f_h[i_ee] * q_ss[i_ss] * np.exp(-prefs.gamma*(1.0-prefs.beta)*pvv)
+    amen = i_h * p_h[2,0]
+    eqscale = 1.0
+    if dims.n_s==16 and dims.a_j[i_s]==1:
+        eqscale += rates.eqscale
+    u = ces_fun(cons, amen, nu_ij_c[i_s], prefs.nu_h, prefs.rho,eqscale)
+    vopt = (1.0-prefs.beta)*(u**(1.0-prefs.varepsilon)-1.0)/(1.0-prefs.varepsilon)
+    vopt -= prefs.beta/prefs.gamma * np.log(ev)
     return vopt
 
 @njit(Tuple((float64[:],float64[:,:],float64[:,:]))(int64,float64[:,:],

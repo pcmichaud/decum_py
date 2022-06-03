@@ -36,7 +36,6 @@ spec_dims = [
     ('adm',int64[:,:]),
     ('to_states',int64[:])
 ]
-
 @jitclass(spec_dims)
 class set_dims(object):
     def __init__(self, married, omega_d, T = 35, e_min = -2.0, e_max = 2.0,
