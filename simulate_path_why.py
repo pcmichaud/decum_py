@@ -49,7 +49,7 @@ plt.xlabel('age')
 plt.ylabel('financial wealth')
 plt.legend()
 plt.show()
-plt.savefig('output/simulated_path_why_finwlth_singles.eps',format='eps')
+plt.savefig('output/simulated_path_why_finwlth_singles.png',format='png')
 
 
 colors = ['b','g','r','c','m']
