@@ -1,0 +1,55 @@
+	(1)
+VARIABLES	y1
+	
+age	0.00145
+	(0.00314)
+married	0.135***
+	(0.0290)
+2.qwealth_total	0.0229
+	(0.0154)
+3.qwealth_total	0.0308**
+	(0.0153)
+4.qwealth_total	0.0508***
+	(0.0152)
+2.qhome_equity	-0.00578
+	(0.0148)
+3.qhome_equity	0.0233
+	(0.0159)
+4.qhome_equity	0.0237
+	(0.0171)
+2.qtotinc	-0.000131
+	(0.0216)
+3.qtotinc	0.0345
+	(0.0252)
+4.qtotinc	0.00263
+	(0.0240)
+2.qretinc	0.00408
+	(0.0231)
+3.qretinc	0.0127
+	(0.0241)
+4.qretinc	0.00547
+	(0.0237)
+xi	-0.0787***
+	(0.00643)
+mu	-0.0193**
+	(0.00880)
+zeta	-0.0226**
+	(0.00905)
+risk_ann	-0.0192***
+	(0.00387)
+risk_ltci	-0.625***
+	(0.161)
+risk_rmr	0.0827**
+	(0.0417)
+pref_beq_money	0.0127
+	(0.0128)
+pref_home	0.0286**
+	(0.0115)
+pref_live_fast	-0.0696***
+	(0.0117)
+pref_risk_averse	-0.0355**
+	(0.0143)
+	
+Observations	1,445
+Standard errors in parentheses	
+*** p<0.01, ** p<0.05, * p<0.1	

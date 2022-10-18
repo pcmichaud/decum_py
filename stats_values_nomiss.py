@@ -43,6 +43,30 @@ table.loc['ann','model (optimal)'] = df[['buy_'+str(i) for i in range(1,5)]].sta
 table.loc['ltc','model (optimal)'] = df[['buy_'+str(i) for i in range(5,9)]].stack().mean()
 table.loc['rmr','model (optimal)'] = df[['buy_'+str(i) for i in range(9,13)]].stack().mean()
 
+print(df.groupby('int_scn_rmr_1').mean()['buy_9'])
+print(df.groupby('int_scn_rmr_2').mean()['buy_10'])
+print(df.groupby('int_scn_rmr_3').mean()['buy_11'])
+print(df.groupby('int_scn_rmr_4').mean()['buy_12'])
+
+print(df.groupby('int_scn_rmr_1').mean()['loan_scn_rmr_1'])
+print(df.groupby('int_scn_rmr_2').mean()['loan_scn_rmr_2'])
+print(df.groupby('int_scn_rmr_3').mean()['loan_scn_rmr_3'])
+print(df.groupby('int_scn_rmr_4').mean()['loan_scn_rmr_4'])
+
+
+print(df.groupby('int_scn_rmr_1').mean()['home_value'])
+print(df.groupby('int_scn_rmr_2').mean()['home_value'])
+print(df.groupby('int_scn_rmr_3').mean()['home_value'])
+print(df.groupby('int_scn_rmr_4').mean()['home_value'])
+
+
+print(df.groupby('int_scn_rmr_1').mean()['mort_balance'])
+print(df.groupby('int_scn_rmr_2').mean()['mort_balance'])
+print(df.groupby('int_scn_rmr_3').mean()['mort_balance'])
+print(df.groupby('int_scn_rmr_4').mean()['mort_balance'])
+
+
+
 table.loc['ann','predicted'] = df[['prob_'+str(i) for i in range(1,5)]].stack().mean()
 table.loc['ltc','predicted'] = df[['prob_'+str(i) for i in range(5,9)]].stack().mean()
 table.loc['rmr','predicted'] = df[['prob_'+str(i) for i in range(9,13)]].stack().mean()

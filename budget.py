@@ -40,8 +40,8 @@ class set_rates(object):
               phi = 0.035, eqscale = 0.55):
         self.rate = rate
         self.r_r = r_r
-        self.r_d = rate + r_d
-        self.r_h = r_h  + r_d
+        self.r_d = self.rate + r_d
+        self.r_h = r_h  + self.r_d
         self.xi_d = xi_d
         self.phi = phi
         self.phi_d = phi_d
@@ -142,6 +142,7 @@ def reimburse_loan(benfs,prices,p_h,dims,rates):
     pi_r = prices.rmr
     for i in range(dims.T):
         for j in range(dims.n_e):
+            # in next iteration of results, drop the rate in there. pi_r already includes it
             b_its[j,i] = min(benfs.rmr * np.exp((rate+pi_r)*float(i)),p_h[j,i])
     return b_its
 

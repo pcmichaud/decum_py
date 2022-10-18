@@ -7,13 +7,7 @@ import statsmodels.api as sm
 lowess = sm.nonparametric.lowess
 dfs = []
 
-
-
-
-
-
-
-scns = ['nomiss','nobequest', 'transfers','muhealth','medrisk']
+scns = ['nomiss','nobequest', 'transfers']
 for scn in scns:
 	df = pd.read_csv('output/simulated_'+scn+'.csv')
 	df['qinc'] = pd.qcut(df['totinc'],q=3)
@@ -22,7 +16,7 @@ for scn in scns:
 		df['totwlth_'+str(a)] = df['wlth_'+str(a)] + df['home_'+str(a)]
 	dfs.append(df)
 vars_list = ['married']
-scns = ['baseline','no bequest','low transfers','state-independent $\\nu_c$','no med risk']
+scns = ['baseline','no bequest','more insurance']
 cut_time = 30
 
 def smooth_profile(data,byvar):
@@ -52,7 +46,7 @@ plt.xlabel('age')
 plt.ylabel('financial wealth')
 plt.legend()
 plt.show()
-plt.savefig('output/simulated_path_why_finwlth_singles.png',format='png')
+plt.savefig('output/simulated_path_why_finwlth_singles.eps',format='eps')
 
 
 colors = ['b','g','r','c','m']
