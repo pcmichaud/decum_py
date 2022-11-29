@@ -115,7 +115,7 @@ def func_simulate(row,theta):
         qs_ij = joint_surv_rates(q1, q1_sp, dims.n_s, dims.T)
     else :
         qs_ij = q1[:, :, :]
-    # house prices
+     # house prices
     #p_h, f_h, p_r = house_prices(row['g'], row['sig'], base_value, hh['home_value'], rates,
     #                             dims)
     #b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
@@ -128,6 +128,7 @@ def func_simulate(row,theta):
     row[['wlth_' + str(i) for i in range(dims.T)]] = wlth_path
     row[['home_' + str(i) for i in range(dims.T)]] = home_path
     return row
+
 
 def func_fair(row,theta):
     hh = dict(row[['wgt','cma','married','own','wealth_total',
