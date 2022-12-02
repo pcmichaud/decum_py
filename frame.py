@@ -4,7 +4,9 @@ from functools import partial
 from scipy.interpolate import interp1d
 from itertools import product
 
-def func_solve(row,theta):
+
+def get_actors(row):
+    # household information
     hh = dict(row[['wgt','cma','married','own','wealth_total',
                    'mort_balance','home_value']])
     rp = dict(row[['age','totinc','retinc','hlth']])
@@ -12,17 +14,34 @@ def func_solve(row,theta):
         sp = dict(row[['sp_age','sp_totinc','sp_retinc','sp_hlth']])
     else:
         sp = None
-    g = row['g'] * row['mu']
-    sig = row['sig'] * row['zeta']
-    base_value = row['base_value']
+    return hh, rp, sp    
+
+def get_house_info(row,debias=False,g_fudge=1.0,sig_fudge=1.0):
+    if debias:
+        g = row['mu']
+        sig = row['sig'] 
+    else :
+        g = row['g'] * row['mu']
+        sig = row['sig'] * row['zeta']
+    g *= g_fudge 
+    sig *= sig_fudge
+    base_value = row['base_value']   
+    return g, sig, base_value 
+
+def get_medcosts(row, fudge_hc = 1.0, fudge_nh = 1.0):
     hc = row[['hc_0','hc_1','hc_2']].to_numpy(dtype='float64')
     nh = row[['nh_0','nh_1','nh_2']].to_numpy(dtype='float64')
+    hc *= fudge_hc 
+    nh *= fudge_nh
+    return hc, nh    
+
+def get_health_params(row):
     hp_vars = ['gamma(2,1)', 'delta(1,2)', 'delta(2,2)', 'delta(3,2)',
                'gamma(3,1)', 'delta(1,3)', 'delta(2,3)', 'delta(3,3)',
                'gamma(4,1)', 'delta(1,4)', 'delta(2,4)', 'delta(3,4)']
     hp = row[hp_vars]
     surv_bias = row[['xi','miss_psurv85']]
-    if hh['married'] == 1:
+    if row['married'] == 1:
         hp_sp_vars = ['sp_' + x for x in hp_vars]
         hp_sp = row[hp_sp_vars]
         hp_sp.index = hp_vars
@@ -30,20 +49,39 @@ def func_solve(row,theta):
     else:
         hp_sp = None
         sp_surv_bias = None
+    return hp, surv_bias, hp_sp, sp_surv_bias
 
-    if theta is None:
-        prefs = set_prefs(live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row[
-        'pref_home'])
-        p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-            setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                          surv_bias,sp_surv_bias,miss_par=-0.779,sp_miss_par=0.659)
-    else :
-        prefs = set_prefs(varepsilon=theta[0],d_varepsilon=theta[1],
-        gamma=theta[2],d_gamma=theta[3],rho=theta[4],b_x=theta[5],d_b_x=theta[6],b_k=theta[7],nu_c1=theta[8],nu_c2=theta[9],nu_h=theta[10],d_nu_h=theta[11],live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
-        p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-            setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                      surv_bias,sp_surv_bias,miss_par=theta[12],sp_miss_par=theta[13])
+def get_prefs(row,theta):
+    prefs = set_prefs(varepsilon=theta[0],d_varepsilon=theta[1],
+                        gamma=theta[2],d_gamma=theta[3],rho=theta[4],
+                        b_x=theta[5],d_b_x=theta[6],b_k=theta[7],nu_c1=theta[8],
+                        nu_c2=theta[9],nu_h=theta[10],d_nu_h=theta[11],
+                        live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],
+                        beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
+    return prefs    
+
+# function used to solve for expected value across scenarios
+def func_solve(row,theta):
+    # household information
+    hh, rp, sp = get_actors(row)
+
+    # house price information
+    g, sig, base_value = get_house_info(row)
+
+    # health transition parameters
+    hc, nh = get_medcosts(row)
+
+    # health transition parameters 
+    hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
+
+    # setup the problem, depending on whether preferences supplied or not 
+    prefs = get_prefs(row,theta)
+    p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
+        setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
+                    surv_bias,sp_surv_bias,miss_par=theta[12],sp_miss_par=theta[13])
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
+
+    # run the task for this function: get value for all 13 scenarios (12 + baseline)
     for i in range(13):
         f_prices, f_benfs = set_scenario(row,i)
         i_prices = set_prices(f_prices[0], f_prices[1], f_prices[2])
@@ -54,55 +92,37 @@ def func_solve(row,theta):
                                          nu_ij_c, rates, dims, prefs)
     return row
 
+# function to simulate under reference scenario
 def func_simulate(row,theta):
-    hh = dict(row[['wgt','cma','married','own','wealth_total',
-                   'mort_balance','home_value']])
-    rp = dict(row[['age','totinc','retinc','hlth']])
-    if hh['married'] == 1:
-        sp = dict(row[['sp_age','sp_totinc','sp_retinc','sp_hlth']])
-    else:
-        sp = None
-    g = row['g'] * row['mu']
-    sig = row['sig'] * row['zeta']
-    base_value = row['base_value']
-    hc = row[['hc_0','hc_1','hc_2']].to_numpy(dtype='float64')
-    nh = row[['nh_0','nh_1','nh_2']].to_numpy(dtype='float64')
-    hp_vars = ['gamma(2,1)', 'delta(1,2)', 'delta(2,2)', 'delta(3,2)',
-               'gamma(3,1)', 'delta(1,3)', 'delta(2,3)', 'delta(3,3)',
-               'gamma(4,1)', 'delta(1,4)', 'delta(2,4)', 'delta(3,4)']
-    hp = row[hp_vars]
-    surv_bias = row[['xi','miss_psurv85']]
-    if hh['married'] == 1:
-        hp_sp_vars = ['sp_' + x for x in hp_vars]
-        hp_sp = row[hp_sp_vars]
-        hp_sp.index = hp_vars
-        sp_surv_bias = row[['xi_sp','sp_miss_psurv85']]
-    else:
-        hp_sp = None
-        sp_surv_bias = None
-    if theta is None:
-        prefs = set_prefs(live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row[
-        'pref_home'])
-        p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-            setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                      surv_bias,sp_surv_bias,miss_par=-0.779,sp_miss_par=0.659)
-    else :
-        prefs = set_prefs(varepsilon=theta[0],d_varepsilon=theta[1],
-        gamma=theta[2],d_gamma=theta[3],rho=theta[4],b_x=theta[5],d_b_x=theta[6],b_k=theta[7],nu_c1=theta[8],nu_c2=theta[9],nu_h=theta[10],d_nu_h=theta[11],live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
-        p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-            setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                      surv_bias,sp_surv_bias,miss_par=theta[12],sp_miss_par=theta[13])
-    nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs,rates.eqscale)
+    
+    # household information
+    hh, rp, sp = get_actors(row)
 
-    # first solve
+    # house price information
+    g, sig, base_value = get_house_info(row)
+
+    # health transition parameters
+    hc, nh = get_medcosts(row)
+
+    # health transition parameters 
+    hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
+
+    # setup the problem, depending on whether preferences supplied or not 
+    prefs = get_prefs(row,theta)
+    p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
+        setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
+                    surv_bias,sp_surv_bias,miss_par=theta[12],sp_miss_par=theta[13])
+    nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
+
+    # solving baseline (no risk management)
     i_prices = set_prices(0.0, 0.0, 0.0)
     i_benfs = set_benfs(0.0, 0.0, 0.0)
     b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
     cons_rules, cond_values = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
                                          nu_ij_c,rates, dims, prefs)
-    #print(np.mean(cons_rules[:,1,0]),np.mean(cons_rules[:,1,dims.t_last]))
-    # debias survival and home prices
+    
+    # debias survival and home prices for simulation
     # health transitions
     gammas, deltas = parse_surv(hp)
     q1 = transition_rates(rp['age'], gammas, deltas, 0.0,
@@ -115,14 +135,17 @@ def func_simulate(row,theta):
         qs_ij = joint_surv_rates(q1, q1_sp, dims.n_s, dims.T)
     else :
         qs_ij = q1[:, :, :]
-     # house prices
-    #p_h, f_h, p_r = house_prices(row['g'], row['sig'], base_value, hh['home_value'], rates,
-    #                             dims)
-    #b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
 
-    cons_path, own_path, wlth_path, home_path     = get_sim_path(row['seed'],cons_rules, cond_values, hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
-                                         p_r, y_ij, med_ij, qs_ij, b_its,
-                                         nu_ij_c,rates, dims, prefs)
+
+    # house prices
+    p_h, f_h, p_r = house_prices(row['g'], row['sig'], base_value, hh['home_value'], rates,
+                                 dims)
+    b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+    # simulate path once... 
+    cons_path, own_path, wlth_path, home_path     = get_sim_path(row['seed'],cons_rules, 
+                                    cond_values, hh, rp, sp, base_value, i_prices, 
+                                    i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
+                                    nu_ij_c,rates, dims, prefs)
     row[['cons_' + str(i) for i in range(dims.T)]] = cons_path
     row[['own_' + str(i) for i in range(dims.T)]] = own_path
     row[['wlth_' + str(i) for i in range(dims.T)]] = wlth_path
@@ -131,44 +154,23 @@ def func_simulate(row,theta):
 
 
 def func_fair(row,theta):
-    hh = dict(row[['wgt','cma','married','own','wealth_total',
-                   'mort_balance','home_value']])
-    rp = dict(row[['age','totinc','retinc','hlth']])
-    if hh['married'] == 1:
-        sp = dict(row[['sp_age','sp_totinc','sp_retinc','sp_hlth']])
-    else:
-        sp = None
-    g = row['g'] * row['mu']
-    sig = row['sig'] * row['zeta']
-    base_value = row['base_value']
-    hc = row[['hc_0','hc_1','hc_2']].to_numpy(dtype='float64')
-    nh = row[['nh_0','nh_1','nh_2']].to_numpy(dtype='float64')
-    hp_vars = ['gamma(2,1)', 'delta(1,2)', 'delta(2,2)', 'delta(3,2)',
-               'gamma(3,1)', 'delta(1,3)', 'delta(2,3)', 'delta(3,3)',
-               'gamma(4,1)', 'delta(1,4)', 'delta(2,4)', 'delta(3,4)']
-    hp = row[hp_vars]
-    surv_bias = row[['xi','miss_psurv85']]
-    if hh['married'] == 1:
-        hp_sp_vars = ['sp_' + x for x in hp_vars]
-        hp_sp = row[hp_sp_vars]
-        hp_sp.index = hp_vars
-        sp_surv_bias = row[['xi_sp','sp_miss_psurv85']]
-    else:
-        hp_sp = None
-        sp_surv_bias = None
+    # household information
+    hh, rp, sp = get_actors(row)
 
-    if theta is None:
-        prefs = set_prefs(live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row[
-        'pref_home'])
-        p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-            setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                          surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
-    else :
-        prefs = set_prefs(varepsilon=theta[0],d_varepsilon=theta[1],
-        gamma=theta[2],d_gamma=theta[3],rho=theta[4],b_x=theta[5],d_b_x=theta[6],b_k=theta[7],nu_c1=theta[8],nu_c2=theta[9],nu_h=theta[10],d_nu_h=theta[11],live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
-        p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-            setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                      surv_bias,sp_surv_bias,miss_par=theta[12],sp_miss_par=theta[13])
+    # house price information
+    g, sig, base_value = get_house_info(row)
+
+    # health transition parameters
+    hc, nh = get_medcosts(row)
+
+    # health transition parameters 
+    hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
+
+    # setup the problem, depending on whether preferences supplied or not 
+    prefs = get_prefs(row,theta)
+    p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
+        setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
+                    surv_bias,sp_surv_bias,miss_par=theta[12],sp_miss_par=theta[13])
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
 
     # objective health probabilities
@@ -177,8 +179,7 @@ def func_fair(row,theta):
                           surv_bias['miss_psurv85'], 0.0, dims.T)
     if hh['married'] == 1:
         gammas, deltas = parse_surv(hp_sp)
-        q1_sp_o = transition_rates(sp['sp_age'], gammas, deltas,
-                                 0.0,
+        q1_sp_o = transition_rates(sp['sp_age'], gammas, deltas, 0.0,
                                  sp_surv_bias['sp_miss_psurv85'], 0.0, dims.T)
         qs_ij_o = joint_surv_rates(q1_o, q1_sp_o, dims.n_s, dims.T)
     else :
@@ -221,7 +222,7 @@ def func_fair(row,theta):
     row['max_rmr_fair'] = max(opt_max[2],0.0)
 
     # everything is parametrized to fit into unit cube for demand
-    pi = 0.5*np.ones(3,dtype=np.float64)
+    pi = 0.0*np.ones(3,dtype=np.float64)
     pi[2] = 1.0
     i_rs = np.linspace(0.0,0.05,5)
     ds = []
@@ -269,44 +270,23 @@ def func_fair(row,theta):
 
 
 def func_joint(row,theta):
-    hh = dict(row[['wgt','cma','married','own','wealth_total',
-                   'mort_balance','home_value']])
-    rp = dict(row[['age','totinc','retinc','hlth']])
-    if hh['married'] == 1:
-        sp = dict(row[['sp_age','sp_totinc','sp_retinc','sp_hlth']])
-    else:
-        sp = None
-    g = row['g'] * row['mu']
-    sig = row['sig'] * row['zeta']
-    base_value = row['base_value']
-    hc = row[['hc_0','hc_1','hc_2']].to_numpy(dtype='float64')
-    nh = row[['nh_0','nh_1','nh_2']].to_numpy(dtype='float64')
-    hp_vars = ['gamma(2,1)', 'delta(1,2)', 'delta(2,2)', 'delta(3,2)',
-               'gamma(3,1)', 'delta(1,3)', 'delta(2,3)', 'delta(3,3)',
-               'gamma(4,1)', 'delta(1,4)', 'delta(2,4)', 'delta(3,4)']
-    hp = row[hp_vars]
-    surv_bias = row[['xi','miss_psurv85']]
-    if hh['married'] == 1:
-        hp_sp_vars = ['sp_' + x for x in hp_vars]
-        hp_sp = row[hp_sp_vars]
-        hp_sp.index = hp_vars
-        sp_surv_bias = row[['xi_sp','sp_miss_psurv85']]
-    else:
-        hp_sp = None
-        sp_surv_bias = None
+    # household information
+    hh, rp, sp = get_actors(row)
 
-    if theta is None:
-        prefs = set_prefs(live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row[
-        'pref_home'])
-        p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-            setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                          surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
-    else :
-        prefs = set_prefs(varepsilon=theta[0],d_varepsilon=theta[1],
-        gamma=theta[2],d_gamma=theta[3],rho=theta[4],b_x=theta[5],d_b_x=theta[6],b_k=theta[7],nu_c1=theta[8],nu_c2=theta[9],nu_h=theta[10],d_nu_h=theta[11],live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
-        p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-            setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
-                      surv_bias,sp_surv_bias,miss_par=theta[12],sp_miss_par=theta[13])
+    # house price information
+    g, sig, base_value = get_house_info(row)
+
+    # health transition parameters
+    hc, nh = get_medcosts(row)
+
+    # health transition parameters 
+    hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
+
+    # setup the problem, depending on whether preferences supplied or not 
+    prefs = get_prefs(row,theta)
+    p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
+        setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
+                    surv_bias,sp_surv_bias,miss_par=theta[12],sp_miss_par=theta[13])
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
 
     # fair prices
@@ -319,14 +299,14 @@ def func_joint(row,theta):
     opt_min = np.zeros(3,dtype=np.float64)
     opt_max[0] = hh['wealth_total']
     opt_max[1] = med_ij[2]
+    # use what was available in survey in terms of how much they can purchase
     rates.omega_rm = 0.35
     opt_max[2] = max(rates.omega_rm*(hh['home_value'] - hh['mort_balance']),0.0)
     # search over grid
-    nu = 2
+    nu = 4
     nuu = nu*nu*nu
     gridu = np.linspace(0,1.0,nu)
     buy_grid = np.array(list(product(*[gridu,gridu,gridu])))
-    #print(buy_grid)
     values = np.zeros(nuu)
     for i in range(nuu):
         pi = buy_grid[i,:]

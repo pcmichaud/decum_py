@@ -33,7 +33,7 @@ spec_rates = [
 
 @jitclass(spec_rates)
 class set_rates(object):
-    def __init__(self, rate=0.01, r_r=0.0949, r_d=0.02, r_h=0.02,
+    def __init__(self, rate=0.01, r_r=0.0949, r_d=0.02, r_h=0.01,
               xi_d=0.9622,phi_d = 0.1,x_min = 18.2, tau_s0 = 1.5,tau_s1 = 0.05,
               tau_b0 = 0.5,tau_b1 = 0.01, omega_d = 0.65, omega_rm = 0.55,
               omega_r = 0.329, omega_h0 = 0.65,omega_h1 = 0.8,
@@ -138,12 +138,10 @@ def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
         set_dims.class_type.instance_type, set_rates.class_type.instance_type),fastmath=True, cache=True)
 def reimburse_loan(benfs,prices,p_h,dims,rates):
     b_its = np.empty((dims.n_e,dims.T))
-    rate = rates.rate
     pi_r = prices.rmr
     for i in range(dims.T):
         for j in range(dims.n_e):
-            # in next iteration of results, drop the rate in there. pi_r already includes it
-            b_its[j,i] = min(benfs.rmr * np.exp((rate+pi_r)*float(i)),p_h[j,i])
+            b_its[j,i] = min(benfs.rmr * np.exp(pi_r*float(i)),p_h[j,i])
     return b_its
 
 def load_house_prices(file_d='house_prices_real.csv',file_b='home_values.csv'):

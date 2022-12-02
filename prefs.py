@@ -63,7 +63,7 @@ spec_prefs = [
 class set_prefs(object):
     def __init__(self, varepsilon= 0.261, d_varepsilon=0.028, gamma = 0.403,
                 d_gamma = 0.145, rho = 0.811, b_x = 0.045, d_b_x = 0.02, b_k = 2.252e3,
-                 nu_c0 = 1.0, nu_c1 = 0.117, nu_c2 = 0.027, nu_h = 0.186, d_nu_h = 0.012, beta = 0.97, live_fast=0, risk_averse=0,
+                 nu_c0 = 1.0, nu_c1 = 0.117, nu_c2 = 0.027, nu_h = 0.186, d_nu_h = 0.012, beta = 0.96, live_fast=0, risk_averse=0,
                  beq_money=0, pref_home=0):
         self.varepsilon = varepsilon
         if live_fast==1:
