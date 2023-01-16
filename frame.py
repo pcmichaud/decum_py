@@ -14,26 +14,26 @@ def get_actors(row):
         sp = dict(row[['sp_age','sp_totinc','sp_retinc','sp_hlth']])
     else:
         sp = None
-    return hh, rp, sp    
+    return hh, rp, sp
 
 def get_house_info(row,debias=False,g_fudge=1.0,sig_fudge=1.0):
     if debias:
         g = row['mu']
-        sig = row['sig'] 
+        sig = row['sig']
     else :
         g = row['g'] * row['mu']
         sig = row['sig'] * row['zeta']
-    g *= g_fudge 
+    g *= g_fudge
     sig *= sig_fudge
-    base_value = row['base_value']   
-    return g, sig, base_value 
+    base_value = row['base_value']
+    return g, sig, base_value
 
 def get_medcosts(row, fudge_hc = 1.0, fudge_nh = 1.0):
     hc = row[['hc_0','hc_1','hc_2']].to_numpy(dtype='float64')
     nh = row[['nh_0','nh_1','nh_2']].to_numpy(dtype='float64')
-    hc *= fudge_hc 
+    hc *= fudge_hc
     nh *= fudge_nh
-    return hc, nh    
+    return hc, nh
 
 def get_health_params(row):
     hp_vars = ['gamma(2,1)', 'delta(1,2)', 'delta(2,2)', 'delta(3,2)',
@@ -58,7 +58,7 @@ def get_prefs(row,theta):
                         nu_c2=theta[9],nu_h=theta[10],d_nu_h=theta[11],
                         live_fast=row['pref_live_fast'],risk_averse=row['pref_risk_averse'],
                         beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
-    return prefs    
+    return prefs
 
 # function used to solve for expected value across scenarios
 def func_solve(row,theta):
@@ -71,10 +71,10 @@ def func_solve(row,theta):
     # health transition parameters
     hc, nh = get_medcosts(row)
 
-    # health transition parameters 
+    # health transition parameters
     hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
 
-    # setup the problem, depending on whether preferences supplied or not 
+    # setup the problem, depending on whether preferences supplied or not
     prefs = get_prefs(row,theta)
     p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
         setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
@@ -94,7 +94,7 @@ def func_solve(row,theta):
 
 # function to simulate under reference scenario
 def func_simulate(row,theta):
-    
+
     # household information
     hh, rp, sp = get_actors(row)
 
@@ -104,10 +104,10 @@ def func_simulate(row,theta):
     # health transition parameters
     hc, nh = get_medcosts(row)
 
-    # health transition parameters 
+    # health transition parameters
     hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
 
-    # setup the problem, depending on whether preferences supplied or not 
+    # setup the problem, depending on whether preferences supplied or not
     prefs = get_prefs(row,theta)
     p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
         setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
@@ -121,7 +121,7 @@ def func_simulate(row,theta):
     cons_rules, cond_values = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
                                          nu_ij_c,rates, dims, prefs)
-    
+
     # debias survival and home prices for simulation
     # health transitions
     gammas, deltas = parse_surv(hp)
@@ -141,9 +141,9 @@ def func_simulate(row,theta):
     p_h, f_h, p_r = house_prices(row['g'], row['sig'], base_value, hh['home_value'], rates,
                                  dims)
     b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
-    # simulate path once... 
-    cons_path, own_path, wlth_path, home_path     = get_sim_path(row['seed'],cons_rules, 
-                                    cond_values, hh, rp, sp, base_value, i_prices, 
+    # simulate path once...
+    cons_path, own_path, wlth_path, home_path     = get_sim_path(row['seed'],cons_rules,
+                                    cond_values, hh, rp, sp, base_value, i_prices,
                                     i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
                                     nu_ij_c,rates, dims, prefs)
     row[['cons_' + str(i) for i in range(dims.T)]] = cons_path
@@ -163,10 +163,10 @@ def func_fair(row,theta):
     # health transition parameters
     hc, nh = get_medcosts(row)
 
-    # health transition parameters 
+    # health transition parameters
     hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
 
-    # setup the problem, depending on whether preferences supplied or not 
+    # setup the problem, depending on whether preferences supplied or not
     prefs = get_prefs(row,theta)
     p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
         setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
@@ -246,7 +246,8 @@ def func_fair(row,theta):
         nneg = 0.0
         for i in range(nsim):
             cons_path, own_path, wlth_path, home_path     = get_sim_path(1234,
-                                        cons_rules,cond_values, hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
+                                        cons_rules,cond_values, hh, rp, sp, base_value, i_prices,
+                                        i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
                                         nu_ij_c,rates, dims, prefs)
             for t in range(dims.T):
                 Lt = i_benfs.rmr*np.exp((rates.r_h+i_r)*t)
@@ -279,10 +280,10 @@ def func_joint(row,theta):
     # health transition parameters
     hc, nh = get_medcosts(row)
 
-    # health transition parameters 
+    # health transition parameters
     hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
 
-    # setup the problem, depending on whether preferences supplied or not 
+    # setup the problem, depending on whether preferences supplied or not
     prefs = get_prefs(row,theta)
     p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
         setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
@@ -310,7 +311,7 @@ def func_joint(row,theta):
     values = np.zeros(nuu)
     for i in range(nuu):
         pi = buy_grid[i,:]
-        i_prices = set_prices(pi[0]*opt_max[0],p_l*pi[1]*opt_max[1] ,pi[2]* i_r)
+        i_prices = set_prices(pi[0]*opt_max[0],p_l*pi[1]*opt_max[1] , i_r)
         i_benfs = set_benfs(pi[0]*opt_max[0]/p_a, pi[1]*opt_max[1], pi[2]*opt_max[2])
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         # get decision rules based on fair pricing for annuities and LTCI, candidate rmr

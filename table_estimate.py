@@ -3,14 +3,14 @@ import pandas as pd
 
 # estimates
 ssd =  7980.57
-sigmas = np.load('output/sigmas_nomiss.npy')
-pars =  np.load('output/estimates_nomiss.npy')
+sigmas = np.load('output/sigmas_reference.npy')
+pars =  np.load('output/estimates_reference.npy')
 
 # standard errors
-es = pd.read_csv('output/within_residuals_nomiss.csv',dtype=np.float64)
+es = pd.read_csv('output/within_residuals_reference.csv',dtype=np.float64)
 es['respid'] = es['respid'].astype('int64')
 es.set_index('respid',inplace=True)
-gs = pd.read_csv('output/gradients_nomiss.csv',dtype=np.float64)
+gs = pd.read_csv('output/gradients_reference.csv',dtype=np.float64)
 gs['respid'] = gs['respid'].astype('int64')
 gs.set_index('respid',inplace=True)
 gs = gs[[str(x) for x in range(gs.shape[1]-1)]]
@@ -60,7 +60,7 @@ table.loc['within SSE','point'] = ssd
 
 print(table)
 
-table.round(3).to_latex('output/table_estimates_miss.tex',escape=False)
+table.round(3).to_latex('output/table_estimates_reference.tex',escape=False)
 
 
 

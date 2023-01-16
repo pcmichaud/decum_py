@@ -9,20 +9,19 @@ import numpy as np
 if __name__ == '__main__':
         warnings.simplefilter(action='ignore')
         data = init_data()
-        #data = data.sample(n=250)
         maxeval=10000
-        pars = np.array([0.75,
-                        0.25,
-                        0.30,
-                        0.25,
-                        0.78,
-                        0.05,
-                        0.2,
+        pars = np.array([0.237,
+                        0.0981,
+                        0.131,
+                        0.0477,
+                        0.931,
+                        0.004,
+                        0.0153,
                         0.0,
-                        0.669,
-                        0.3,
-                        0.2,
-                        0.1,
+                        0.064,
+                        0.053,
+                        0.153,
+                        0.001,
                         0.0,
                         0.0])
         isfree = np.ones(pars.shape[0])
@@ -34,8 +33,8 @@ if __name__ == '__main__':
         print('number of parameters = ',pars.shape[0],', number of free parameters = ',n_free_theta)
         dx = np.zeros(n_free_theta)
         for i in range(n_free_theta):
-                dx[i] = np.abs(theta[i])*0.25
-        partial_distance = partial(concentrated_distance_within,data=data,isfree=isfree,ipars=pars,npartitions=250, scn_name='nomiss')
+                dx[i] = np.abs(theta[i])*0.5
+        partial_distance = partial(concentrated_distance_within,data=data,isfree=isfree,ipars=pars,npartitions=250, scn_name='reference')
         opt = nl.opt('LN_NEWUOA',n_free_theta)
         opt.set_min_objective(partial_distance)
         opt.set_initial_step(dx)
@@ -46,5 +45,5 @@ if __name__ == '__main__':
         opt_pars = extract_pars(theta, isfree, pars)
         print('estimates = ', opt_pars)
         print('final distance = ', distance)
-        np.save('output/estimates_nomiss',opt_pars)
+        np.save('output/estimates_reference',opt_pars)
 

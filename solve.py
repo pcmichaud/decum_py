@@ -124,8 +124,8 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
         condv_t[dims.to_states[:],1,t] = condv_last[:,1]
     # find current state
     h_init = hh['own']
-    e_init = 2
-    s_init = rp['hlth']-1
+    e_init =2
+    s_init= rp['hlth']-1
     if hh['married']==1:
         s_init = s_init * 4 + sp['sp_hlth'] - 1
     if h_init==1:

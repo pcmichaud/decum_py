@@ -11,8 +11,8 @@ if __name__ == '__main__':
     #data = data.sample(n=100)
     n_part = 250
     # estimates from reference scenario
-    sigmas = np.load('output/sigmas_nomiss.npy')
-    pars = np.load('output/estimates_nomiss.npy')
+    sigmas = np.load('output/sigmas_reference.npy')
+    pars = np.load('output/estimates_reference.npy')
     isfree = np.ones(pars.shape[0])
     isfree[7] = 0
     isfree[12] = 0
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     K = 12
     eps = 1e-4
     es = residuals_within(theta, sigmas, data, isfree, pars, npartitions=n_part)
-    es.to_csv('output/within_residuals_nomiss.csv')
+    es.to_csv('output/within_residuals_reference.csv')
     es = es.stack()
     print(es.head(50))
     theta = set_theta(pars,isfree)
@@ -49,7 +49,7 @@ if __name__ == '__main__':
             grad[j_start+jj] = (gs_up - gs)/eps
             jj +=1
     print(grad.head(50))
-    grad.to_csv('output/gradients_nomiss.csv')
+    grad.to_csv('output/gradients_reference.csv')
 
 
 
