@@ -7,8 +7,9 @@ from optim import *
 from matplotlib import pyplot as plt
 
 # Load values which are compared by run_ref.py
-df = pd.read_csv('output/values_nomiss_with_deltas.csv')
+df = pd.read_csv('output/values_reference_with_deltas.csv')
 pd.set_option('display.max_rows', 500)
+#df  = df.loc[df.married==False,:]
 # compute value differences for each scenarios (0 = baseline)
 for i in range(1,13):
 	df['d_value_'+str(i)] = df['value_'+str(i)] - df['value_0']
@@ -43,30 +44,6 @@ table.loc['ann','model (optimal)'] = df[['buy_'+str(i) for i in range(1,5)]].sta
 table.loc['ltc','model (optimal)'] = df[['buy_'+str(i) for i in range(5,9)]].stack().mean()
 table.loc['rmr','model (optimal)'] = df[['buy_'+str(i) for i in range(9,13)]].stack().mean()
 
-print(df.groupby('int_scn_rmr_1').mean()['buy_9'])
-print(df.groupby('int_scn_rmr_2').mean()['buy_10'])
-print(df.groupby('int_scn_rmr_3').mean()['buy_11'])
-print(df.groupby('int_scn_rmr_4').mean()['buy_12'])
-
-print(df.groupby('int_scn_rmr_1').mean()['loan_scn_rmr_1'])
-print(df.groupby('int_scn_rmr_2').mean()['loan_scn_rmr_2'])
-print(df.groupby('int_scn_rmr_3').mean()['loan_scn_rmr_3'])
-print(df.groupby('int_scn_rmr_4').mean()['loan_scn_rmr_4'])
-
-
-print(df.groupby('int_scn_rmr_1').mean()['home_value'])
-print(df.groupby('int_scn_rmr_2').mean()['home_value'])
-print(df.groupby('int_scn_rmr_3').mean()['home_value'])
-print(df.groupby('int_scn_rmr_4').mean()['home_value'])
-
-
-print(df.groupby('int_scn_rmr_1').mean()['mort_balance'])
-print(df.groupby('int_scn_rmr_2').mean()['mort_balance'])
-print(df.groupby('int_scn_rmr_3').mean()['mort_balance'])
-print(df.groupby('int_scn_rmr_4').mean()['mort_balance'])
-
-
-
 table.loc['ann','predicted'] = df[['prob_'+str(i) for i in range(1,5)]].stack().mean()
 table.loc['ltc','predicted'] = df[['prob_'+str(i) for i in range(5,9)]].stack().mean()
 table.loc['rmr','predicted'] = df[['prob_'+str(i) for i in range(9,13)]].stack().mean()
@@ -75,7 +52,7 @@ print(table)
 
 for c in table.columns:
     table[c] = table[c].astype('float64')
-table.round(3).to_latex('output/stats_values_nomiss.tex')
+table.round(3).to_latex('output/stats_values_reference.tex')
 
 
 

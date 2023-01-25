@@ -4,7 +4,6 @@ from functools import partial
 from scipy.interpolate import interp1d
 from itertools import product
 
-
 def get_actors(row):
     # household information
     hh = dict(row[['wgt','cma','married','own','wealth_total',
@@ -52,7 +51,7 @@ def get_health_params(row):
     return hp, surv_bias, hp_sp, sp_surv_bias
 
 def get_prefs(row,theta):
-    prefs = set_prefs(varepsilon=theta[0],d_varepsilon=theta[1],
+    prefs = set_prefs(varepsilon=theta[2],d_varepsilon=theta[3],
                         gamma=theta[2],d_gamma=theta[3],rho=theta[4],
                         b_x=theta[5],d_b_x=theta[6],b_k=theta[7],nu_c1=theta[8],
                         nu_c2=theta[9],nu_h=theta[10],d_nu_h=theta[11],
@@ -83,11 +82,19 @@ def func_solve(row,theta):
 
     # run the task for this function: get value for all 13 scenarios (12 + baseline)
     for i in range(13):
+        hhp = hh.copy()
         f_prices, f_benfs = set_scenario(row,i)
         i_prices = set_prices(f_prices[0], f_prices[1], f_prices[2])
         i_benfs = set_benfs(f_benfs[0], f_benfs[1], f_benfs[2])
+        if i_benfs.rmr>0.0:
+            if hhp['mort_balance']>0:
+                if i_benfs.rmr>hhp['mort_balance']:
+                    i_benfs.rmr -= hhp['mort_balance']
+                    hhp['mort_balance'] = 0
+                else :
+                    i_benfs.rmr = 0.0
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
-        row['value_' + str(i)] = get_value(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+        row['value_' + str(i)] = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
                                          nu_ij_c, rates, dims, prefs)
     return row
@@ -227,11 +234,19 @@ def func_fair(row,theta):
     i_rs = np.linspace(0.0,0.05,5)
     ds = []
     for i_r in i_rs:
+        hhp = hh.copy()
         i_prices = set_prices(pi[0]*opt_max[0],p_l*pi[1]*opt_max[1] , rates.r_h + i_r)
         i_benfs = set_benfs(pi[0]*opt_max[0]/p_a, pi[1]*opt_max[1], pi[2]*opt_max[2])
+        if i_benfs.rmr>0.0:
+            if hhp['mort_balance']>0:
+                if i_benfs.rmr>hhp['mort_balance']:
+                    i_benfs.rmr -= hhp['mort_balance']
+                    hhp['mort_balance'] = 0
+                else :
+                    i_benfs.rmr = 0.0
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         # get decision rules based on fair pricing for annuities and LTCI, candidate rmr
-        cons_rules, cond_values = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+        cons_rules, cond_values = get_rules(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                             p_r, y_ij, med_ij, qs_ij, b_its,
                                             nu_ij_c,rates, dims, prefs)
         # simulate to get the house ownership dynamics
@@ -246,7 +261,7 @@ def func_fair(row,theta):
         nneg = 0.0
         for i in range(nsim):
             cons_path, own_path, wlth_path, home_path     = get_sim_path(1234,
-                                        cons_rules,cond_values, hh, rp, sp, base_value, i_prices,
+                                        cons_rules,cond_values, hhp, rp, sp, base_value, i_prices,
                                         i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
                                         nu_ij_c,rates, dims, prefs)
             for t in range(dims.T):
@@ -310,12 +325,20 @@ def func_joint(row,theta):
     buy_grid = np.array(list(product(*[gridu,gridu,gridu])))
     values = np.zeros(nuu)
     for i in range(nuu):
+        hhp = hh.copy()
         pi = buy_grid[i,:]
         i_prices = set_prices(pi[0]*opt_max[0],p_l*pi[1]*opt_max[1] , i_r)
         i_benfs = set_benfs(pi[0]*opt_max[0]/p_a, pi[1]*opt_max[1], pi[2]*opt_max[2])
+        if i_benfs.rmr>0.0:
+            if hhp['mort_balance']>0:
+                if i_benfs.rmr>hhp['mort_balance']:
+                    i_benfs.rmr -= hhp['mort_balance']
+                    hhp['mort_balance'] = 0
+                else :
+                    i_benfs.rmr = 0.0
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         # get decision rules based on fair pricing for annuities and LTCI, candidate rmr
-        values[i] =  get_value(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+        values[i] =  get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
                                          nu_ij_c, rates, dims, prefs)
     # joint purchase

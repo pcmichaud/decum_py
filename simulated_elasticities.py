@@ -11,7 +11,7 @@ import statsmodels.api as sm
 from itertools import product
 
 # Load values which are compared by run_ref.py
-df = pd.read_csv('output/values_nomiss_with_deltas.csv')
+df = pd.read_csv('output/values_reference_with_deltas.csv')
 pd.set_option('display.max_rows', 500)
 # compute value differences for each scenarios (0 = baseline)
 for i in range(1,13):
@@ -205,7 +205,7 @@ for c in table.columns:
     table[c] = table[c].astype('float64')
 table = table.round(3)
 print(table)
-table.to_latex('output/table_simulated_elasticities_nomiss.tex')
+table.to_latex('output/table_simulated_elasticities_reference.tex')
 
 
 

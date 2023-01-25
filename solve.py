@@ -266,11 +266,11 @@ def v_t_fun_ez(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
             else :
                 beq += prefs.b_x*f_h[i_ee]*(((b_e + prefs.b_k))**(
                 1.0-prefs.gamma))
-    amen = i_h * p_h[2, 0]
+    amen = (rates.phi + prefs.nu_h * i_h) * p_h[2, 0]
     eqscale = 1.0
     if dims.n_s==16 and dims.a_j[i_s]==1:
         eqscale += rates.eqscale
-    u = ces_fun(cons, amen, nu_ij_c[i_s], prefs.nu_h, prefs.rho, eqscale)
+    u = cob_fun(cons, amen, nu_ij_c[i_s], prefs.rho, eqscale)
     beta = prefs.beta
     vareps = prefs.varepsilon
     gamma = prefs.gamma
@@ -313,11 +313,11 @@ def v_t_fun_bo(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
             beq += f_h[i_ee]*np.exp(-prefs.gamma*(1.0-prefs.beta)*b_e)
     else :
         beq = 1.0
-    amen = i_h * p_h[2, 0]
+    amen = (rates.phi + prefs.nu_h * i_h) * p_h[2, 0]
     eqscale = 1.0
     if dims.n_s==16 and dims.a_j[i_s]==1:
         eqscale += rates.eqscale
-    u = ces_fun(cons, amen, nu_ij_c[i_s], prefs.nu_h, prefs.rho, eqscale)
+    u = cob_fun(cons, amen, nu_ij_c[i_s], prefs.rho, eqscale)
     beta = prefs.beta
     vareps = prefs.varepsilon
     gamma = prefs.gamma
@@ -374,11 +374,11 @@ def v_fun_ez(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
                     else :
                         ev += f_h[i_ee] * q_ss[i_ss] * prefs.b_x *np.log( (
                             beq + prefs.b_k))
-    amen = i_h * p_h[2,0]
+    amen = (rates.phi + prefs.nu_h * i_h) * p_h[2, 0]
     eqscale = 1.0
     if dims.n_s==16 and dims.a_j[i_s]==1:
         eqscale += rates.eqscale
-    u = ces_fun(cons, amen, nu_ij_c[i_s], prefs.nu_h, prefs.rho,eqscale)
+    u = cob_fun(cons, amen, nu_ij_c[i_s], prefs.rho,eqscale)
     vopt = ez_fun(u, ev, prefs.beta, prefs.varepsilon, prefs.gamma)
     return vopt
 
@@ -423,11 +423,11 @@ def v_fun_bo(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
                                 1.0 - prefs.varepsilon) - (prefs.b_k) ** (
                                 1.0 - prefs.varepsilon))
                 ev += f_h[i_ee] * q_ss[i_ss] * np.exp(-prefs.gamma*(1.0-prefs.beta)*pvv)
-    amen = i_h * p_h[2,0]
+    amen = (rates.phi + prefs.nu_h * i_h) * p_h[2, 0]
     eqscale = 1.0
     if dims.n_s==16 and dims.a_j[i_s]==1:
         eqscale += rates.eqscale
-    u = ces_fun(cons, amen, nu_ij_c[i_s], prefs.nu_h, prefs.rho,eqscale)
+    u = cob_fun(cons, amen, nu_ij_c[i_s], prefs.rho,eqscale)
     vopt = (1.0-prefs.beta)*(u**(1.0-prefs.varepsilon)-1.0)/(1.0-prefs.varepsilon)
     vopt -= prefs.beta/prefs.gamma * np.log(ev)
     return vopt

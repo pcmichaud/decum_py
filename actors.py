@@ -103,7 +103,7 @@ def load_house_expectations(file='house_expectations.csv'):
     df['mu'] = df['mu'].clip(upper=1.5)
     df['zeta'] = df['zeta'].clip(upper=1.5)
     return df
-def load_scenarios(price_file='prices.csv',benfs_file='benefits.csv', 
+def load_scenarios(price_file='prices.csv',benfs_file='benefits.csv',
         probs_file='prob.csv'):
     df_prices = pd.read_csv('inputs/'+price_file)
     df_prices.set_index('respid',inplace=True)

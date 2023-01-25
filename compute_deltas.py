@@ -9,7 +9,7 @@ from scipy.stats import ttest_ind
 
 
 # Load values which are compared by run_ref.py
-df = pd.read_csv('output/values_nomiss.csv')
+df = pd.read_csv('output/values_reference.csv')
 pd.set_option('display.max_rows', 500)
 # compute value differences for each scenarios (0 = baseline)
 for i in range(1,13):
@@ -39,7 +39,7 @@ for c in probs.columns:
     probs[c] = np.log(probs[c]/(1.0-probs[c]))
 
 # sigmas
-sigmas = np.load('output/sigmas_nomiss.npy')
+sigmas = np.load('output/sigmas_reference.npy')
 
 df['sigma_ann'] = np.where(df['know_ann']==1,sigmas[0,1],sigmas[0,0])
 df['sigma_ltc'] = np.where(df['know_ltci']==1,sigmas[1,1],sigmas[1,0])
@@ -58,7 +58,7 @@ print(deltas.describe().transpose())
 
 # merge back
 df = df.merge(deltas,left_index=True,right_index=True,how='left')
-df.to_csv('output/values_nomiss_with_deltas.csv')
+df.to_csv('output/values_reference_with_deltas.csv')
 
 def ecdf(a):
     x, counts = np.unique(a, return_counts=True)
@@ -105,7 +105,7 @@ test_stat = ttest_ind(df.loc[df['know_rmr']==1,'delta_rmr'], df.loc[df['know_rmr
 test_stats.append(test_stat[0])
 table['t-value'] = test_stats
 print(table)
-table.round(3).to_latex('output/deltas_by_product_nomiss.tex')
+table.round(3).to_latex('output/deltas_by_product_reference.tex')
 #### compute overall means and sd for Results Table
 print(df[deltas].describe())
 

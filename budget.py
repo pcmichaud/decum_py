@@ -42,6 +42,7 @@ class set_rates(object):
         self.phi = phi
         self.phi_d = phi_d
         self.x_min = x_min
+        #self.x_min = 1.0
         self.tau_s0 = tau_s0
         self.tau_s1 = tau_s1
         self.tau_b0 = tau_b0

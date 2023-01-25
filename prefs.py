@@ -38,9 +38,14 @@ def eu_fun(u,ev,beta,varepsilon,gamma):
     eu = present + future
     return eu
 
-@njit(float64(float64,float64,float64,float64,float64,float64),fastmath=True,cache=True)
-def ces_fun(cons,amen,nu_c,nu_h,rho, eqscale):
-    ces = (nu_c/eqscale) *(  (cons**(1.0 - rho)) + nu_h * (amen**(1.0 - rho)))**(1.0 / (1.0 - rho))
+@njit(float64(float64,float64,float64,float64,float64),fastmath=True,cache=True)
+def ces_fun(cons,amen,nu_c, rho, eqscale):
+    ces = (nu_c/eqscale) *(  (cons**(1.0 - rho)) + (amen**(1.0 - rho)))**(1.0 / (1.0 - rho))
+    return ces
+
+@njit(float64(float64,float64,float64,float64,float64),fastmath=True,cache=True)
+def cob_fun(cons,amen,nu_c, rho, eqscale):
+    ces = (nu_c/eqscale) *((cons**rho) * (amen**(1.0-rho)) )
     return ces
 
 spec_prefs = [
