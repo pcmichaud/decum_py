@@ -9,37 +9,18 @@ import numpy as np
 if __name__ == '__main__':
         warnings.simplefilter(action='ignore')
         data = init_data()
-        #data = data.iloc[:256,:]
         maxeval=10000
-        pars = np.array([0.09,
-                        0.03,
-                        0.683,
-                        0.016,
+        pars = np.array([0.312,
+                        0.213,
                         0.532,
-                        0.096,
-                        0.011,
-                        0.0,
-                        0.718,
+                        0.196,
+                        0.1,
+                        200.0,
+                        0.432,
                         0.134,
-                        0.0355,
-                        0.011,
-                        0.0,
-                        0.0])
+                        0.123,
+                        0.11])
         isfree = np.ones(pars.shape[0])
-        isfree[0] = 0
-        isfree[1] = 0
-        #isfree[2] = 0
-        #isfree[3] = 0
-        #isfree[4] = 0
-        #isfree[5] = 0
-        #isfree[6] = 0
-        isfree[7] = 0
-        #isfree[8] = 0
-        #isfree[9] = 0
-        #isfree[10] = 0
-        #isfree[11] = 0
-        isfree[12] = 0
-        isfree[13] = 0
         theta = set_theta(pars,isfree)
         n_free_theta = theta.shape[0]
         print('number of parameters = ',pars.shape[0],', number of free parameters = ',n_free_theta)
@@ -51,7 +32,7 @@ if __name__ == '__main__':
         opt.set_min_objective(partial_distance)
         opt.set_initial_step(dx)
         opt.set_maxeval(maxeval)
-        opt.set_xtol_abs(1e-4)
+        opt.set_xtol_abs(1e-5)
         theta = opt.optimize(theta)
         distance = opt.last_optimum_value()
         opt_pars = extract_pars(theta, isfree, pars)

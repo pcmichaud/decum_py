@@ -5,43 +5,25 @@ from numba.types import Tuple
 from budget import *
 from space import *
 
-@njit(float64(float64,float64,float64,float64,float64),fastmath=True, cache=True)
-def ez_fun(u,ev,beta,varepsilon,gamma):
-    present = (1.0 - beta) * (u**(1.0 - varepsilon))
-    if ev!=0.0:
-        if gamma != 1.0:
-            future = (beta) * (ev ** ((1.0 - varepsilon) / (1.0 - gamma)))
-        else :
-            future = (beta) * (np.exp(ev) ** (1.0 - varepsilon))
-    else :
-        future = 0.0
-    ez = (present + future)**(1.0 / (1.0 - varepsilon))
-    return ez
 
-@njit(float64(float64,float64,float64,float64,float64),fastmath=True, cache=True)
-def bo_fun(u,ev,beta,varepsilon,gamma):
-    present = (1.0 - beta) * (u**(1.0 - varepsilon))
-    if ev!=0.0:
-        if gamma != 1.0:
-            future = (beta) * (ev ** ((1.0 - varepsilon) / (1.0 - gamma)))
-        else :
-            future = (beta) * (np.exp(ev) ** (1.0 - varepsilon))
+@njit(float64(float64,float64,float64,float64),fastmath=True, cache=True)
+def eu_fun(u,ev,beta,gamma):
+    if gamma!=1.0:
+        present = (u**(1.0-gamma))/(1.0-gamma)
     else :
-        future = 0.0
-    ez = (present + future)**(1.0 / (1.0 - varepsilon))
-    return ez
-
-@njit(float64(float64,float64,float64,float64,float64),fastmath=True, cache=True)
-def eu_fun(u,ev,beta,varepsilon,gamma):
-    present = (u**(1.0-gamma))/(1.0-gamma)
+        present = np.log(u)
     future = beta * ev
     eu = present + future
     return eu
 
-@njit(float64(float64,float64,float64,float64,float64),fastmath=True,cache=True)
-def ces_fun(cons,amen,nu_c, rho, eqscale):
-    ces = (nu_c/eqscale) *(  (cons**(1.0 - rho)) + (amen**(1.0 - rho)))**(1.0 / (1.0 - rho))
-    return ces
+@njit(float64(float64,float64,float64,float64),fastmath=True, cache=True)
+def bu_fun(w,b_x,b_k,gamma):
+    b_w = w + b_k
+    if gamma!=1.0:
+        b_u = b_x * (b_w**(1.0-gamma))/(1.0-gamma)
+    else :
+        b_u = b_x * np.log(b_w)
+    return b_u
 
 @njit(float64(float64,float64,float64,float64,float64),fastmath=True,cache=True)
 def cob_fun(cons,amen,nu_c, rho, eqscale):
@@ -49,12 +31,11 @@ def cob_fun(cons,amen,nu_c, rho, eqscale):
     return ces
 
 spec_prefs = [
-    ('varepsilon',float64),
     ('gamma',float64),
     ('rho',float64),
     ('b_x',float64),
     ('b_k',float64),
-    ('nu_c0',float64),
+    ('nu_c0',float64)
     ('nu_c1',float64),
     ('nu_c2',float64),
     ('nu_h',float64),
@@ -64,13 +45,10 @@ spec_prefs = [
 
 @jitclass(spec_prefs)
 class set_prefs(object):
-    def __init__(self, varepsilon= 0.261, d_varepsilon=0.028, gamma = 0.403,
-                d_gamma = 0.145, rho = 0.811, b_x = 0.045, d_b_x = 0.02, b_k = 2.252e3,
-                 nu_c0 = 1.0, nu_c1 = 0.117, nu_c2 = 0.027, nu_h = 0.186, d_nu_h = 0.012, beta = 0.97, live_fast=0, risk_averse=0,
+    def __init__(self, gamma = 0.403,
+                d_gamma = 0.145, rho = 0.811, b_x = 0.045, d_b_x = 0.02, b_k = 500.0,
+                  nu_c1 = 0.117, nu_c2 = 0.027, nu_h = 0.186, d_nu_h = 0.012, beta = 0.97, risk_averse=0,
                  beq_money=0, pref_home=0):
-        self.varepsilon = varepsilon
-        if live_fast==1:
-            self.varepsilon -= d_varepsilon
         self.gamma = gamma
         if risk_averse==1:
             self.gamma += d_gamma
@@ -79,7 +57,7 @@ class set_prefs(object):
         if beq_money==1:
             self.b_x += d_b_x
         self.b_k = b_k
-        self.nu_c0 = nu_c0
+        self.nu_c0 = 1.0
         self.nu_c1 = nu_c1
         self.nu_c2 = nu_c2
         self.nu_h = nu_h
