@@ -290,10 +290,10 @@ def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c,  med_ij, y_ij,
             else :
                 copt[i_hh] = clast[z,i_hh]
                 if t==dims.t_last:
-                    vopt[i_hh] = v_t_fun_ez(copt[i_hh],cash[0],z,i_hh,p_h,b_its,f_h,
+                    vopt[i_hh] = v_t_fun(copt[i_hh],cash[0],z,i_hh,p_h,b_its,f_h,
                         nu_ij_c,base_value,prefs, dims, rates)
                 else :
-                    vopt[i_hh] = v_fun_ez(copt[i_hh],cash[0],z,t,i_hh,p_h,b_its,f_h,
+                    vopt[i_hh] = v_fun(copt[i_hh],cash[0],z,t,i_hh,p_h,b_its,f_h,
                         nu_ij_c, qs_ij,base_value,prefs, dims, rates, nextv)
         if dims.ij_h[i_s]==1 and afford==1:
             if vopt[1] > vopt[0]:

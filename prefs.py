@@ -35,7 +35,7 @@ spec_prefs = [
     ('rho',float64),
     ('b_x',float64),
     ('b_k',float64),
-    ('nu_c0',float64)
+    ('nu_c0',float64),
     ('nu_c1',float64),
     ('nu_c2',float64),
     ('nu_h',float64),
