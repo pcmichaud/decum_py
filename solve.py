@@ -146,6 +146,95 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
     value = interp2d(du, wu, vsub)
     return value
 
+def get_sim_path(seed, cons_rules, cond_values, hh, rp, sp, base_value, prices, benfs,
+              p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its, nu_ij_c,
+              rates, dims, prefs):
+    # for solution, set array for path
+    cons_path = np.empty(dims.T,dtype=np.float64)
+    cons_path[:] = np.nan
+    own_path = np.empty(dims.T,dtype=np.float64)
+    own_path[:] = np.nan
+    wlth_path = np.empty(dims.T, dtype=np.float64)
+    wlth_path[:] = np.nan
+    home_path = np.empty(dims.T, dtype=np.float64)
+    home_path[:] = np.nan
+
+    # find current state
+    i_h = hh['own']
+    i_e = 2
+    i_s = rp['hlth']-1
+    d_t = hh['mort_balance']
+    w_t = hh['wealth_total']
+    if hh['married']==1:
+        i_s = i_s * 4 + sp['sp_hlth'] - 1
+    vopt = np.zeros(2,dtype=np.float64)
+    copt = np.zeros(2,dtype=np.float64)
+    sub = np.empty((2,2),dtype=np.float64)
+    np.random.seed()
+    for t in range(dims.T):
+        # figure out where in continuous space
+        if i_h==1:
+            d_low, d_up, du = scale(d_t, dims.d_h[:,i_e,t])
+        else :
+            d_low = 0
+            d_up = 0
+            du = 0.0
+        ww_space = dims.w_space[d_low,:,i_s,i_e,i_h,t]
+        wlth_path[t] = max(w_t,ww_space[0])
+        home_path[t] = i_h*(p_h[i_e,t] - d_t)
+        w_low, w_up, wu = scale(w_t,ww_space)
+        # get decisions by interpolation over continuous state
+        for i_hh in range(2):
+            v = cond_values[:,i_hh, t].reshape((dims.n_d, dims.n_w, dims.n_s,
+                                            dims.n_e, 2),order='F')
+            sub[0,0] = v[d_low,w_low,i_s,i_e,i_h]
+            sub[0,1] = v[d_low,w_up,i_s,i_e,i_h]
+            sub[1,0] = v[d_up,w_low,i_s,i_e,i_h]
+            sub[1,1] = v[d_up,w_up,i_s,i_e,i_h]
+            vopt[i_hh] = interp2d(du, wu, sub)
+        if vopt[1] > vopt[0]:
+            own_path[t] = 1
+        else :
+            own_path[t] = 0
+        c = cons_rules[:,int(own_path[t]), t].reshape((dims.n_d, dims.n_w, dims.n_s,
+                                            dims.n_e, 2),order='F')
+        sub[0,0] = c[d_low,w_low,i_s,i_e,i_h]
+        sub[0,1] = c[d_low,w_up,i_s,i_e,i_h]
+        sub[1,0] = c[d_up,w_low,i_s,i_e,i_h]
+        sub[1,1] = c[d_up,w_up,i_s,i_e,i_h]
+        cons_path[t] = interp2d(du, wu, sub)
+        # update state to next year
+        i_hh = int(own_path[t])
+        # update wealth
+        cash = x_fun(d_t,w_t,i_h,dims.s_i[i_s],dims.s_j[i_s],hh['married'],i_hh,
+                t, p_h[i_e,t],p_r[i_e,t], b_its[i_e,t], med_ij[i_s], y_ij[i_s,t],
+                dims,rates, prices, benfs)
+        w_p = cash[0] - cons_path[t]
+        if w_p >= 0.0:
+            w_p *= np.exp(rates.rate)
+        else :
+            r_b = i_h*rates.r_h + (1.0-i_h)*rates.r_r
+            w_p *= np.exp(r_b)
+        # update mortgage
+        d_p = i_hh*(rates.xi_d*i_h*d_t
+                    + (1.0 - i_h)*rates.omega_d*p_h[i_e,t])
+        # change in house price shock
+        i_ee = np.random.choice(np.arange(dims.n_e),p=f_h)
+        # determine change in health state
+        q_ss = qs_ij[i_s,:,t]
+        i_ss = np.random.choice(dims.s_ij,p=q_ss)
+        if i_ss==(dims.n_s-1):
+            # check if household stil exist
+            break
+        else :
+            # make switch, given survival
+            i_h = i_hh
+            i_e = i_ee
+            i_s = i_ss
+            w_t = w_p
+            d_t = d_p
+
+    return cons_path, own_path, wlth_path, home_path
 
 
 @njit(float64(float64,float64,int64,int64,float64[:,:],

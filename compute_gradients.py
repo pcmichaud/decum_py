@@ -14,11 +14,6 @@ if __name__ == '__main__':
     sigmas = np.load('output/sigmas_reference.npy')
     pars = np.load('output/estimates_reference.npy')
     isfree = np.ones(pars.shape[0])
-    isfree[0] = 0
-    isfree[1] = 0
-    isfree[7] = 0
-    isfree[12] = 0
-    isfree[13] = 0
     theta = set_theta(pars,isfree)
     # sizes
     n_free_theta = theta.shape[0]

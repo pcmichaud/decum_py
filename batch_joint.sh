@@ -1,0 +1,14 @@
+python joint_reference.py
+python joint_nobequest.py
+python joint_muhealth.py
+python joint_house_pref.py
+python joint_no_drift.py
+python joint_no_risk.py
+python joint_obj_surv.py
+python joint_obj_home.py
+python joint_loading.py
+python joint_lowfloor.py
+python joint_singles.py
+python joint_nomedexp.py
+python joint_yaari.py
+

@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 # estimates
-ssd =  7932.1
+ssd =  7904.06
 sigmas = np.load('output/sigmas_reference.npy')
 pars =  np.load('output/estimates_reference.npy')
 
@@ -32,10 +32,9 @@ Ainv = np.linalg.inv(A)
 cov = Ainv @ B @ Ainv
 se = np.sqrt(np.diag(cov))
 
-pars = np.delete(pars,[0,1,7,12,13])
 
 labels= ['$\\gamma$','$\\gamma_{\\Delta}$',
-         '$\\rho$','$b$','$b_{\\Delta}$','$\\nu_{c,2}$','$\\nu_{c,3}$',
+         '$\\rho$','$b$','$b_{\\Delta}$','$b_k$','$\\nu_{c,2}$','$\\nu_{c,3}$',
          '$\\nu_{h}$', '$\\nu_{h,\\Delta}$']
 
 table = pd.DataFrame(index=labels,columns=['point','se'])

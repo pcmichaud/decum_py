@@ -99,6 +99,47 @@ def func_solve(row,theta):
     return row
 
 
+def func_sim(row,theta):
+    # household information
+    hh, rp, sp = get_actors(row)
+
+    # house price information
+    g, sig, base_value = get_house_info(row)
+
+    # health transition parameters
+    hc, nh = get_medcosts(row)
+
+    # health transition parameters
+    hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
+
+    # setup the problem, depending on whether preferences supplied or not
+    prefs = get_prefs(row,theta)
+    p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
+        setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
+                    surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
+    nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
+
+
+    i_prices = set_prices(0.0,0.0 , rates.r_h)
+    i_benfs = set_benfs(0.0, 0.0, 0.0)
+    b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+    cons_rules, cond_values = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                            p_r, y_ij, med_ij, qs_ij, b_its,
+                                            nu_ij_c,rates, dims, prefs)
+    # record how often wealth is low
+    nsim = 1000
+    pnone = 0.0
+    target = 85 - rp['age']
+    for i in range(nsim):
+        cons_path, own_path, wlth_path, home_path     = get_sim_path(i,
+                                        cons_rules,cond_values, hh, rp, sp, base_value, i_prices,
+                                        i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
+                                        nu_ij_c,rates, dims, prefs)
+        pnone += np.where(wlth_path[target]<=0.0,1.0,0.0)
+    row['pexhaust85_sim'] = pnone/float(nsim)
+    return row
+
+
 def func_fair(row,theta):
     # household information
     hh, rp, sp = get_actors(row)
@@ -144,7 +185,7 @@ def func_fair(row,theta):
     sx = np.zeros(dims.T, dtype=np.float64)
     for i in range(dims.T):
         sx[i] = np.sum(q_n[dims.s_i<=2,i])
-    p_a = np.sum([np.exp(-rates.rate*i)*sx[i] for i in range(dims.T)])
+    p_a = np.sum([np.exp(-rates.rate*i)*sx[i] for i in range(1,dims.T)])
     row['price_ann_fair'] = p_a
     # compute fair price of long-term care insurance (see eq. 3 of paper)
     Lx = np.zeros(dims.T, dtype=np.float64)
@@ -152,7 +193,7 @@ def func_fair(row,theta):
     for i in range(dims.T):
         Lx[i] = np.sum(q_n[dims.s_i==2,i])
         qx[i] = np.sum(q_n[dims.s_i<=1,i])
-    num = np.sum([np.exp(-rates.rate*i)*Lx[i] for i in range(dims.T)])
+    num = np.sum([np.exp(-rates.rate*i)*Lx[i] for i in range(1,dims.T)])
     den = np.sum([np.exp(-rates.rate*i)*qx[i] for i in range(dims.T)])
     p_l = num/den
     row['price_ltci_fair'] = p_l
@@ -161,7 +202,6 @@ def func_fair(row,theta):
     opt_min = np.zeros(3,dtype=np.float64)
     opt_max[0] = hh['wealth_total']
     opt_max[1] = med_ij[2]
-    #rates.omega_rm = 1.0
     opt_max[2] = rates.omega_rm*(hh['home_value'] - hh['mort_balance'])
     row['max_ann_fair'] = opt_max[0]
     row['max_ltci_fair'] = opt_max[1]
@@ -172,6 +212,7 @@ def func_fair(row,theta):
     pi[2] = 1.0
     i_rs = np.linspace(0.0,0.05,5)
     ds = []
+    ps = []
     for i_r in i_rs:
         hhp = hh.copy()
         i_prices = set_prices(pi[0]*opt_max[0],p_l*pi[1]*opt_max[1] , rates.r_h + i_r)
@@ -199,7 +240,7 @@ def func_fair(row,theta):
         mip = 0.0
         nneg = 0.0
         for i in range(nsim):
-            cons_path, own_path, wlth_path, home_path     = get_sim_path(1234,
+            cons_path, own_path, wlth_path, home_path     = get_sim_path(i,
                                         cons_rules,cond_values, hhp, rp, sp, base_value, i_prices,
                                         i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
                                         nu_ij_c,rates, dims, prefs)
@@ -211,6 +252,7 @@ def func_fair(row,theta):
                 if own_path[t]==0:
                     nneg += np.exp(-rates.r_h*t)*lt
                     break
+
         mip = mip/nsim
         nneg = nneg/nsim
         ds.append(mip-nneg)
@@ -224,7 +266,7 @@ def func_fair(row,theta):
     return row
 
 
-def func_joint(row,theta):
+def func_joint(row,theta, ixmin = False, dispose_home = False):
     # household information
     hh, rp, sp = get_actors(row)
 
@@ -244,24 +286,31 @@ def func_joint(row,theta):
                     surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
 
+    if ixmin:
+        rates.x_min = 1.0
+    if dispose_home:
+        hh['own'] = 0
+        hh['wealth_total'] += hh['home_value'] - hh['mort_balance']
+        hh['home_value'] = 0.0
+        hh['mort_balance'] = 0.0
+
     # fair prices
-    p_a = row['price_ann_fair_avg']
-    p_l = row['price_ltci_fair_avg']
-    i_r = rates.r_h + row['price_rmr_fair_avg']
+    p_a = row['price_ann_fair']
+    p_l = row['price_ltci_fair']
+    i_r = rates.r_h + row['price_rmr_fair']
 
     # set bounds
     opt_max = np.zeros(3,dtype=np.float64)
     opt_min = np.zeros(3,dtype=np.float64)
     opt_max[0] = hh['wealth_total']
     opt_max[1] = med_ij[2]
-    # use what was available in survey in terms of how much they can purchase
-    rates.omega_rm = 0.35
     opt_max[2] = max(rates.omega_rm*(hh['home_value'] - hh['mort_balance']),0.0)
     # search over grid
-    nu = 4
+    nu = 2
     nuu = nu*nu*nu
-    gridu = np.linspace(0,1.0,nu)
-    buy_grid = np.array(list(product(*[gridu,gridu,gridu])))
+    gridu = np.linspace(0,0.5,nu)
+    gridr = np.linspace(0,1.0,nu)
+    buy_grid = np.array(list(product(*[gridu,gridu,gridr])))
     values = np.zeros(nuu)
     for i in range(nuu):
         hhp = hh.copy()
@@ -335,13 +384,15 @@ def compute_fair_chunks(df,theta):
     df = df.apply(func_fair,axis=1,args=(theta,))
     return df
 
-def compute_joint_chunks(df,theta):
-    df = df.apply(func_joint,axis=1,args=(theta,))
+def compute_sim_chunks(df,theta):
+    df = df.apply(func_sim,axis=1,args=(theta,))
     return df
 
-def compute_sim_chunks(df,theta):
-    df = df.apply(func_simulate,axis=1,args=(theta,))
+
+def compute_joint_chunks(df,theta, ixmin = False, dispose_home = False):
+    df = df.apply(func_joint,axis=1,args=(theta,ixmin,dispose_home))
     return df
+
 
 def solve_df(data, npartitions=12,theta=None):
     # load data
@@ -366,14 +417,28 @@ def solve_fair(data, npartitions=12,theta=None):
     df = pd.concat(res)
     return df
 
-def solve_joint(data, npartitions=12,theta=None):
+def solve_sim(data, npartitions=12,theta=None):
+    # load data
+    df = data.loc[:,:]
+    df['pexhaust85_sim'] = np.nan
+    df['seed'] = np.random.shuffle(df.index.to_numpy())
+    list_df = np.array_split(df, npartitions)
+    compress_compute_chunks = partial(compute_sim_chunks,theta=theta)
+    with mp.Pool(processes=npartitions) as pool:
+        res = pool.map(compress_compute_chunks, list_df)
+    df = pd.concat(res)
+    return df
+
+
+
+def solve_joint(data, npartitions=12,theta=None, ixmin = False, dispose_home = False):
     # load data
     df = data.loc[:,:]
     df[['buy_'+ p + '_joint' for p in ['ann','ltci','rmr']]] = np.nan
     df[['buy_'+ p + '_indp' for p in ['ann','ltci','rmr']]] = np.nan
     df['seed'] = np.random.shuffle(df.index.to_numpy())
     list_df = np.array_split(df, npartitions)
-    compress_compute_chunks = partial(compute_joint_chunks,theta=theta)
+    compress_compute_chunks = partial(compute_joint_chunks,theta=theta, ixmin = ixmin, dispose_home = dispose_home)
     with mp.Pool(processes=npartitions) as pool:
         res = pool.map(compress_compute_chunks, list_df)
     df = pd.concat(res)
