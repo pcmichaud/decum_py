@@ -3,8 +3,7 @@ import numpy as np
 
 
 
-scenarios = ['reference','nobequest','muhealth','house_pref','no_drift','no_risk','obj_surv','obj_home','lowfloor','loading','singles','nomedexp','yaari']
-
+scenarios = ['reference','averse','nobequest','muhealth','house_pref','no_drift','no_risk','obj_surv','obj_home','lowfloor','loading','singles','nomedexp','yaari']
 products = ['ann','ltci','rmr']
 indp_labels = ['buy_'+p+'_indp' for p in products]
 
