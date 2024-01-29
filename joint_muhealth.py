@@ -7,10 +7,10 @@ if __name__ == '__main__':
     warnings.simplefilter(action='ignore')
     data = init_data()
     # load estimated parameters
-    theta = np.load('output/estimates_reference.npy')
+    theta = np.load('output/estimates_ez.npy')
 
+    theta[5] = 1.0
     theta[6] = 1.0
-    theta[7] = 1.0
 
     # load fair prices
     prices = pd.read_csv('output/fair_prices.csv')

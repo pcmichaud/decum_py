@@ -51,15 +51,13 @@ def get_health_params(row):
     return hp, surv_bias, hp_sp, sp_surv_bias
 
 def get_prefs(row,theta):
-    prefs = set_prefs(gamma=theta[0],d_gamma=theta[1],rho=theta[2],
-                        b_x=theta[3],d_b_x=theta[4],b_k=theta[5],     nu_c1=theta[6],
-                        nu_c2=theta[7],nu_h=theta[8],d_nu_h=theta[9],
-                        risk_averse=row['pref_risk_averse'],
-                        beq_money=row['pref_beq_money'],pref_home=row['pref_home'])
+    prefs = set_prefs(gamma=theta[0],sigma=theta[1],rho=theta[2],
+                        b_x=theta[3],b_k=theta[4],nu_c1=theta[5],
+                        nu_c2=theta[6],nu_h=theta[7])
     return prefs
 
 # function used to solve for expected value across scenarios
-def func_solve(row,theta):
+def func_solve(row,theta, iann, iltc, irmr):
     # household information
     hh, rp, sp = get_actors(row)
 
@@ -93,7 +91,23 @@ def func_solve(row,theta):
                 else :
                     i_benfs.rmr = 0.0
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
-        row['value_' + str(i)] = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+        if i==0:
+            row['value_' + str(i)] = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                         p_r, y_ij, med_ij, qs_ij, b_its,
+                                         nu_ij_c, rates, dims, prefs)
+        if i>=1 and i<=4:
+            if iann:
+                row['value_' + str(i)] = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                         p_r, y_ij, med_ij, qs_ij, b_its,
+                                         nu_ij_c, rates, dims, prefs)
+        if i>=5 and i<=8:
+             if iltc:
+                row['value_' + str(i)] = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                         p_r, y_ij, med_ij, qs_ij, b_its,
+                                         nu_ij_c, rates, dims, prefs)
+        if i>=9 & i<=12:
+            if irmr:
+                row['value_' + str(i)] = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
                                          nu_ij_c, rates, dims, prefs)
     return row
@@ -135,7 +149,7 @@ def func_sim(row,theta):
                                         cons_rules,cond_values, hh, rp, sp, base_value, i_prices,
                                         i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
                                         nu_ij_c,rates, dims, prefs)
-        pnone += np.where(wlth_path[target]<=0.0,1.0,0.0)
+        pnone += np.where(wlth_path[target]<=10.0,1.0,0.0)
     row['pexhaust85_sim'] = pnone/float(nsim)
     return row
 
@@ -376,8 +390,8 @@ def set_scenario(row,scn):
     return _prices, _benfs
 
 
-def compute_solve_chunks(df,theta):
-    df = df.apply(func_solve,axis=1,args=(theta,))
+def compute_solve_chunks(df,theta, iann, iltc, irmr):
+    df = df.apply(func_solve,axis=1,args=(theta,iann,iltc,irmr,))
     return df
 
 def compute_fair_chunks(df,theta):
@@ -394,12 +408,12 @@ def compute_joint_chunks(df,theta, ixmin = False, dispose_home = False):
     return df
 
 
-def solve_df(data, npartitions=12,theta=None):
+def solve_df(data, iann = True, iltc = True, irmr = True, npartitions=12,theta=None):
     # load data
     df = data.loc[:,:]
     df[['value_'+str(x) for x in range(13)]] = np.nan
     list_df = np.array_split(df, npartitions)
-    compress_compute_chunks = partial(compute_solve_chunks,theta=theta)
+    compress_compute_chunks = partial(compute_solve_chunks,theta=theta, iann = iann, iltc = iltc, irmr = irmr)
     with mp.Pool(processes=npartitions) as pool:
         res = pool.map(compress_compute_chunks, list_df)
     df = pd.concat(res)

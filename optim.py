@@ -15,7 +15,7 @@ def set_theta(pars, isfree):
         if isfree[0]==1:
                 theta[i] = np.log(pars[0])
                 i +=1
-        # d_gamma
+        # sigma
         if isfree[1]==1:
                 theta[i] = np.log(pars[1])
                 i +=1
@@ -27,29 +27,21 @@ def set_theta(pars, isfree):
         if isfree[3]==1:
                 theta[i] = np.log(pars[3])
                 i +=1
-        # d_b_x
+        # b_k
         if isfree[4]==1:
                 theta[i] = np.log(pars[4])
                 i +=1
-        # b_k
+        # nu_c1
         if isfree[5]==1:
                 theta[i] = np.log(pars[5])
                 i +=1
-        # nu_c1
+        # nu_c2
         if isfree[6]==1:
                 theta[i] = np.log(pars[6])
                 i +=1
-        # nu_c2
+        # nu_h
         if isfree[7]==1:
                 theta[i] = np.log(pars[7])
-                i +=1
-        # nu_h
-        if isfree[8]==1:
-                theta[i] = np.log(pars[8])
-                i +=1
-        # d_nu_h
-        if isfree[9]==1:
-                theta[i] = np.log(pars[9])
                 i +=1
         return theta
 
@@ -62,7 +54,7 @@ def extract_pars(theta, isfree, ipars):
                 i +=1
         else :
                 pars[0] = ipars[0]
-        # d_gamma
+        # sigma
         if isfree[1]==1:
                 pars[1] = np.exp(theta[i])
                 i +=1
@@ -80,97 +72,106 @@ def extract_pars(theta, isfree, ipars):
                 i +=1
         else :
                 pars[3] = ipars[3]
-        # d_b_x
+        # b_k
         if isfree[4]==1:
                 pars[4] = np.exp(theta[i])
                 i +=1
         else :
                 pars[4] = ipars[4]
-        # b_k
+        # nu_c1
         if isfree[5]==1:
                 pars[5] = np.exp(theta[i])
                 i +=1
         else :
                 pars[5] = ipars[5]
-        # nu_c1
+        # nu_c2
         if isfree[6]==1:
                 pars[6] = np.exp(theta[i])
                 i +=1
         else :
                 pars[6] = ipars[6]
-        # nu_c2
+        # nu_h
         if isfree[7]==1:
                 pars[7] = np.exp(theta[i])
                 i +=1
         else :
                 pars[7] = ipars[7]
-        # nu_h
-        if isfree[8]==1:
-                pars[8] = np.exp(theta[i])
-                i +=1
-        else :
-                pars[8] = ipars[8]
-        # d_nu_h
-        if isfree[9]==1:
-                pars[9] = np.exp(theta[i])
-                i +=1
-        else :
-                pars[9] = ipars[9]
         return pars
 
 
-def concentrated_distance_within(theta, grad, data, isfree, ipars, iwithin, scn_name, npartitions=50):
+def concentrated_distance_within(theta, grad, data, isfree, ipars, iwithin, scn_name, iann = True, irmr = True, iltc = True, npartitions=50):
         # get params
         pars = extract_pars(theta,isfree,ipars)
         # get dataset with solved expected utilities
-        df = solve_df(data, npartitions=npartitions, theta=pars)
+        df = solve_df(data, iann=iann, iltc = iltc, irmr = irmr, npartitions=npartitions, theta=pars)
         # take difference in value with respect to baseline
         scns = [s for s in range(1,13)]
         for s in scns:
-                df['d_value_'+str(s)] = df['value_'+str(s)] - df['value_0']
+            if s<=4:
+                if iann:
+                    df['d_value_'+str(s)] = df['value_'+str(s)] - df['value_0']
+            if s>=5 and s<=8:
+                if iltc:
+                     df['d_value_'+str(s)] = df['value_'+str(s)] - df['value_0']
+            if s>=9:
+                if irmr:
+                     df['d_value_'+str(s)] = df['value_'+str(s)] - df['value_0']
         # for each set of products, take within differences
-
         if iwithin:
-
-            df[['w_value_'+str(s) for s in range(1,5)]] = within_difference(df[['d_value_'+str(s) for s in range(1,5)]])
-            df[['w_value_'+str(s) for s in range(5,9)]] = within_difference(df[['d_value_'+str(s) for s in range(5,9)]])
-            df[['w_value_'+str(s) for s in range(9,13)]] = within_difference(df[['d_value_'+str(s) for s in range(9,13)]])
+            if iann:
+                df[['w_value_'+str(s) for s in range(1,5)]] = within_difference(df[['d_value_'+str(s) for s in range(1,5)]])
+            if iltc:
+                df[['w_value_'+str(s) for s in range(5,9)]] = within_difference(df[['d_value_'+str(s) for s in range(5,9)]])
+            if irmr:
+                df[['w_value_'+str(s) for s in range(9,13)]] = within_difference(df[['d_value_'+str(s) for s in range(9,13)]])
         else :
-            df[['w_value_'+str(s) for s in range(1,5)]] = df[['d_value_'+str(s) for s in range(1,5)]].copy()
-            df[['w_value_'+str(s) for s in range(5,9)]] = df[['d_value_'+str(s) for s in range(5,9)]].copy()
-            df[['w_value_'+str(s) for s in range(9,13)]] = df[['d_value_'+str(s) for s in range(9,13)]].copy()
+            if iann:
+                df[['w_value_'+str(s) for s in range(1,5)]] = df[['d_value_'+str(s) for s in range(1,5)]].copy()
+            if iltc:
+                df[['w_value_'+str(s) for s in range(5,9)]] = df[['d_value_'+str(s) for s in range(5,9)]].copy()
+            if irmr:
+                df[['w_value_'+str(s) for s in range(9,13)]] = df[['d_value_'+str(s) for s in range(9,13)]].copy()
 
         # take exp odds transform of probabilities
         s = 1
         for i in range(1,5):
-                df['odd_'+str(s)] = np.log(df['prob_scn_ann_'+str(i)])/(1.0 - df['prob_scn_ann_'+str(i)])
+                if iann:
+                    df['odd_'+str(s)] = np.log(df['prob_scn_ann_'+str(i)])/(1.0 - df['prob_scn_ann_'+str(i)])
                 s += 1
         for i in range(1,5):
-                df['odd_'+str(s)] = np.log(df['prob_scn_ltci_'+str(i)])/(1.0 - df['prob_scn_ltci_'+str(i)])
+                if iltc:
+                    df['odd_'+str(s)] = np.log(df['prob_scn_ltci_'+str(i)])/(1.0 - df['prob_scn_ltci_'+str(i)])
                 s += 1
         for i in range(1,5):
-                df['odd_'+str(s)] = np.log(df['prob_scn_rmr_'+str(i)])/(1.0 - df['prob_scn_rmr_'+str(i)])
+                if irmr:
+                    df['odd_'+str(s)] = np.log(df['prob_scn_rmr_'+str(i)])/(1.0 - df['prob_scn_rmr_'+str(i)])
                 s += 1
         # take within deviations
         if iwithin:
-            df[['w_odd_'+str(s) for s in range(1,5)]] = within_difference(df[['odd_'
+            if iann:
+                df[['w_odd_'+str(s) for s in range(1,5)]] = within_difference(df[['odd_'
                                                         +str(s) for s in range(1,5)]])
-            df[['w_odd_'+str(s) for s in range(5,9)]] = within_difference(df[['odd_'
+            if iltc:
+                df[['w_odd_'+str(s) for s in range(5,9)]] = within_difference(df[['odd_'
                                                         +str(s) for s in range(5,9)]])
-            df[['w_odd_'+str(s) for s in range(9,13)]] = within_difference(df[['odd_'
+            if irmr:
+                df[['w_odd_'+str(s) for s in range(9,13)]] = within_difference(df[['odd_'
                                                         +str(s) for s in range(9,13)]])
         else :
-            df[['w_odd_'+str(s) for s in range(1,5)]] = df[['odd_'
+            if iann:
+                df[['w_odd_'+str(s) for s in range(1,5)]] = df[['odd_'
                                                         +str(s) for s in range(1,5)]].copy()
-            df[['w_odd_'+str(s) for s in range(5,9)]] = df[['odd_'
+            if iltc:
+                df[['w_odd_'+str(s) for s in range(5,9)]] = df[['odd_'
                                                         +str(s) for s in range(5,9)]].copy()
-            df[['w_odd_'+str(s) for s in range(9,13)]] = df[['odd_'
+            if irmr:
+                df[['w_odd_'+str(s) for s in range(9,13)]] = df[['odd_'
                                                         +str(s) for s in range(9,13)]].copy()
-
         # perform OLS to obtain estimates of sigma per product
         sigmas = np.zeros((3,2))
         sum_distance = 0.0
-        for k in [0,1]:
+        if iann:
+            for k in [0,1]:
                 cond = (~df['w_odd_1'].isna()) & (df['know_ann']==k)
                 y = df.loc[cond,['w_odd_'+str(s) for s in range(1,5)]].stack().values
                 X = df.loc[cond,['w_value_'+str(s) for s in range(1,5)]].stack().values
@@ -179,7 +180,8 @@ def concentrated_distance_within(theta, grad, data, isfree, ipars, iwithin, scn_
                 results = model.fit()
                 sigmas[0,k] = results.params[1]
                 sum_distance += results.ssr
-        for k in [0,1]:
+        if iltc:
+            for k in [0,1]:
                 cond = (~df['w_odd_5'].isna()) & (df['know_ltci']==k)
                 y = df.loc[cond,['w_odd_'+str(s) for s in range(5,9)]].stack().values
                 X = df.loc[cond,['w_value_'+str(s) for s in range(5,9)]].stack().values
@@ -188,7 +190,8 @@ def concentrated_distance_within(theta, grad, data, isfree, ipars, iwithin, scn_
                 results = model.fit()
                 sigmas[1,k] = results.params[1]
                 sum_distance += results.ssr
-        for k in [0,1]:
+        if irmr:
+            for k in [0,1]:
                 cond = (~df['w_odd_9'].isna()) & (df['know_rmr']==k)
                 y = df.loc[cond,['w_odd_'+str(s) for s in range(9,12)]].stack().values
                 X = df.loc[cond,['w_value_'+str(s) for s in range(9,12)]].stack().values
@@ -200,6 +203,12 @@ def concentrated_distance_within(theta, grad, data, isfree, ipars, iwithin, scn_
         print('- function call summary')
         print('ssd = ', sum_distance, ' sigmas = ',sigmas)
         print('pars = ',pars)
+        if iann:
+            print('std.dev of utility differences - annuities',df[['d_value_'+str(s) for s in range(1,5)]].std())
+        if iltc:
+            print('std.dev of utility differences - ltc',df[['d_value_'+str(s) for s in range(5,9)]].std())
+        if irmr:
+            print('std.dev of utility differences - rmr',df[['d_value_'+str(s) for s in range(9,13)]].std())
         np.save('output/sigmas_'+scn_name,sigmas)
         return sum_distance
 

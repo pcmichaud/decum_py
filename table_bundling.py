@@ -60,6 +60,6 @@ table.columns = ['joint','indp']
 for c in table.columns:
 	table[c] = np.where(table[c].isna(),0.0,table[c])
 print(table)
-table.round(3).to_latex('output/joint_distribution_extensive.tex')
+table.round(3).to_latex('output/joint_distribution_extensive_ez.tex')
 
 

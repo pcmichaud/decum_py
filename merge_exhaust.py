@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 
 warnings.simplefilter(action='ignore')
 
-data = pd.read_csv('output/exhaust_sim.csv')
+data = pd.read_csv('output/exhaust_sim_ez.csv')
 data.set_index('respid',inplace=True)
 other = pd.read_csv('inputs/other_vars.csv')
 other.set_index('respid',inplace=True)

@@ -39,13 +39,13 @@ spec_dims = [
 @jitclass(spec_dims)
 class set_dims(object):
     def __init__(self, married, omega_d, T = 35, e_min = -2.0, e_max = 2.0,
-                    n_e = 10, d_min = 0.0, n_d = 7, w_min = 0.0, w_max = 2.0e3,
-                    n_w = 12, n_h = 2):
+                    n_e = 5, d_min = 0.0, n_d = 5, w_min = 0.0, w_max = 2.0e3,
+                    n_w = 10, n_h = 2):
         self.T = T
         self.t_last = 33
         #self.time_t = np.array([0,3,5,7,10,13,15,17,20,23,25,27,30,32], dtype=np.int64)
-        #self.time_t = np.array([0,3,7,15,20,25,30,32], dtype=np.int64)
-        self.time_t = np.arange(self.t_last, dtype=np.int64)
+        self.time_t = np.array([0,1,3,5,15,25,30,32], dtype=np.int64)
+        #self.time_t = np.arange(self.t_last, dtype=np.int64)
         self.nper = self.time_t.shape[0]
         self.e_min = e_min
         self.e_max = e_max

@@ -2,15 +2,15 @@ import numpy as np
 import pandas as pd
 
 # estimates
-ssd =  7904.06
-sigmas = np.load('output/sigmas_reference.npy')
-pars =  np.load('output/estimates_reference.npy')
+ssd =  7778.1
+sigmas = np.load('output/sigmas_ez.npy')
+pars =  np.load('output/estimates_ez.npy')
 
 # standard errors
-es = pd.read_csv('output/within_residuals_reference.csv',dtype=np.float64)
+es = pd.read_csv('output/within_residuals_ez.csv',dtype=np.float64)
 es['respid'] = es['respid'].astype('int64')
 es.set_index('respid',inplace=True)
-gs = pd.read_csv('output/gradients_reference.csv',dtype=np.float64)
+gs = pd.read_csv('output/gradients_ez.csv',dtype=np.float64)
 gs['respid'] = gs['respid'].astype('int64')
 gs.set_index('respid',inplace=True)
 gs = gs[[str(x) for x in range(gs.shape[1]-1)]]
@@ -33,9 +33,9 @@ cov = Ainv @ B @ Ainv
 se = np.sqrt(np.diag(cov))
 
 
-labels= ['$\\gamma$','$\\gamma_{\\Delta}$',
-         '$\\rho$','$b$','$b_{\\Delta}$','$b_k$','$\\nu_{c,2}$','$\\nu_{c,3}$',
-         '$\\nu_{h}$', '$\\nu_{h,\\Delta}$']
+labels= ['$\\gamma$','$\\varepsilon$',
+         '$\\rho$','$b_X$','$b_K$','$\\nu_{c,2}$','$\\nu_{c,3}$',
+         '$\\nu_{h}$']
 
 table = pd.DataFrame(index=labels,columns=['point','se'])
 
@@ -55,7 +55,7 @@ table.loc['within SSE','point'] = ssd
 
 print(table)
 
-table.round(3).to_latex('output/table_estimates_reference.tex',escape=False)
+table.round(3).to_latex('output/table_estimates_ez.tex',escape=False)
 
 
 

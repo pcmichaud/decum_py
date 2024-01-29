@@ -91,7 +91,7 @@ def beq_fun(d, w, i_hh, p_h, b_its, tau_s0, tau_s1):
         mc_s = tau_s0 + tau_s1 * p_h
         p = p_h - d - mc_s - b_its
         beq += p
-    beq = max(beq,0.01)
+    beq = max(beq,0.1)
     return beq
 
 @njit(Tuple((float64,float64))(float64,float64,int64,int64,
@@ -108,26 +108,28 @@ def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
     mc_b = rates.tau_b0 + rates.tau_b1 * p_h
     mc = h0 * (1.0 - h1) * mc_s + (1.0 - h0) * h1 * mc_b
     w_h = h0 * (p_h - d0 * np.exp(rates.r_d))
+    z_ben = 0.0
+    z_prem = 0.0
     if tt==0:
-        z = - prices.ann - prices.ltc  \
-            + h0 * h1  * benfs.rmr
+        z_prem += prices.ann + prices.ltc
+        z_ben += h0 * h1  * benfs.rmr
     else :
-        z = -h0 * (1.0 - h1) * b_its
+        z_prem += h0 * (1.0-h1) * b_its
         if s_i <= 2:
-            z += benfs.ann
+            z_ben += benfs.ann
         if s_i == 2:
-            z += benfs.ltc
+            z_ben += benfs.ltc
         if s_i < 2:
-            z -= prices.ltc
-    x = w0 + w_h + y + z - med
+            z_prem += prices.ltc
+    x = w0 + w_h + y + z_ben - med - z_prem - mc
     x_f = 0.0
     if s_i<=2:
         x_f += rates.x_min
     if marr == 1:
         if s_j<=2:
             x_f += rates.x_min * rates.eqscale
-    tr = max(x_f - x + (1.0-h1) * p_r, 0.0)
-    x += tr - c_h - mc
+    tr = max(x_f + (1-h1)*p_r - x, 0.0)
+    x += tr - c_h
     return x, tr
 
 @njit(float64[:,:](set_benfs.class_type.instance_type,set_prices.class_type.instance_type,float64[:,:],

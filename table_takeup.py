@@ -7,7 +7,7 @@ from optim import *
 from matplotlib import pyplot as plt
 
 # Load values which are compared by run_ref.py
-df = pd.read_csv('output/values_reference_with_deltas.csv')
+df = pd.read_csv('output/values_ez_with_deltas.csv')
 pd.set_option('display.max_rows', 500)
 #df  = df.loc[df.married==False,:]
 # compute value differences for each scenarios (0 = baseline)
@@ -52,7 +52,7 @@ print(table)
 
 for c in table.columns:
     table[c] = table[c].astype('float64')
-table.round(3).to_latex('output/stats_values_reference.tex')
+table.round(3).to_latex('output/stats_values_ez.tex')
 
 
 

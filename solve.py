@@ -13,7 +13,7 @@ from math import floor
 def setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp, surv_bias,
                   sp_surv_bias,miss_par=0.0,sp_miss_par=0.0):
     # create rates
-    rates = set_rates()
+    rates = set_rates(omega_h0=0.0,omega_h1=0.0,omega_r=0.0)
     # create dimensions
     dims = set_dims(hh['married'], rates.omega_d)
     # house price dynamics and matrices
@@ -261,13 +261,15 @@ def v_t_fun(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
         for i_ee in range(dims.n_e):
             b_e = beq_fun(d_t,w_t,i_hh,p_h[i_ee,t],
                           b_its[i_ee,t],rates.tau_s0,rates.tau_s1)
-            beq += f_h[i_ee]*bu_fun(b_e,prefs.b_x,prefs.b_k,prefs.gamma)
+            beq += f_h[i_ee]*(bu_fun(b_e,prefs.b_x,prefs.b_k,prefs.gamma))**(1.0-prefs.gamma)
     amen = (rates.phi + prefs.nu_h * i_h) * p_h[2, 0]
     eqscale = 1.0
     if dims.n_s==16 and dims.a_j[i_s]==1:
         eqscale += rates.eqscale
+    #if cons<=0.0:
+        #print('got a zero cons in last period',cons, x)
     u = cob_fun(cons, amen, nu_ij_c[i_s], prefs.rho, eqscale)
-    vopt = eu_fun(u,beq,prefs.beta,prefs.gamma)
+    vopt = ez_fun(u,beq,prefs.beta,prefs.gamma, prefs.sigma)
     return vopt
 
 @njit(float64(float64,float64,int64, int64, int64,float64[:,:],
@@ -303,17 +305,17 @@ def v_fun(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
                      wu*(-v[d_low,w_low] + v[d_low,w_up]) + \
                      wu*du*(v[d_low, w_low] - v[d_up,w_low]
                             - v[d_low,w_up] + v[d_up,w_up])
-                ev += f_h[i_ee] * q_ss[i_ss] * pv
+                ev += f_h[i_ee] * q_ss[i_ss] * (pv**(1.0-prefs.gamma))
             else :
                 if prefs.b_x > 0.0:
                     bu = bu_fun(beq,prefs.b_x,prefs.b_k,prefs.gamma)
-                    ev += f_h[i_ee]*q_ss[i_ss] * bu
+                    ev += f_h[i_ee]*q_ss[i_ss] * (bu**(1.0-prefs.gamma))
     amen = (rates.phi + prefs.nu_h * i_h) * p_h[2, 0]
     eqscale = 1.0
     if dims.n_s==16 and dims.a_j[i_s]==1:
         eqscale += rates.eqscale
     u = cob_fun(cons, amen, nu_ij_c[i_s], prefs.rho,eqscale)
-    vopt = eu_fun(u,ev,prefs.beta,prefs.gamma)
+    vopt = ez_fun(u,ev,prefs.beta,prefs.gamma, prefs.sigma)
     return vopt
 
 
@@ -361,9 +363,9 @@ def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c,  med_ij, y_ij,
                 x_w = min(min(rates.omega_h0*p_h[i_e,t],
                           rates.omega_h1*max(p_h[i_e,t]-d0,0.0)),rates.omega_r * y_ij[i_s,t])
                 r_b = rates.r_h
-            c_max = max(x_w*np.exp(-r_b) + cash[0],0.0)
+            c_max = x_w*np.exp(-r_b) + cash[0]
             afford = 1
-            if c_max <= 0.0 and i_hh==1:
+            if c_max <= rates.x_min and i_hh==1:
                 afford = 0
                 continue
             if isolve==1:

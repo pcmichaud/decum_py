@@ -7,7 +7,7 @@ if __name__ == '__main__':
     warnings.simplefilter(action='ignore')
     data = init_data()
     # load estimated parameters
-    theta = np.load('output/estimates_reference.npy')
+    theta = np.load('output/estimates_ez.npy')
 
     data['xi'] = 0.0
     data['xi_sp'] = 0.0

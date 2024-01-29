@@ -7,7 +7,7 @@ if __name__ == '__main__':
     warnings.simplefilter(action='ignore')
     data = init_data()
     # load estimated parameters
-    theta = np.load('output/estimates_reference.npy')
+    theta = np.load('output/estimates_ez.npy')
 
     data['totinc'] = np.where(data['married']==1,data['totinc']+               data['sp_totinc'], data['totinc'])
     data['retinc'] = np.where(data['married']==1,data['retinc']+               data['sp_retinc'], data['retinc'])
@@ -21,13 +21,11 @@ if __name__ == '__main__':
     #data['retinc'] *= 0.25
 
     theta[3] = 0.0
-    theta[4] = 0.0
 
+    theta[5] = 1.0
     theta[6] = 1.0
-    theta[7] = 1.0
 
-    theta[8] = 0.0
-    theta[9] = 0.0
+    theta[7] = 0.0
 
     data['g'] = 0.0
     data['sig'] = 0.0
