@@ -31,7 +31,7 @@ spec_rates = [
 class set_rates(object):
     def __init__(self, rate=0.01, r_r=0.0949, r_d=0.02, r_h=0.02,
               xi_d=0.9622,phi_d = 0.1,x_min = 18.2, tau_s0 = 1.5,tau_s1 = 0.05,
-              tau_b0 = 0.5,tau_b1 = 0.01, omega_d = 0.65, omega_rm = 0.55,
+              tau_b0 = 0.5,tau_b1 = 0.01, omega_d = 0.8, omega_rm = 0.55,
               omega_r = 0.329, omega_h0 = 0.65,omega_h1 = 0.8,
               phi = 0.035, eqscale = 0.55):
         self.rate = rate
@@ -91,7 +91,7 @@ def beq_fun(d, w, i_hh, p_h, b_its, tau_s0, tau_s1):
         mc_s = tau_s0 + tau_s1 * p_h
         p = p_h - d - mc_s - b_its
         beq += p
-    beq = max(beq,0.1)
+    beq = max(beq,1e-3)
     return beq
 
 @njit(Tuple((float64,float64))(float64,float64,int64,int64,
@@ -121,13 +121,16 @@ def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
             z_ben += benfs.ltc
         if s_i < 2:
             z_prem += prices.ltc
-    x = w0 + w_h + y + z_ben - med - z_prem - mc
+    x = w0 + w_h + y + z_ben - med - z_prem
     x_f = 0.0
     if s_i<=2:
         x_f += rates.x_min
     if marr == 1:
         if s_j<=2:
-            x_f += rates.x_min * rates.eqscale
+            if s_i>2:
+                x_f += rates.x_min
+            else :
+                x_f += rates.x_min * rates.eqscale
     tr = max(x_f + (1-h1)*p_r - x, 0.0)
     x += tr - c_h
     return x, tr

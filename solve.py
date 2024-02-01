@@ -13,7 +13,7 @@ from math import floor
 def setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp, surv_bias,
                   sp_surv_bias,miss_par=0.0,sp_miss_par=0.0):
     # create rates
-    rates = set_rates(omega_h0=0.0,omega_h1=0.0,omega_r=0.0)
+    rates = set_rates()
     # create dimensions
     dims = set_dims(hh['married'], rates.omega_d)
     # house price dynamics and matrices
@@ -365,17 +365,34 @@ def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c,  med_ij, y_ij,
                 r_b = rates.r_h
             c_max = x_w*np.exp(-r_b) + cash[0]
             afford = 1
-            if c_max <= rates.x_min and i_hh==1:
+            x_f = 0.0
+            if dims.s_i[i_s]<=2:
+                x_f += rates.x_min
+            if married == 1:
+                if dims.s_j[i_s]<=2:
+                    if dims.s_i[i_s]>2:
+                        x_f += rates.x_min
+                    else :
+                        x_f += rates.x_min * rates.eqscale
+            if c_max <= x_f and i_hh==1:
                 afford = 0
                 continue
+            if c_max <= x_f and i_hh==0:
+                c_max = x_f
             if isolve==1:
-                cs_ = np.linspace(np.sqrt(rates.x_min), np.sqrt(c_max), n_c)
+                cs_ = np.linspace(np.sqrt(x_f), np.sqrt(c_max), n_c)
                 if t==dims.t_last:
-                    for i_c in range(n_c):
-                        vs_[i_c] = v_t_fun(cs_[i_c]**2,cash[0],z,i_hh,p_h,b_its,f_h, nu_ij_c, base_value, prefs, dims, rates)
+                    if c_max==x_f:
+                        vs_[:] = v_t_fun(cs_[0]**2,cash[0],z,i_hh,p_h,b_its,f_h, nu_ij_c, base_value, prefs, dims, rates)
+                    else :
+                        for i_c in range(n_c):
+                            vs_[i_c] = v_t_fun(cs_[i_c]**2,cash[0],z,i_hh,p_h,b_its,f_h, nu_ij_c, base_value, prefs, dims, rates)
                 else :
-                    for i_c in range(n_c):
-                        vs_[i_c] = v_fun(cs_[i_c]**2,cash[0],z,t,i_hh,p_h,b_its,f_h, nu_ij_c,qs_ij, base_value, prefs, dims, rates, nextv)
+                    if c_max==x_f:
+                        vs_[:] = v_fun(cs_[0]**2,cash[0],z,t,i_hh,p_h,b_its,f_h, nu_ij_c,qs_ij, base_value, prefs, dims, rates, nextv)
+                    else :
+                        for i_c in range(n_c):
+                            vs_[i_c] = v_fun(cs_[i_c]**2,cash[0],z,t,i_hh,p_h,b_its,f_h, nu_ij_c,qs_ij, base_value, prefs, dims, rates, nextv)
                 imax = np.argmax(vs_)
                 copt[i_hh] = cs_[imax]**2
                 vopt[i_hh] = vs_[imax]
