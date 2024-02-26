@@ -11,13 +11,13 @@ if __name__ == '__main__':
         data = init_data()
         #data = data.sample(n=255, random_state = 524644)
         maxeval=10000
-        pars = np.array([2.847,
-                        1.974,
-                        0.883,
-                        0.088,
+        pars = np.array([3.047,
+                        2.074,
+                        0.6,
+                        0.25,
                         106.23,
-                        1.106,
-                        49.489,
+                        0.9,
+                        0.5,
                         0.246])
         isfree = np.ones(pars.shape[0])
         #isfree[0] = 0

@@ -268,7 +268,7 @@ def v_t_fun(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
         eqscale += rates.eqscale
     #if cons<=0.0:
         #print('got a zero cons in last period',cons, x)
-    u = cob_fun(cons, amen, nu_ij_c[i_s], prefs.rho, eqscale)
+    u = cob_fun(cons, amen, nu_ij_c[i_s], prefs.sigma, prefs.rho, eqscale)
     vopt = ez_fun(u,beq,prefs.beta,prefs.gamma, prefs.sigma)
     return vopt
 
@@ -314,7 +314,7 @@ def v_fun(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
     eqscale = 1.0
     if dims.n_s==16 and dims.a_j[i_s]==1:
         eqscale += rates.eqscale
-    u = cob_fun(cons, amen, nu_ij_c[i_s], prefs.rho,eqscale)
+    u = cob_fun(cons, amen, nu_ij_c[i_s],prefs.sigma,  prefs.rho,eqscale)
     vopt = ez_fun(u,ev,prefs.beta,prefs.gamma, prefs.sigma)
     return vopt
 

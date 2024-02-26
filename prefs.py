@@ -31,9 +31,10 @@ def bu_fun(w,b_x,b_k,gamma):
     b_u = (b_x**(1/(1.0-gamma))) * b_w
     return b_u
 
-@njit(float64(float64,float64,float64,float64,float64),fastmath=True,cache=True)
-def cob_fun(cons,amen,nu_c, rho, eqscale):
-    ces = (nu_c/eqscale) *((cons**rho) * (amen**(1.0-rho)) )
+@njit(float64(float64,float64,float64,float64,float64,float64),fastmath=True,cache=True)
+def cob_fun(cons,amen,nu_c, sigma, rho, eqscale):
+    nu = (nu_c/eqscale)**(1/(1-sigma))
+    ces = nu  *((cons**rho) * (amen**(1.0-rho)) )
     return ces
 
 spec_prefs = [
