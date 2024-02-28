@@ -11,16 +11,7 @@ if __name__ == '__main__':
         data = init_data()
         #data = data.sample(n = 270)
         maxeval=10000
-        pars = np.array([0.459,
-                        0.018,
-                        0.812,
-                        0.343,
-                        0.102,
-                        120.0,
-                        0.235,
-                        0.043,
-                        0.312,
-                        0.037])
+        pars = np.load('output/estimates_ez.npy')
         isfree = np.ones(pars.shape[0])
         #isfree[1] = 0
         #isfree[2] = 0

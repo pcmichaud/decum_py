@@ -8,16 +8,25 @@ from matplotlib import pyplot as plt
 
 # Load values which are compared by run_ref.py
 df = pd.read_csv('output/values_ez_with_deltas.csv')
+
+df_l = pd.read_csv('output/values_levels.csv')
+
 pd.set_option('display.max_rows', 500)
 #df  = df.loc[df.married==False,:]
 # compute value differences for each scenarios (0 = baseline)
 for i in range(1,13):
-	df['d_value_'+str(i)] = df['value_'+str(i)] - df['value_0']
+    df['d_value_'+str(i)] = df['value_'+str(i)] - df['value_0']
+    df_l['d_value_'+str(i)] = df_l['value_'+str(i)] - df_l['value_0']
+
+
+
 print(df[['d_value_'+str(i) for i in range(1,13)]].describe().transpose())
 
 # compute indicator for whether value diff is positive (buy)
 for i in range(1,13):
-	df['buy_'+str(i)] = df['d_value_'+str(i)]>0
+    df['buy_'+str(i)] = df['d_value_'+str(i)]>0
+    df_l['buy_'+str(i)] = df_l['d_value_'+str(i)]>0
+
 
 # compute predicted probabilities
 for i in range(1,5):
@@ -34,7 +43,7 @@ for i in range(9,13):
 
 
 # plot and save
-table = pd.DataFrame(index=['ann','ltc','rmr'],columns=['data','predicted','model (optimal)'])
+table = pd.DataFrame(index=['ann','ltc','rmr'],columns=['data','predicted','model (optimal)','model (levels)'])
 
 table.loc['ann','data'] = df[['prob_scn_ann_'+str(i) for i in range(1,5)]].stack().mean()
 table.loc['ltc','data'] = df[['prob_scn_ltci_'+str(i) for i in range(1,5)]].stack().mean()
@@ -43,6 +52,10 @@ table.loc['rmr','data'] = df[['prob_scn_rmr_'+str(i) for i in range(1,5)]].stack
 table.loc['ann','model (optimal)'] = df[['buy_'+str(i) for i in range(1,5)]].stack().mean()
 table.loc['ltc','model (optimal)'] = df[['buy_'+str(i) for i in range(5,9)]].stack().mean()
 table.loc['rmr','model (optimal)'] = df[['buy_'+str(i) for i in range(9,13)]].stack().mean()
+
+table.loc['ann','model (levels)'] = df_l[['buy_'+str(i) for i in range(1,5)]].stack().mean()
+table.loc['ltc','model (levels)'] = df_l[['buy_'+str(i) for i in range(5,9)]].stack().mean()
+table.loc['rmr','model (levels)'] = df_l[['buy_'+str(i) for i in range(9,13)]].stack().mean()
 
 table.loc['ann','predicted'] = df[['prob_'+str(i) for i in range(1,5)]].stack().mean()
 table.loc['ltc','predicted'] = df[['prob_'+str(i) for i in range(5,9)]].stack().mean()
