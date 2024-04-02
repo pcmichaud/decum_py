@@ -4,8 +4,8 @@
 # In[88]:
 
 
-import pandas as pd 
-import numpy as np 
+import pandas as pd
+import numpy as np
 from matplotlib import pyplot as plt
 from linearmodels import PanelOLS
 
@@ -15,13 +15,13 @@ from linearmodels import PanelOLS
 # In[89]:
 
 
-prices = pd.read_csv('../py/inputs/prices.csv')
+prices = pd.read_csv('inputs/prices.csv')
 prices.set_index('respid',inplace=True)
 prices.columns = [x for x in range(1,13)]
-benfs = pd.read_csv('../py/inputs/benefits.csv')
+benfs = pd.read_csv('inputs/benefits.csv')
 benfs.set_index('respid',inplace=True)
 benfs.columns = [x for x in range(1,13)]
-prob = pd.read_csv('../py/inputs/prob.csv')
+prob = pd.read_csv('inputs/prob.csv')
 prob.set_index('respid',inplace=True)
 prob.columns = [x for x in range(1,13)]
 
@@ -47,7 +47,7 @@ data.head()
 
 
 for c in data.columns:
-	data.loc[data[c]==-999,c] = np.nan	
+	data.loc[data[c]==-999,c] = np.nan
 data.dropna(axis=0,inplace=True)
 
 
@@ -92,7 +92,7 @@ table
 # In[102]:
 
 
-know = pd.read_csv('../py/inputs/know.csv')
+know = pd.read_csv('inputs/know.csv')
 know.set_index('respid',inplace=True)
 
 
@@ -113,8 +113,9 @@ for c in table.columns:
 # In[107]:
 
 
-table.round(3).to_latex('../tex/tables/choice_probabilities.tex')
+table.round(3).to_latex('output/choice_probabilities.tex')
 
+print(table)
 
 # In[ ]:
 

@@ -14,8 +14,6 @@ gs = pd.read_csv('output/gradients_ez.csv',dtype=np.float64)
 gs['respid'] = gs['respid'].astype('int64')
 gs.set_index('respid',inplace=True)
 gs = gs[[str(x) for x in range(gs.shape[1]-1)]]
-print(gs.head())
-print(gs.loc[gs.index==10066,:])
 J = len(gs.columns)
 n = len(es)
 A = np.zeros((J,J),dtype=np.float64)

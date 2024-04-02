@@ -62,7 +62,7 @@ df_p.columns = ['psim','pmodel','pdata','price','benfs']
 for c in df_p.columns:
     df_p[c] = np.where(df_p[c]==-999,np.nan,df_p[c])
 df_p.dropna(inplace=True)
-df_p = df_p.loc[df_p.benfs!=0.0,:]
+#df_p = df_p.loc[df_p.benfs!=0.0,:]
 print(df_p.describe())
 
 depvars = ['pdata','psim','pmodel']
@@ -70,13 +70,21 @@ labels =['data','predicted','model']
 
 y_mean = df_p['pdata'].mean()
 
+df_p['q_benfs'] = pd.qcut(df_p['benfs'],q=4,duplicates='drop')
+df_p['q_price'] = pd.qcut(df_p['price'],q=4,duplicates='drop')
+
+
+
 for i,m in zip(depvars,labels):
     y = df_p.loc[:,i]
+    y_mean = y.mean()
     X = sm.add_constant(df_p.loc[:,['benfs','price']])
     mod = PanelOLS(y,X,entity_effects=True)
     results = mod.fit()
     table.loc[('price','ann'),m] = esti(results.params[2],X['price'].mean(),y_mean)
     table.loc[('benefit','ann'),m] = esti(results.params[1],X['benfs'].mean(),y_mean)
+    print(m)
+    print(df_p.groupby(['q_price','q_benfs']).mean()[i].unstack())
 
 # ltci
 keep_vars = ['respid']
@@ -101,18 +109,27 @@ df_p.columns = ['psim','pmodel','pdata','price','benfs']
 for c in df_p.columns:
     df_p[c] = np.where(df_p[c]==-999,np.nan,df_p[c])
 df_p.dropna(inplace=True)
-df_p = df_p.loc[df_p.benfs!=0.0,:]
+#df_p = df_p.loc[df_p.benfs!=0.0,:]
 print(df_p.describe())
 
 y_mean = df_p['pdata'].mean()
 
+df_p['q_benfs'] = pd.qcut(df_p['benfs'],q=4,duplicates='drop')
+df_p['q_price'] = pd.qcut(df_p['price'],q=4,duplicates='drop')
+
+
+
 for i,m in zip(depvars,labels):
     y = df_p.loc[:,i]
+    y_mean = y.mean()
     X = sm.add_constant(df_p.loc[:,['benfs','price']])
     mod = PanelOLS(y,X,entity_effects=True)
     results = mod.fit()
     table.loc[('price','ltc'),m] = esti(results.params[2],X['price'].mean(),y_mean)
     table.loc[('benefit','ltc'),m] = esti(results.params[1],X['benfs'].mean(),y_mean)
+    print(m)
+    print(df_p.groupby(['q_price','q_benfs']).mean()[i].unstack())
+
 
 
 # rmr
@@ -137,18 +154,27 @@ df_p.columns = ['psim','pmodel','pdata','price','benfs']
 for c in df_p.columns:
     df_p[c] = np.where(df_p[c]==-999,np.nan,df_p[c])
 df_p.dropna(inplace=True)
-df_p = df_p.loc[df_p.benfs!=0.0,:]
+#df_p = df_p.loc[df_p.benfs!=0.0,:]
 print(df_p.describe())
 
 y_mean = df_p['pdata'].mean()
+df_p['q_benfs'] = pd.qcut(df_p['benfs'],q=4,duplicates='drop')
+df_p['q_price'] = pd.qcut(df_p['price'],q=4,duplicates='drop')
+
+
+
 
 for i,m in zip(depvars,labels):
     y = df_p.loc[:,i]
+    y_mean = y.mean()
     X = sm.add_constant(df_p.loc[:,['benfs','price']])
     mod = PanelOLS(y,X,entity_effects=True)
     results = mod.fit()
     table.loc[('price','rmr'),m] = esti(results.params[2],X['price'].mean(),y_mean)
     table.loc[('benefit','rmr'),m] = esti(results.params[1],X['benfs'].mean(),y_mean)
+    print(m)
+    print(df_p.groupby(['q_price','q_benfs']).mean()[i].unstack())
+
 
 for c in table.columns:
     table[c] = table[c].astype('float64')

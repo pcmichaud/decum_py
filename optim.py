@@ -21,7 +21,7 @@ def set_theta(pars, isfree):
                 i +=1
         # rho
         if isfree[2]==1:
-                theta[i] = pars[2]
+                theta[i] = -np.log((1-pars[2])/pars[2])
                 i +=1
         # b_x
         if isfree[3]==1:
@@ -33,15 +33,15 @@ def set_theta(pars, isfree):
                 i +=1
         # nu_c1
         if isfree[5]==1:
-                theta[i] = pars[5]
+                theta[i] = np.log(pars[5])
                 i +=1
         # nu_c2
         if isfree[6]==1:
-                theta[i] = pars[6]
+                theta[i] = np.log(pars[6])
                 i +=1
         # nu_h
         if isfree[7]==1:
-                theta[i] = pars[7]
+                theta[i] = np.log(pars[7])
                 i +=1
         return theta
 
@@ -62,7 +62,7 @@ def extract_pars(theta, isfree, ipars):
                 pars[1] = ipars[1]
         # rho
         if isfree[2]==1:
-                pars[2] = theta[i]
+                pars[2] = 1.0/(1.0+np.exp(-theta[i]))
                 i +=1
         else :
                 pars[2] = ipars[2]
@@ -80,19 +80,19 @@ def extract_pars(theta, isfree, ipars):
                 pars[4] = ipars[4]
         # nu_c1
         if isfree[5]==1:
-                pars[5] = theta[i]
+                pars[5] = np.exp(theta[i])
                 i +=1
         else :
                 pars[5] = ipars[5]
         # nu_c2
         if isfree[6]==1:
-                pars[6] = theta[i]
+                pars[6] = np.exp(theta[i])
                 i +=1
         else :
                 pars[6] = ipars[6]
         # nu_h
         if isfree[7]==1:
-                pars[7] = theta[i]
+                pars[7] = np.exp(theta[i])
                 i +=1
         else :
                 pars[7] = ipars[7]

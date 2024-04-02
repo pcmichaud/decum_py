@@ -1,0 +1,51 @@
+        count       mean        std  ...        50%       75%         max
+ann_1  1581.0   0.660324   6.780941  ...   0.000000  2.439089   59.878007
+ann_2  1581.0   1.281905  14.817407  ...   0.000000  6.579939  132.594109
+ann_3  1581.0   0.799423   7.248779  ...   0.000000  2.772925   69.721823
+ann_4  1581.0   1.020356  16.081378  ...  -0.012666  5.364309  190.682852
+ltc_1  1581.0  -1.594590   1.665223  ...  -1.475901 -0.624385   17.874081
+ltc_2  1581.0  -3.479341   3.141031  ...  -3.055251 -1.457521   36.082460
+ltc_3  1581.0  -1.591919   1.695782  ...  -1.410539 -0.632456   18.844597
+ltc_4  1581.0  -3.439775   3.053342  ...  -3.131060 -1.588630   33.954995
+rmr_1  1581.0 -16.279961  18.684525  ... -10.372411 -2.868810   10.703275
+rmr_2  1581.0 -17.007306  20.325716  ... -10.318502 -2.769615   27.346583
+rmr_3  1581.0 -15.847457  18.357290  ...  -9.919741 -2.587777   15.128206
+rmr_4  1581.0 -17.390111  20.101174  ... -11.090954 -2.940093   32.143664
+
+[12 rows x 8 columns]
+        count      mean       std   min   25%   50%     75%   max
+ann_1  1556.0  0.114608  0.211436  0.01  0.01  0.01  0.1000  0.99
+ann_2  1556.0  0.108117  0.205824  0.01  0.01  0.01  0.1000  0.99
+ann_3  1556.0  0.121015  0.225699  0.01  0.01  0.01  0.1000  0.99
+ann_4  1556.0  0.115405  0.226804  0.01  0.01  0.01  0.0925  0.99
+ltc_1  1581.0  0.202783  0.263661  0.01  0.01  0.05  0.4000  0.99
+ltc_2  1581.0  0.169557  0.249597  0.01  0.01  0.01  0.2500  0.99
+ltc_3  1581.0  0.186528  0.260390  0.01  0.01  0.01  0.3000  0.99
+ltc_4  1581.0  0.158539  0.246308  0.01  0.01  0.01  0.2500  0.99
+rmr_1  1580.0  0.075614  0.170998  0.01  0.01  0.01  0.0100  0.99
+rmr_2  1580.0  0.079854  0.177832  0.01  0.01  0.01  0.0100  0.99
+rmr_3  1580.0  0.080854  0.180064  0.01  0.01  0.01  0.0100  0.99
+rmr_4  1580.0  0.085665  0.189718  0.01  0.01  0.01  0.0100  0.99
+            count      mean       std  ...       50%       75%       max
+delta_ann  1556.0  3.466831  1.624026  ...  4.542748  4.613176  5.860190
+delta_ltc  1581.0  2.304122  1.989452  ...  2.818844  4.079224  5.660163
+delta_rmr  1580.0  3.411543  1.453545  ...  4.084469  4.432395  4.799443
+
+[3 rows x 8 columns]
+['respid', 'wgt', 'cma', 'married', 'own', 'wealth_total', 'mort_balance', 'home_value', 'age', 'totinc', 'retinc', 'hlth', 'sp_age', 'sp_totinc', 'sp_retinc', 'sp_hlth', 'pref_beq_money', 'pref_home', 'pref_live_fast', 'pref_risk_averse', 'know_ann', 'know_ltci', 'know_rmr', 'gamma(2,1)', 'delta(1,2)', 'delta(2,2)', 'delta(3,2)', 'gamma(3,1)', 'delta(1,3)', 'delta(2,3)', 'delta(3,3)', 'gamma(4,1)', 'delta(1,4)', 'delta(2,4)', 'delta(3,4)', 'sp_gamma(2,1)', 'sp_delta(1,2)', 'sp_delta(2,2)', 'sp_delta(3,2)', 'sp_gamma(3,1)', 'sp_delta(1,3)', 'sp_delta(2,3)', 'sp_delta(3,3)', 'sp_gamma(4,1)', 'sp_delta(1,4)', 'sp_delta(2,4)', 'sp_delta(3,4)', 'xi', 'xi_sp', 'miss_psurv85', 'sp_miss_psurv85', 'mu', 'zeta', 'prem_scn_ann_1', 'prem_scn_ann_2', 'prem_scn_ann_3', 'prem_scn_ann_4', 'prem_scn_ltci_1', 'prem_scn_ltci_2', 'prem_scn_ltci_3', 'prem_scn_ltci_4', 'int_scn_rmr_1', 'int_scn_rmr_2', 'int_scn_rmr_3', 'int_scn_rmr_4', 'ben_scn_ann_1', 'ben_scn_ann_2', 'ben_scn_ann_3', 'ben_scn_ann_4', 'ben_scn_ltci_1', 'ben_scn_ltci_2', 'ben_scn_ltci_3', 'ben_scn_ltci_4', 'loan_scn_rmr_1', 'loan_scn_rmr_2', 'loan_scn_rmr_3', 'loan_scn_rmr_4', 'prob_scn_ann_1', 'prob_scn_ann_2', 'prob_scn_ann_3', 'prob_scn_ann_4', 'prob_scn_ltci_1', 'prob_scn_ltci_2', 'prob_scn_ltci_3', 'prob_scn_ltci_4', 'prob_scn_rmr_1', 'prob_scn_rmr_2', 'prob_scn_rmr_3', 'prob_scn_rmr_4', 'nh_0', 'nh_1', 'nh_2', 'hc_0', 'hc_1', 'hc_2', 'g', 'sig', 'base_value', 'value_0', 'value_1', 'value_2', 'value_3', 'value_4', 'value_5', 'value_6', 'value_7', 'value_8', 'value_9', 'value_10', 'value_11', 'value_12', 'd_value_1', 'd_value_2', 'd_value_3', 'd_value_4', 'd_value_5', 'd_value_6', 'd_value_7', 'd_value_8', 'd_value_9', 'd_value_10', 'd_value_11', 'd_value_12', 'sigma_ann', 'sigma_ltc', 'sigma_rmr', 'ann', 'ltc', 'rmr', 'delta_ann', 'delta_ltc', 'delta_rmr']
+0    1156
+1     425
+Name: know_ann, dtype: int64
+               does not know     knows   t-value
+annuities           3.568115  3.194661 -4.052705
+ltci                2.280223  2.499903  1.367509
+reverse mort.       3.480768  3.239855 -2.988748
+         delta_ann    delta_ltc    delta_rmr
+count  1556.000000  1581.000000  1580.000000
+mean      3.466831     2.304122     3.411543
+std       1.624026     1.989452     1.453545
+min      -4.555518    -5.163904    -4.486947
+25%       2.387768     0.848990     2.831843
+50%       4.542748     2.818844     4.084469
+75%       4.613176     4.079224     4.432395
+max       5.860190     5.660163     4.799443
