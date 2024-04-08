@@ -1,0 +1,64 @@
+number of parameters =  8 , number of free parameters =  7
+- function call summary
+ssd =  30444.04954382176  sigmas =  [[0.00363096 0.00305017]
+ [0.01193766 0.03998501]
+ [0.00505492 0.00127471]]
+pars =  [4.0501618  1.11334652 0.67222911 1.40703194 0.         1.26999453
+ 0.26732378 0.29928368]
+std.dev of utility differences - annuities d_value_1     8.374465
+d_value_2    24.255582
+d_value_3     8.495541
+d_value_4    23.854708
+dtype: float64
+std.dev of utility differences - ltc d_value_5     8.375353
+d_value_6    10.187807
+d_value_7     8.540520
+d_value_8    10.259518
+dtype: float64
+std.dev of utility differences - rmr d_value_9     18.651386
+d_value_10    22.856005
+d_value_11    18.414121
+d_value_12    22.926260
+dtype: float64
+- function call summary
+ssd =  30439.52676761921  sigmas =  [[0.00365049 0.00306141]
+ [0.0124825  0.04116488]
+ [0.00511736 0.00125058]]
+pars =  [4.1603509  1.11334652 0.67222911 1.40703194 0.         1.26999453
+ 0.26732378 0.29928368]
+std.dev of utility differences - annuities d_value_1     8.334983
+d_value_2    24.032481
+d_value_3     8.456402
+d_value_4    23.620188
+dtype: float64
+std.dev of utility differences - ltc d_value_5     8.119374
+d_value_6     9.999867
+d_value_7     8.276430
+d_value_8    10.085838
+dtype: float64
+std.dev of utility differences - rmr d_value_9     18.548785
+d_value_10    22.714781
+d_value_11    18.295615
+d_value_12    22.812015
+dtype: float64
+- function call summary
+ssd =  30422.444961362853  sigmas =  [[0.00258486 0.00289252]
+ [0.01059438 0.03505924]
+ [0.00470688 0.00262619]]
+pars =  [4.0501618  1.14363633 0.67222911 1.40703194 0.         1.26999453
+ 0.26732378 0.29928368]
+std.dev of utility differences - annuities d_value_1     9.708748
+d_value_2    28.611457
+d_value_3     9.823432
+d_value_4    28.263201
+dtype: float64
+std.dev of utility differences - ltc d_value_5     9.224370
+d_value_6    11.833189
+d_value_7     9.397464
+d_value_8    11.931711
+dtype: float64
+std.dev of utility differences - rmr d_value_9     20.053876
+d_value_10    24.292536
+d_value_11    19.701236
+d_value_12    24.352154
+dtype: float64

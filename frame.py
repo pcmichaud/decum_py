@@ -51,7 +51,7 @@ def get_health_params(row):
     return hp, surv_bias, hp_sp, sp_surv_bias
 
 def get_prefs(row,theta):
-    prefs = set_prefs(gamma=theta[0],sigma=theta[1],rho=theta[2],
+    prefs = set_prefs(gamma=theta[0],vareps=theta[1],rho=theta[2],
                         b_x=theta[3],b_k=theta[4],nu_c1=theta[5],
                         nu_c2=theta[6],nu_h=theta[7])
     return prefs
@@ -149,7 +149,7 @@ def func_sim(row,theta):
                                         cons_rules,cond_values, hh, rp, sp, base_value, i_prices,
                                         i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
                                         nu_ij_c,rates, dims, prefs)
-        pnone += np.where(wlth_path[target]<=10.0,1.0,0.0)
+        pnone += np.where(wlth_path[target]<=rates.x_min,1.0,0.0)
     row['pexhaust85_sim'] = pnone/float(nsim)
     return row
 

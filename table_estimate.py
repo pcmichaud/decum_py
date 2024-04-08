@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 # estimates
-ssd =  7778.1
+ssd =  8272.62
 sigmas = np.load('output/sigmas_ez.npy')
 pars =  np.load('output/estimates_ez.npy')
 
@@ -13,7 +13,7 @@ es.set_index('respid',inplace=True)
 gs = pd.read_csv('output/gradients_ez.csv',dtype=np.float64)
 gs['respid'] = gs['respid'].astype('int64')
 gs.set_index('respid',inplace=True)
-gs = gs[[str(x) for x in range(gs.shape[1]-1)]]
+gs = gs.drop(labels=['4'],axis=1)
 J = len(gs.columns)
 n = len(es)
 A = np.zeros((J,J),dtype=np.float64)
@@ -26,18 +26,19 @@ for i in es.index:
     ji = g_i.shape[0]
     A = A + g_i.T @ g_i
     B = B + g_i.T @ (e_i.T @ e_i) @ g_i
+print(A)
 Ainv = np.linalg.inv(A)
 cov = Ainv @ B @ Ainv
 se = np.sqrt(np.diag(cov))
-
+se = np.delete(se,4)
 
 labels= ['$\\gamma$','$\\varepsilon$',
-         '$\\rho$','$b_X$','$b_K$','$\\nu_{c,2}$','$\\nu_{c,3}$',
+         '$\\rho$','$b_X$','$\\nu_{c,2}$','$\\nu_{c,3}$',
          '$\\nu_{h}$']
 
 table = pd.DataFrame(index=labels,columns=['point','se'])
 
-table['point'] = pars
+table['point'] = np.delete(pars,4)
 
 
 table.loc['$\\sigma_{\\upsilon,A}(0)$','point'] = sigmas[0,0]

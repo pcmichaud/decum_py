@@ -13,11 +13,11 @@ def set_theta(pars, isfree):
         i = 0
         # gamma
         if isfree[0]==1:
-                theta[i] = pars[0]
+                theta[i] = np.log(pars[0])
                 i +=1
-        # sigma
+        # varepsilon
         if isfree[1]==1:
-                theta[i] = pars[1]
+                theta[i] = np.log(pars[1])
                 i +=1
         # rho
         if isfree[2]==1:
@@ -25,11 +25,11 @@ def set_theta(pars, isfree):
                 i +=1
         # b_x
         if isfree[3]==1:
-                theta[i] = pars[3]
+                theta[i] = np.log(pars[3])
                 i +=1
         # b_k
         if isfree[4]==1:
-                theta[i] = pars[4]
+                theta[i] = np.log(pars[4])
                 i +=1
         # nu_c1
         if isfree[5]==1:
@@ -50,13 +50,13 @@ def extract_pars(theta, isfree, ipars):
         i = 0
         # gamma
         if isfree[0]==1:
-                pars[0] = theta[i]
+                pars[0] = np.exp(theta[i])
                 i +=1
         else :
                 pars[0] = ipars[0]
         # sigma
         if isfree[1]==1:
-                pars[1] = theta[i]
+                pars[1] = np.exp(theta[i])
                 i +=1
         else :
                 pars[1] = ipars[1]
@@ -68,13 +68,13 @@ def extract_pars(theta, isfree, ipars):
                 pars[2] = ipars[2]
         # b_x
         if isfree[3]==1:
-                pars[3] = theta[i]
+                pars[3] = np.exp(theta[i])
                 i +=1
         else :
                 pars[3] = ipars[3]
         # b_k
         if isfree[4]==1:
-                pars[4] = theta[i]
+                pars[4] = np.exp(theta[i])
                 i +=1
         else :
                 pars[4] = ipars[4]

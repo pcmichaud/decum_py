@@ -12,12 +12,12 @@ if __name__ == '__main__':
         #data = data.sample(n = 270)
         maxeval=10000
         pars = np.load('output/estimates_ez.npy')
-        pars[6] = 0.5
+        pars[4] = 0.0
         isfree = np.ones(pars.shape[0])
         #isfree[1] = 0
         #isfree[2] = 0
         #isfree[3] = 0
-        #isfree[4] = 0
+        isfree[4] = 0
         #isfree[5] = 0
         #isfree[6] = 0
         #isfree[7] = 0
@@ -29,7 +29,7 @@ if __name__ == '__main__':
         dx = np.zeros(n_free_theta)
         for i in range(n_free_theta):
                 dx[i] = np.abs(theta[i])*0.25
-        partial_distance = partial(concentrated_distance_within,data=data,isfree=isfree,ipars=pars,npartitions=256, iwithin=False,scn_name='levels')
+        partial_distance = partial(concentrated_distance_within,data=data,isfree=isfree,ipars=pars,npartitions=256, iwithin=False,scn_name='ez_levels')
         opt = nl.opt('LN_NEWUOA',n_free_theta)
         opt.set_min_objective(partial_distance)
         opt.set_initial_step(dx)
@@ -40,5 +40,5 @@ if __name__ == '__main__':
         opt_pars = extract_pars(theta, isfree, pars)
         print('estimates = ', opt_pars)
         print('final distance = ', distance)
-        np.save('output/estimates_levels',opt_pars)
+        np.save('output/estimates_ez_levels',opt_pars)
 
