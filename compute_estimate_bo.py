@@ -9,11 +9,9 @@ import numpy as np
 if __name__ == '__main__':
         warnings.simplefilter(action='ignore')
         data = init_data()
-        #data = data.sample(n=250, random_state = 524644)
         maxeval=10000
-
         pars = np.array([0.7,
-                        1.05,
+                        2.0,
                         0.72,
                         1.41,
                         1.0,

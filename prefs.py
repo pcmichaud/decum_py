@@ -40,7 +40,7 @@ def bu_fun(w,b_x,b_k,gamma):
 
 @njit(float64(float64,float64,float64,float64,float64,float64),fastmath=True,cache=True)
 def cob_fun(cons,amen,nu_c, vareps, rho, eqscale):
-    nu = (nu_c/eqscale)**(1/(1-vareps))
+    nu = nu_c/eqscale
     ces = nu  *((cons**rho) * (amen**(1.0-rho)) )
     return ces
 

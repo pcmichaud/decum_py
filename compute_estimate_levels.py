@@ -27,8 +27,13 @@ if __name__ == '__main__':
         n_free_theta = theta.shape[0]
         print('number of parameters = ',pars.shape[0],', number of free parameters = ',n_free_theta)
         dx = np.zeros(n_free_theta)
-        for i in range(n_free_theta):
-                dx[i] = np.abs(theta[i])*0.25
+        dx[0] = 1.0
+        dx[1] = 1.0
+        dx[2] = 0.2
+        dx[3] = 1.0
+        dx[4] = 1.0
+        dx[5] = 1.0
+        dx[6] = 1.0
         partial_distance = partial(concentrated_distance_within,data=data,isfree=isfree,ipars=pars,npartitions=256, iwithin=False,scn_name='ez_levels')
         opt = nl.opt('LN_NEWUOA',n_free_theta)
         opt.set_min_objective(partial_distance)

@@ -15,10 +15,12 @@ if __name__ == '__main__':
                         0.65,
                         1.1,
                         0.0,
-                        1.21,
-                        0.3,
+                        1.2,
+                        1.5,
                         0.327])
-        #pars = np.load('output/estimates_ez.npy')
+        #ipars = np.load('output/estimates_ez.npy')
+        #pars[5] = 1.0
+        #pars[6] = 1.0
         isfree = np.ones(pars.shape[0])
         #isfree[0] = 0
         #isfree[1] = 0
@@ -42,7 +44,7 @@ if __name__ == '__main__':
         dx[6] = 1.0
         print('theta = ',theta)
         print('dx = ',dx)
-        partial_distance = partial(concentrated_distance_within,data=data,isfree=isfree,ipars=pars,npartitions=256, iwithin = True,  scn_name='ez')
+        partial_distance = partial(concentrated_distance_within,data=data,isfree=isfree,ipars=pars,npartitions=256, iwithin = True,  scn_name='nu')
         opt = nl.opt('LN_NEWUOA',n_free_theta)
         opt.set_min_objective(partial_distance)
         opt.set_initial_step(dx)
@@ -53,5 +55,5 @@ if __name__ == '__main__':
         opt_pars = extract_pars(theta, isfree, pars)
         print('estimates = ', opt_pars)
         print('final distance = ', distance)
-        np.save('output/estimates_ez',opt_pars)
+        np.save('output/estimates_nu',opt_pars)
 
