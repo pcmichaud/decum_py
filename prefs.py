@@ -26,7 +26,7 @@ def bo_fun(u,ev,beta,gamma,vareps):
 
 @njit(float64(float64,float64,float64,float64, float64),fastmath=True, cache=True)
 def ez_fun(u,ev,beta,gamma,vareps):
-    present = (1.0-beta)*(u**(1.0-vareps))
+    present = u**(1.0-vareps)
     ezv = ev**((1.0-vareps)/(1.0-gamma))
     future = beta * ezv
     ez = (present + future)**(1.0/(1.0-vareps))
@@ -34,14 +34,16 @@ def ez_fun(u,ev,beta,gamma,vareps):
 
 @njit(float64(float64,float64,float64,float64),fastmath=True, cache=True)
 def bu_fun(w,b_x,b_k,gamma):
-    b_w = w + b_k
+    b_w = max(w + b_k,1.0)
     b_u = (b_x**(1/(1.0-gamma))) * b_w
     return b_u
 
 @njit(float64(float64,float64,float64,float64,float64,float64),fastmath=True,cache=True)
 def cob_fun(cons,amen,nu_c, vareps, rho, eqscale):
     nu = nu_c/eqscale
-    ces = nu  *((cons**rho) * (amen**(1.0-rho)) )
+    nu = nu**(1.0/(1.0-vareps))
+    ces = nu*((cons**rho) * (amen**(1.0-rho)) )
+    #ces = nu*cons
     return ces
 
 spec_prefs = [
@@ -77,7 +79,7 @@ class set_prefs(object):
     set_dims.class_type.instance_type, set_prefs.class_type.instance_type, float64),fastmath=True, cache=True)
 def update_nus(married, s_i, s_j, dims, prefs, eqscale):
     nu_ij_c = np.empty(dims.n_s)
-    nu_c = np.array([1.0, prefs.nu_c1, prefs.nu_c2, 0.0])
+    nu_c = np.array([1.0, 1.0, prefs.nu_c2, 0.0])
     if married==1:
         for i in range(dims.n_s):
             nu_ij_c[i] = nu_c[s_i[i]] + nu_c[s_j[i]]

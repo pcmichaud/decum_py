@@ -10,6 +10,7 @@ if __name__ == '__main__':
         warnings.simplefilter(action='ignore')
         data = init_data()
         maxeval=10000
+        #data = data.sample(n = 250)
         pars = np.array([0.7,
                         2.0,
                         0.72,

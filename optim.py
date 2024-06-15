@@ -102,6 +102,7 @@ def extract_pars(theta, isfree, ipars):
 def concentrated_distance_within(theta, grad, data, isfree, ipars, iwithin, scn_name, iann = True, irmr = True, iltc = True, npartitions=50):
         # get params
         pars = extract_pars(theta,isfree,ipars)
+        print('pars = ',pars)
         # get dataset with solved expected utilities
         df = solve_df(data, iann=iann, iltc = iltc, irmr = irmr, npartitions=npartitions, theta=pars)
         # take difference in value with respect to baseline
@@ -171,34 +172,34 @@ def concentrated_distance_within(theta, grad, data, isfree, ipars, iwithin, scn_
         sigmas = np.zeros((3,2))
         sum_distance = 0.0
         if iann:
-            for k in [0,1]:
-                cond = (~df['w_odd_1'].isna()) & (df['know_ann']==k)
+            for k in [0]:
+                cond = (~df['w_odd_1'].isna())
                 y = df.loc[cond,['w_odd_'+str(s) for s in range(1,5)]].stack().values
                 X = df.loc[cond,['w_value_'+str(s) for s in range(1,5)]].stack().values
                 X = sm.add_constant(X)
                 model = sm.OLS(y,X,missing='drop')
                 results = model.fit()
-                sigmas[0,k] = results.params[1]
+                sigmas[0,:] = results.params[1]
                 sum_distance += results.ssr
         if iltc:
-            for k in [0,1]:
-                cond = (~df['w_odd_5'].isna()) & (df['know_ltci']==k)
+            for k in [0]:
+                cond = (~df['w_odd_5'].isna())
                 y = df.loc[cond,['w_odd_'+str(s) for s in range(5,9)]].stack().values
                 X = df.loc[cond,['w_value_'+str(s) for s in range(5,9)]].stack().values
                 X = sm.add_constant(X)
                 model = sm.OLS(y,X,missing='drop')
                 results = model.fit()
-                sigmas[1,k] = results.params[1]
+                sigmas[1,:] = results.params[1]
                 sum_distance += results.ssr
         if irmr:
-            for k in [0,1]:
-                cond = (~df['w_odd_9'].isna()) & (df['know_rmr']==k)
+            for k in [0]:
+                cond = (~df['w_odd_9'].isna())
                 y = df.loc[cond,['w_odd_'+str(s) for s in range(9,12)]].stack().values
                 X = df.loc[cond,['w_value_'+str(s) for s in range(9,12)]].stack().values
                 X = sm.add_constant(X)
                 model = sm.OLS(y,X,missing='drop')
                 results = model.fit()
-                sigmas[2,k] = results.params[1]
+                sigmas[2,:] = results.params[1]
                 sum_distance += results.ssr
         print('- function call summary')
         print('ssd = ', sum_distance, ' sigmas = ',sigmas)
@@ -247,9 +248,9 @@ def residuals_within(theta, sigmas, data, isfree, ipars, npartitions=50):
         df[['w_odd_'+str(s) for s in range(9,13)]] = within_difference(df[['odd_'
                                                         +str(s) for s in range(9,13)]])
         residuals = pd.DataFrame(index=df.index,columns=[x for x in range(1,13)])
-        df['sigma_ann'] = np.where(df['know_ann']==1,sigmas[0,1],sigmas[0,0])
-        df['sigma_ltc'] = np.where(df['know_ltci']==1,sigmas[1,1],sigmas[1,0])
-        df['sigma_rmr'] = np.where(df['know_rmr']==1,sigmas[2,1],sigmas[2,0])
+        df['sigma_ann'] = sigmas[0]
+        df['sigma_ltc'] = sigmas[1]
+        df['sigma_rmr'] = sigmas[2]
         for s in range(1,5):
                 residuals.loc[:,s] = df.loc[:,'w_odd_'+str(s)] - df['sigma_ann']* df.loc[:,'w_value_'+str(s)]
         for s in range(5,9):
@@ -258,7 +259,7 @@ def residuals_within(theta, sigmas, data, isfree, ipars, npartitions=50):
                 residuals.loc[:,s] = df.loc[:,'w_odd_'+str(s)] - df['sigma_rmr']* df.loc[:,'w_value_'+str(s)]
         return residuals
 
-def g_within(theta, sigmas, data, isfree, ipars, npartitions=50):
+def g_within(theta, sigmas, data, isfree, ipars, npartitions=50, iscale=True):
         # get params
         pars = extract_pars(theta,isfree,ipars)
         # get dataset with solved expected utilities
@@ -275,9 +276,14 @@ def g_within(theta, sigmas, data, isfree, ipars, npartitions=50):
         df[['w_value_'+str(s) for s in range(9,13)]] = within_difference(df[['d_value_'
                                                         +str(s) for s in range(9,13)]])
         gs = pd.DataFrame(index=df.index,columns=[x for x in range(1,13)])
-        df['sigma_ann'] = np.where(df['know_ann']==1,sigmas[0,1],sigmas[0,0])
-        df['sigma_ltc'] = np.where(df['know_ltci']==1,sigmas[1,1],sigmas[1,0])
-        df['sigma_rmr'] = np.where(df['know_rmr']==1,sigmas[2,1],sigmas[2,0])
+        if iscale:
+            df['sigma_ann'] = sigmas[0]
+            df['sigma_ltc'] = sigmas[1]
+            df['sigma_rmr'] = sigmas[2]
+        else :
+            df['sigma_ann'] = 1
+            df['sigma_ltc'] = 1
+            df['sigma_rmr'] = 1
         for s in range(1,5):
                 gs.loc[:,s] = df['sigma_ann'] * df.loc[:,'w_value_'+str(s)]
         for s in range(5,9):
@@ -285,3 +291,5 @@ def g_within(theta, sigmas, data, isfree, ipars, npartitions=50):
         for s in range(9,13):
                 gs.loc[:,s] = df['sigma_rmr'] * df.loc[:,'w_value_'+str(s)]
         return gs
+
+

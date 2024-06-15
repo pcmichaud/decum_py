@@ -48,7 +48,7 @@ def setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp, surv_bias,
 
 def get_rules(hh, rp, sp, base_value, prices, benfs,
               p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its, nu_ij_c,
-              rates, dims, prefs):
+              rates, dims, prefs, v_ref):
     v_t = np.zeros((dims.n_states, dims.T),dtype='float64')
     c_t = np.zeros((dims.n_states, 2, dims.T),dtype='float64')
     condv_t = np.zeros((dims.n_states, 2, dims.T),dtype='float64')
@@ -59,7 +59,7 @@ def get_rules(hh, rp, sp, base_value, prices, benfs,
     # solve final year for admissible states
     v_last, c_last, condv_last = core_fun(dims.t_last, p_h, p_r, b_its,
                 f_h, nu_ij_c, med_ij, y_ij, qs_ij, hh['married'],
-                base_value, dims, rates, prefs, prices, benfs, nextv, cc_last, 1)
+                base_value, dims, rates, prefs, prices, benfs, nextv, nextv,  cc_last, 1)
 
     # map those to all states
     v_t[dims.to_states[:],dims.t_last] = v_last[:]
@@ -74,20 +74,22 @@ def get_rules(hh, rp, sp, base_value, prices, benfs,
             isolve = 1
         nextv = v_t[:,t+1].reshape((dims.n_d,dims.n_w,dims.n_s,
                                           dims.n_e,2),order='F')
+        nextv_ref = v_ref[:,t+1].reshape((dims.n_d,dims.n_w,dims.n_s,dims.n_e,2),order='F')
+
         cc_last = np.copy(c_last)
         v_last, c_last, condv_last = core_fun(t, p_h, p_r,b_its,
                 f_h, nu_ij_c, med_ij, y_ij, qs_ij, hh['married'],
-                base_value, dims, rates, prefs, prices, benfs, nextv, cc_last, isolve)
+                base_value, dims, rates, prefs, prices, benfs, nextv, nextv_ref,  cc_last, isolve)
         v_t[dims.to_states[:],t] = v_last[:]
         c_t[dims.to_states[:],0,t] = c_last[:,0]
         c_t[dims.to_states[:],1,t] = c_last[:,1]
         condv_t[dims.to_states[:],0,t] = condv_last[:,0]
         condv_t[dims.to_states[:],1,t] = condv_last[:,1]
-    return c_t, condv_t
+    return c_t, condv_t, v_t
 
 def get_value(hh, rp, sp, base_value, prices, benfs,
               p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its, nu_ij_c,
-              rates, dims, prefs):
+              rates, dims, prefs, v_ref):
     v_t = np.zeros((dims.n_states, dims.T),dtype='float64')
     c_t = np.zeros((dims.n_states, 2, dims.T),dtype='float64')
     condv_t = np.zeros((dims.n_states, 2, dims.T),dtype='float64')
@@ -98,7 +100,7 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
     # solve final year for admissible states
     v_last, c_last, condv_last = core_fun(dims.t_last, p_h, p_r, b_its,
                 f_h, nu_ij_c, med_ij, y_ij, qs_ij, hh['married'],
-                base_value, dims, rates, prefs, prices, benfs, nextv, cc_last, 1)
+                base_value, dims, rates, prefs, prices, benfs, nextv, nextv,  cc_last, 1)
     #print('done with last year',v_last[:50])
     # map those to all states
     v_t[dims.to_states[:],dims.t_last] = v_last[:]
@@ -114,10 +116,11 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
 
         nextv = v_t[:,t+1].reshape((dims.n_d,dims.n_w,dims.n_s,
                                           dims.n_e,2),order='F')
+        nextv_ref = v_ref[:,t+1].reshape((dims.n_d,dims.n_w,dims.n_s,dims.n_e,2),order='F')
         cc_last = np.copy(c_last)
         v_last, c_last, condv_last = core_fun(t, p_h, p_r,b_its,
                 f_h, nu_ij_c, med_ij, y_ij, qs_ij, hh['married'],
-                base_value, dims, rates, prefs, prices, benfs, nextv, cc_last, isolve)
+                base_value, dims, rates, prefs, prices, benfs, nextv, nextv_ref, cc_last, isolve)
         v_t[dims.to_states[:],t] = v_last[:]
         c_t[dims.to_states[:],0,t] = c_last[:,0]
         c_t[dims.to_states[:],1,t] = c_last[:,1]
@@ -145,7 +148,7 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
     vsub[1,0] = v[d_up,w_low,s_init,e_init,h_init]
     vsub[1,1] = v[d_up,w_up,s_init,e_init,h_init]
     value = interp2d(du, wu, vsub)
-    return value
+    return value, v_t
 
 def get_sim_path(seed, cons_rules, cond_values, hh, rp, sp, base_value, prices, benfs,
               p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its, nu_ij_c,
@@ -409,11 +412,12 @@ def v_bo_fun(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
             set_rates.class_type.instance_type,
             set_prefs.class_type.instance_type,
             set_prices.class_type.instance_type,
-            set_benfs.class_type.instance_type, float64[:,:,:,:,:],float64[:,:],int64),
+            set_benfs.class_type.instance_type, float64[:,:,:,:,:],
+            float64[:,:,:,:,:],float64[:,:],int64),
             fastmath=True, parallel=False, cache=True)
 def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c,  med_ij, y_ij,
              qs_ij, married, base_value, dims, rates,
-             prefs, prices, benfs, nextv, clast, isolve):
+             prefs, prices, benfs, nextv, nextv_ref, clast, isolve):
     n_c = 10
     vs = np.empty(dims.n_adm,dtype=np.float64)
     cs = np.empty((dims.n_adm,2),dtype=np.float64)
@@ -433,12 +437,13 @@ def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c,  med_ij, y_ij,
         copt[:] = 0.0
         afford = 1
         for i_hh in range(2):
-            if dims.ij_h[i_s]==0 and i_hh==1:
+            if (dims.ij_h[i_s]==0 or i_h==0) and i_hh==1:
                 continue
-            cash = x_fun(d0,w0,i_h,dims.s_i[i_s],dims.s_j[i_s],married,i_hh,
-                         t, p_h[i_e,t],p_r[i_e,t],
-                         b_its[i_e,t], med_ij[i_s], y_ij[i_s,t],
-                         dims,rates, prices, benfs)
+
+            cash  = x_fun(d0,w0,i_h,dims.s_i[i_s],dims.s_j[i_s],married,i_hh,
+                                     t, p_h[i_e,t],p_r[i_e,t],
+                                     b_its[i_e,t], med_ij[i_s], y_ij[i_s,t],
+                                     dims,rates, prices, benfs)
             if i_h==0:
                 x_w = rates.omega_r * y_ij[i_s,t]
                 r_b = rates.r_r
@@ -471,23 +476,31 @@ def core_fun(t, p_h, p_r, b_its, f_h, nu_ij_c,  med_ij, y_ij,
                         for i_c in range(n_c):
                             vs_[i_c] = v_t_fun(cs_[i_c]**2,cash[0],z,i_hh,p_h,b_its,f_h, nu_ij_c, base_value, prefs, dims, rates)
                 else :
+                    if cash[2] ==0:
+                        vprime = nextv
+                    else :
+                        vprime = nextv_ref
                     if c_max==x_f:
-                        vs_[:] = v_fun(cs_[0]**2,cash[0],z,t,i_hh,p_h,b_its,f_h, nu_ij_c,qs_ij, base_value, prefs, dims, rates, nextv)
+                        vs_[:] = v_fun(cs_[0]**2,cash[0],z,t,i_hh,p_h,b_its,f_h, nu_ij_c,qs_ij, base_value, prefs, dims, rates, vprime)
                     else :
                         for i_c in range(n_c):
-                            vs_[i_c] = v_fun(cs_[i_c]**2,cash[0],z,t,i_hh,p_h,b_its,f_h, nu_ij_c,qs_ij, base_value, prefs, dims, rates, nextv)
+                            vs_[i_c] = v_fun(cs_[i_c]**2,cash[0],z,t,i_hh,p_h,b_its,f_h, nu_ij_c,qs_ij, base_value, prefs, dims, rates, vprime)
                 imax = np.argmax(vs_)
                 copt[i_hh] = cs_[imax]**2
                 vopt[i_hh] = vs_[imax]
             else :
                 copt[i_hh] = clast[z,i_hh]
+                if cash[2]==0:
+                    vprime = nextv
+                else :
+                    vprime = nextv_ref
                 if t==dims.t_last:
                     vopt[i_hh] = v_t_fun(copt[i_hh],cash[0],z,i_hh,p_h,b_its,f_h,
                         nu_ij_c,base_value,prefs, dims, rates)
                 else :
                     vopt[i_hh] = v_fun(copt[i_hh],cash[0],z,t,i_hh,p_h,b_its,f_h,
-                        nu_ij_c, qs_ij,base_value,prefs, dims, rates, nextv)
-        if dims.ij_h[i_s]==1 and afford==1:
+                        nu_ij_c, qs_ij,base_value,prefs, dims, rates, vprime)
+        if i_h==1 and dims.ij_h[i_s]==1 and afford==1:
             if vopt[1] > vopt[0]:
                 vs[z] = vopt[1]
             else :

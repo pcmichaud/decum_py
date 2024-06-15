@@ -94,7 +94,7 @@ def beq_fun(d, w, i_hh, p_h, b_its, tau_s0, tau_s1):
     beq = max(beq,1e-3)
     return beq
 
-@njit(Tuple((float64,float64))(float64,float64,int64,int64,
+@njit(Tuple((float64,float64,int64))(float64,float64,int64,int64,
     int64,int64,int64,int64,float64,float64,float64,float64,float64,
      set_dims.class_type.instance_type, set_rates.class_type.instance_type,
      set_prices.class_type.instance_type, set_benfs.class_type.instance_type),
@@ -102,7 +102,6 @@ def beq_fun(d, w, i_hh, p_h, b_its, tau_s0, tau_s1):
 def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
           dims, rates, prices, benfs):
     d1 = h1 * (rates.xi_d * h0 * d0 + (1.0 - h0) * rates.omega_d * p_h)
-
     c_h = (1.0 - h1) * p_r + h1 * p_h - d1
     mc_s = rates.tau_s0 + rates.tau_s1 * p_h
     mc_b = rates.tau_b0 + rates.tau_b1 * p_h
@@ -121,7 +120,7 @@ def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
             z_ben += benfs.ltc
         if s_i < 2:
             z_prem += prices.ltc
-    x = w0 + w_h + y + z_ben - med - z_prem
+    x = w0 + w_h + y - med + z_ben
     x_f = 0.0
     if s_i<=2:
         x_f += rates.x_min
@@ -131,9 +130,14 @@ def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
                 x_f += rates.x_min
             else :
                 x_f += rates.x_min * rates.eqscale
+    lapse = 0
+    if (x - z_prem) < x_f and z_prem>0.0:
+        lapse = 1
+    else :
+        x = x - z_prem
     tr = max(x_f + (1-h1)*p_r - x, 0.0)
     x += tr - c_h
-    return x, tr
+    return x, tr, lapse
 
 @njit(float64[:,:](set_benfs.class_type.instance_type,set_prices.class_type.instance_type,float64[:,:],
         set_dims.class_type.instance_type, set_rates.class_type.instance_type),fastmath=True, cache=True)

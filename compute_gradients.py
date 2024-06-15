@@ -8,19 +8,21 @@ from functools import partial
 if __name__ == '__main__':
     warnings.simplefilter(action='ignore')
     data = init_data()
-    #data = data.sample(n=100)
+    #data = data.sample(n=50)
     n_part = 250
     # estimates from reference scenario
     sigmas = np.load('output/sigmas_ez.npy')
+    sigmas = sigmas[:,0]
     pars = np.load('output/estimates_ez.npy')
     isfree = np.ones(pars.shape[0])
+    isfree[4] = 0
+    isfree[5] = 0
     theta = set_theta(pars,isfree)
     # sizes
     n_free_theta = theta.shape[0]
-    n_sigmas = sigmas.shape[0]*sigmas.shape[1]
+    n_sigmas = sigmas.shape[0]
     J = n_free_theta + n_sigmas
     nresp = len(data)
-    K = 8
     eps = 1e-5
     es = residuals_within(theta, sigmas, data, isfree, pars, npartitions=n_part)
     es.to_csv('output/within_residuals_ez.csv')
@@ -38,17 +40,14 @@ if __name__ == '__main__':
         theta_low[j] -= eps
         gs_low = g_within(theta_low, sigmas, data, isfree, pars, npartitions=n_part).stack()
         grad[j] = (gs_up - gs_low)/(2.0*eps)
-    print(grad.head(50))
     j_start = n_free_theta
-    jj = 0
     for j in range(3):
-        for k in range(2):
-            sigmas_up = sigmas[:,:]
-            sigmas_up[j,k] += eps
-            gs_up = g_within(theta, sigmas_up, data, isfree, pars, npartitions=n_part).stack()
-            grad[j_start+jj] = (gs_up - gs)/eps
-            jj +=1
+        s = np.zeros(3)
+        s[j] = 1
+        gs = g_within(theta, s, data, isfree, pars, npartitions=n_part).stack()
+        grad[j_start+j] = gs
     print(grad.head(50))
+    print(J)
     grad.to_csv('output/gradients_ez.csv')
 
 

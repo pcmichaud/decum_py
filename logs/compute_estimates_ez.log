@@ -1,0 +1,2511 @@
+number of parameters =  8 , number of free parameters =  6
+theta =  [ 1.81146405  0.39514538  1.38629436 -2.28278247 -1.04503361 -1.34854396]
+dx =  [0.25 0.25 0.1  0.25 0.25 0.25]
+pars =  [6.1194   1.4846   0.8      0.102    0.       1.       0.35168  0.259618]
+- function call summary
+ssd =  7988.158194271835  sigmas =  [[ 11.20135613  11.20135613]
+ [173.10402425 173.10402425]
+ [ 32.37847441  32.37847441]]
+pars =  [6.1194   1.4846   0.8      0.102    0.       1.       0.35168  0.259618]
+std.dev of utility differences - annuities d_value_1    0.014308
+d_value_2    0.022427
+d_value_3    0.014220
+d_value_4    0.022159
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001680
+d_value_6    0.002894
+d_value_7    0.001680
+d_value_8    0.002828
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005141
+d_value_10    0.008395
+d_value_11    0.005120
+d_value_12    0.008432
+dtype: float64
+pars =  [6.76298292 1.4846     0.8        0.102      0.         1.
+ 0.35168    0.259618  ]
+- function call summary
+ssd =  7983.261934431881  sigmas =  [[ 11.40988499  11.40988499]
+ [176.58417271 176.58417271]
+ [ 33.35190083  33.35190083]]
+pars =  [6.76298292 1.4846     0.8        0.102      0.         1.
+ 0.35168    0.259618  ]
+std.dev of utility differences - annuities d_value_1    0.014028
+d_value_2    0.021974
+d_value_3    0.013956
+d_value_4    0.021740
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001613
+d_value_6    0.002774
+d_value_7    0.001612
+d_value_8    0.002707
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005048
+d_value_10    0.008190
+d_value_11    0.004982
+d_value_12    0.008247
+dtype: float64
+pars =  [6.1194     1.64073674 0.8        0.102      0.         1.
+ 0.35168    0.259618  ]
+- function call summary
+ssd =  7994.188634177616  sigmas =  [[ 2.29091295  2.29091295]
+ [36.88731604 36.88731604]
+ [ 6.5433058   6.5433058 ]]
+pars =  [6.1194     1.64073674 0.8        0.102      0.         1.
+ 0.35168    0.259618  ]
+std.dev of utility differences - annuities d_value_1    0.069130
+d_value_2    0.109099
+d_value_3    0.068678
+d_value_4    0.108238
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.008496
+d_value_6    0.014697
+d_value_7    0.008578
+d_value_8    0.014368
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.026834
+d_value_10    0.040570
+d_value_11    0.025711
+d_value_12    0.041135
+dtype: float64
+pars =  [6.1194     1.4846     0.81552142 0.102      0.         1.
+ 0.35168    0.259618  ]
+- function call summary
+ssd =  7974.822508651287  sigmas =  [[ 12.09192591  12.09192591]
+ [173.87282984 173.87282984]
+ [ 32.41252746  32.41252746]]
+pars =  [6.1194     1.4846     0.81552142 0.102      0.         1.
+ 0.35168    0.259618  ]
+std.dev of utility differences - annuities d_value_1    0.013674
+d_value_2    0.021461
+d_value_3    0.013585
+d_value_4    0.021191
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001641
+d_value_6    0.002864
+d_value_7    0.001637
+d_value_8    0.002782
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005086
+d_value_10    0.008311
+d_value_11    0.005060
+d_value_12    0.008325
+dtype: float64
+pars =  [6.1194     1.4846     0.8        0.11272743 0.         1.
+ 0.35168    0.259618  ]
+- function call summary
+ssd =  7988.225561173162  sigmas =  [[ 11.20103578  11.20103578]
+ [173.10663545 173.10663545]
+ [ 32.38547873  32.38547873]]
+pars =  [6.1194     1.4846     0.8        0.11272743 0.         1.
+ 0.35168    0.259618  ]
+std.dev of utility differences - annuities d_value_1    0.014305
+d_value_2    0.022424
+d_value_3    0.014217
+d_value_4    0.022158
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001679
+d_value_6    0.002896
+d_value_7    0.001680
+d_value_8    0.002827
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005144
+d_value_10    0.008389
+d_value_11    0.005124
+d_value_12    0.008427
+dtype: float64
+pars =  [6.1194     1.4846     0.8        0.102      0.         1.
+ 0.38866651 0.259618  ]
+- function call summary
+ssd =  7990.0497345473395  sigmas =  [[ 11.29673506  11.29673506]
+ [175.34184101 175.34184101]
+ [ 32.86370699  32.86370699]]
+pars =  [6.1194     1.4846     0.8        0.102      0.         1.
+ 0.38866651 0.259618  ]
+std.dev of utility differences - annuities d_value_1    0.014172
+d_value_2    0.022223
+d_value_3    0.014081
+d_value_4    0.021957
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001685
+d_value_6    0.002905
+d_value_7    0.001687
+d_value_8    0.002835
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005122
+d_value_10    0.008332
+d_value_11    0.005082
+d_value_12    0.008373
+dtype: float64
+pars =  [6.1194     1.4846     0.8        0.102      0.         1.
+ 0.35168    0.28692226]
+- function call summary
+ssd =  7994.376220273782  sigmas =  [[ 10.64858674  10.64858674]
+ [169.77436362 169.77436362]
+ [ 31.96060338  31.96060338]]
+pars =  [6.1194     1.4846     0.8        0.102      0.         1.
+ 0.35168    0.28692226]
+std.dev of utility differences - annuities d_value_1    0.014817
+d_value_2    0.023227
+d_value_3    0.014727
+d_value_4    0.022959
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001720
+d_value_6    0.002953
+d_value_7    0.001721
+d_value_8    0.002891
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005243
+d_value_10    0.008554
+d_value_11    0.005218
+d_value_12    0.008606
+dtype: float64
+pars =  [5.5370621 1.4846    0.8       0.102     0.        1.        0.35168
+ 0.259618 ]
+- function call summary
+ssd =  7997.420232448836  sigmas =  [[ 10.99515601  10.99515601]
+ [169.26233831 169.26233831]
+ [ 31.33340614  31.33340614]]
+pars =  [5.5370621 1.4846    0.8       0.102     0.        1.        0.35168
+ 0.259618 ]
+std.dev of utility differences - annuities d_value_1    0.014582
+d_value_2    0.022851
+d_value_3    0.014478
+d_value_4    0.022572
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001753
+d_value_6    0.003025
+d_value_7    0.001748
+d_value_8    0.002951
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005232
+d_value_10    0.008647
+d_value_11    0.005264
+d_value_12    0.008652
+dtype: float64
+pars =  [6.1194     1.34332163 0.8        0.102      0.         1.
+ 0.35168    0.259618  ]
+- function call summary
+ssd =  8011.601024586996  sigmas =  [[ 169.08151701  169.08151701]
+ [2332.61385163 2332.61385163]
+ [ 479.59574692  479.59574692]]
+pars =  [6.1194     1.34332163 0.8        0.102      0.         1.
+ 0.35168    0.259618  ]
+std.dev of utility differences - annuities d_value_1    0.000958
+d_value_2    0.001493
+d_value_3    0.000954
+d_value_4    0.001469
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000114
+d_value_6    0.000201
+d_value_7    0.000114
+d_value_8    0.000196
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.000333
+d_value_10    0.000580
+d_value_11    0.000337
+d_value_12    0.000574
+dtype: float64
+pars =  [6.1194     1.4846     0.78351931 0.102      0.         1.
+ 0.35168    0.259618  ]
+- function call summary
+ssd =  8003.232388635988  sigmas =  [[ 10.31860899  10.31860899]
+ [171.92091134 171.92091134]
+ [ 32.3866968   32.3866968 ]]
+pars =  [6.1194     1.4846     0.78351931 0.102      0.         1.
+ 0.35168    0.259618  ]
+std.dev of utility differences - annuities d_value_1    0.014982
+d_value_2    0.023472
+d_value_3    0.014889
+d_value_4    0.023207
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001717
+d_value_6    0.002923
+d_value_7    0.001716
+d_value_8    0.002873
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005204
+d_value_10    0.008488
+d_value_11    0.005177
+d_value_12    0.008557
+dtype: float64
+pars =  [6.1194     1.4846     0.8        0.09229342 0.         1.
+ 0.35168    0.259618  ]
+- function call summary
+ssd =  7988.083606508449  sigmas =  [[ 11.19730467  11.19730467]
+ [173.1904537  173.1904537 ]
+ [ 32.36870852  32.36870852]]
+pars =  [6.1194     1.4846     0.8        0.09229342 0.         1.
+ 0.35168    0.259618  ]
+std.dev of utility differences - annuities d_value_1    0.014310
+d_value_2    0.022433
+d_value_3    0.014219
+d_value_4    0.022165
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001678
+d_value_6    0.002893
+d_value_7    0.001676
+d_value_8    0.002826
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005136
+d_value_10    0.008399
+d_value_11    0.005115
+d_value_12    0.008430
+dtype: float64
+pars =  [6.1194     1.4846     0.8        0.102      0.         1.
+ 0.31821322 0.259618  ]
+- function call summary
+ssd =  7986.919956335536  sigmas =  [[ 11.1188358   11.1188358 ]
+ [170.99512762 170.99512762]
+ [ 32.01414669  32.01414669]]
+pars =  [6.1194     1.4846     0.8        0.102      0.         1.
+ 0.31821322 0.259618  ]
+std.dev of utility differences - annuities d_value_1    0.014426
+d_value_2    0.022601
+d_value_3    0.014339
+d_value_4    0.022336
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001675
+d_value_6    0.002889
+d_value_7    0.001674
+d_value_8    0.002825
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005162
+d_value_10    0.008451
+d_value_11    0.005146
+d_value_12    0.008497
+dtype: float64
+pars =  [6.1194     1.4846     0.8        0.102      0.         1.
+ 0.35168    0.23491208]
+- function call summary
+ssd =  7983.078608283053  sigmas =  [[ 11.77885242  11.77885242]
+ [176.35020019 176.35020019]
+ [ 32.83999354  32.83999354]]
+pars =  [6.1194     1.4846     0.8        0.102      0.         1.
+ 0.35168    0.23491208]
+std.dev of utility differences - annuities d_value_1    0.013814
+d_value_2    0.021651
+d_value_3    0.013729
+d_value_4    0.021382
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001635
+d_value_6    0.002832
+d_value_7    0.001635
+d_value_8    0.002763
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005046
+d_value_10    0.008237
+d_value_11    0.005021
+d_value_12    0.008265
+dtype: float64
+pars =  [6.38506772 1.51473866 0.827206   0.10195189 0.         1.
+ 0.3480939  0.25028923]
+- function call summary
+ssd =  7962.731559549387  sigmas =  [[  8.93753921   8.93753921]
+ [121.56364429 121.56364429]
+ [ 22.64018661  22.64018661]]
+pars =  [6.38506772 1.51473866 0.827206   0.10195189 0.         1.
+ 0.3480939  0.25028923]
+std.dev of utility differences - annuities d_value_1    0.018981
+d_value_2    0.029843
+d_value_3    0.018865
+d_value_4    0.029515
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.002327
+d_value_6    0.004087
+d_value_7    0.002323
+d_value_8    0.003950
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.007382
+d_value_10    0.011821
+d_value_11    0.007256
+d_value_12    0.011872
+dtype: float64
+pars =  [6.35393199 1.52121777 0.85370372 0.1018966  0.         1.
+ 0.34520509 0.24382138]
+- function call summary
+ssd =  7946.06462695023  sigmas =  [[  9.44122637   9.44122637]
+ [112.73850343 112.73850343]
+ [ 21.11648516  21.11648516]]
+pars =  [6.35393199 1.52121777 0.85370372 0.1018966  0.         1.
+ 0.34520509 0.24382138]
+std.dev of utility differences - annuities d_value_1    0.018800
+d_value_2    0.029666
+d_value_3    0.018696
+d_value_4    0.029337
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.002432
+d_value_6    0.004359
+d_value_7    0.002430
+d_value_8    0.004189
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.007842
+d_value_10    0.012506
+d_value_11    0.007722
+d_value_12    0.012484
+dtype: float64
+pars =  [5.56411392 1.49825617 0.89259089 0.102009   0.         1.
+ 0.35706586 0.27672197]
+- function call summary
+ssd =  7940.324260915771  sigmas =  [[ 14.03405578  14.03405578]
+ [144.40064373 144.40064373]
+ [ 26.73484229  26.73484229]]
+pars =  [5.56411392 1.49825617 0.89259089 0.102009   0.         1.
+ 0.35706586 0.27672197]
+std.dev of utility differences - annuities d_value_1    0.013056
+d_value_2    0.020876
+d_value_3    0.012991
+d_value_4    0.020574
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001873
+d_value_6    0.003455
+d_value_7    0.001879
+d_value_8    0.003280
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005984
+d_value_10    0.009685
+d_value_11    0.005982
+d_value_12    0.009531
+dtype: float64
+pars =  [5.66139958 1.49458231 0.90510384 0.10130767 0.         1.
+ 0.32071662 0.20152561]
+- function call summary
+ssd =  7926.118316420886  sigmas =  [[ 16.57549308  16.57549308]
+ [154.39771206 154.39771206]
+ [ 28.90095522  28.90095522]]
+pars =  [5.66139958 1.49458231 0.90510384 0.10130767 0.         1.
+ 0.32071662 0.20152561]
+std.dev of utility differences - annuities d_value_1    0.011150
+d_value_2    0.018104
+d_value_3    0.011136
+d_value_4    0.017811
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001681
+d_value_6    0.003153
+d_value_7    0.001694
+d_value_8    0.002980
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005469
+d_value_10    0.008852
+d_value_11    0.005444
+d_value_12    0.008652
+dtype: float64
+pars =  [5.87568717 1.50045112 0.90620367 0.1014526  0.         1.
+ 0.29257237 0.20132561]
+- function call summary
+ssd =  7922.523341352595  sigmas =  [[ 15.439138    15.439138  ]
+ [142.76045926 142.76045926]
+ [ 26.87557335  26.87557335]]
+pars =  [5.87568717 1.50045112 0.90620367 0.1014526  0.         1.
+ 0.29257237 0.20132561]
+std.dev of utility differences - annuities d_value_1    0.012001
+d_value_2    0.019461
+d_value_3    0.012002
+d_value_4    0.019178
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001786
+d_value_6    0.003360
+d_value_7    0.001793
+d_value_8    0.003180
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005888
+d_value_10    0.009460
+d_value_11    0.005853
+d_value_12    0.009271
+dtype: float64
+pars =  [5.73575636 1.49369911 0.90715807 0.10163657 0.         1.
+ 0.26696893 0.20739195]
+- function call summary
+ssd =  7926.1511202292095  sigmas =  [[ 16.68063705  16.68063705]
+ [153.07544729 153.07544729]
+ [ 28.84675217  28.84675217]]
+pars =  [5.73575636 1.49369911 0.90715807 0.10163657 0.         1.
+ 0.26696893 0.20739195]
+std.dev of utility differences - annuities d_value_1    0.011099
+d_value_2    0.018024
+d_value_3    0.011091
+d_value_4    0.017748
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001657
+d_value_6    0.003114
+d_value_7    0.001662
+d_value_8    0.002945
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005435
+d_value_10    0.008803
+d_value_11    0.005431
+d_value_12    0.008628
+dtype: float64
+pars =  [6.45994125 1.49162981 0.90878845 0.1016234  0.         1.
+ 0.29370514 0.20204687]
+- function call summary
+ssd =  7917.86079631496  sigmas =  [[ 17.6543104   17.6543104 ]
+ [160.62180467 160.62180467]
+ [ 30.88430697  30.88430697]]
+pars =  [6.45994125 1.49162981 0.90878845 0.1016234  0.         1.
+ 0.29370514 0.20204687]
+std.dev of utility differences - annuities d_value_1    0.010504
+d_value_2    0.017033
+d_value_3    0.010508
+d_value_4    0.016803
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001545
+d_value_6    0.002914
+d_value_7    0.001552
+d_value_8    0.002754
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005171
+d_value_10    0.008210
+d_value_11    0.005099
+d_value_12    0.008077
+dtype: float64
+pars =  [6.63426713 1.50637643 0.91615928 0.10061255 0.         1.
+ 0.29969881 0.20461336]
+- function call summary
+ssd =  7915.360504366411  sigmas =  [[ 14.95415782  14.95415782]
+ [133.58158402 133.58158402]
+ [ 25.83566141  25.83566141]]
+pars =  [6.63426713 1.50637643 0.91615928 0.10061255 0.         1.
+ 0.29969881 0.20461336]
+std.dev of utility differences - annuities d_value_1    0.012395
+d_value_2    0.020155
+d_value_3    0.012429
+d_value_4    0.019935
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001849
+d_value_6    0.003497
+d_value_7    0.001864
+d_value_8    0.003304
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.006229
+d_value_10    0.009724
+d_value_11    0.006099
+d_value_12    0.009581
+dtype: float64
+pars =  [6.66640708 1.52001755 0.92374761 0.08659419 0.         1.
+ 0.30860279 0.22093712]
+- function call summary
+ssd =  7913.1738576613225  sigmas =  [[ 12.78093089  12.78093089]
+ [113.55104805 113.55104805]
+ [ 21.91136521  21.91136521]]
+pars =  [6.66640708 1.52001755 0.92374761 0.08659419 0.         1.
+ 0.30860279 0.22093712]
+std.dev of utility differences - annuities d_value_1    0.014444
+d_value_2    0.023580
+d_value_3    0.014507
+d_value_4    0.023354
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.002186
+d_value_6    0.004144
+d_value_7    0.002210
+d_value_8    0.003908
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.007377
+d_value_10    0.011395
+d_value_11    0.007175
+d_value_12    0.011236
+dtype: float64
+pars =  [6.63194882 1.51923286 0.927777   0.08722032 0.         1.
+ 0.30745255 0.22274629]
+- function call summary
+ssd =  7911.235470116328  sigmas =  [[ 13.01309166  13.01309166]
+ [114.57679097 114.57679097]
+ [ 22.09141746  22.09141746]]
+pars =  [6.63194882 1.51923286 0.927777   0.08722032 0.         1.
+ 0.30745255 0.22274629]
+std.dev of utility differences - annuities d_value_1    0.014153
+d_value_2    0.023183
+d_value_3    0.014233
+d_value_4    0.022948
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.002167
+d_value_6    0.004114
+d_value_7    0.002195
+d_value_8    0.003876
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.007307
+d_value_10    0.011264
+d_value_11    0.007100
+d_value_12    0.011095
+dtype: float64
+pars =  [6.45059378 1.49872535 0.93624332 0.09116143 0.         1.
+ 0.30681912 0.25584705]
+- function call summary
+ssd =  7908.568169600892  sigmas =  [[ 16.80525145  16.80525145]
+ [145.43236213 145.43236213]
+ [ 28.11294215  28.11294215]]
+pars =  [6.45059378 1.49872535 0.93624332 0.09116143 0.         1.
+ 0.30681912 0.25584705]
+std.dev of utility differences - annuities d_value_1    0.010899
+d_value_2    0.017991
+d_value_3    0.010966
+d_value_4    0.017749
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001703
+d_value_6    0.003245
+d_value_7    0.001724
+d_value_8    0.003057
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005699
+d_value_10    0.008896
+d_value_11    0.005563
+d_value_12    0.008715
+dtype: float64
+pars =  [6.20588212 1.49565444 0.94425763 0.08026941 0.         1.
+ 0.30666237 0.24493221]
+- function call summary
+ssd =  7905.412651634379  sigmas =  [[ 17.88345137  17.88345137]
+ [151.60412234 151.60412234]
+ [ 29.26885464  29.26885464]]
+pars =  [6.20588212 1.49565444 0.94425763 0.08026941 0.         1.
+ 0.30666237 0.24493221]
+std.dev of utility differences - annuities d_value_1    0.010132
+d_value_2    0.016924
+d_value_3    0.010220
+d_value_4    0.016662
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001652
+d_value_6    0.003132
+d_value_7    0.001671
+d_value_8    0.002955
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005452
+d_value_10    0.008569
+d_value_11    0.005349
+d_value_12    0.008338
+dtype: float64
+pars =  [6.54002428 1.49967404 0.9525699  0.07339513 0.         1.
+ 0.30888474 0.24833312]
+- function call summary
+ssd =  7899.634328962829  sigmas =  [[ 17.38309759  17.38309759]
+ [145.28518191 145.28518191]
+ [ 28.44419109  28.44419109]]
+pars =  [6.54002428 1.49967404 0.9525699  0.07339513 0.         1.
+ 0.30888474 0.24833312]
+std.dev of utility differences - annuities d_value_1    0.010321
+d_value_2    0.017382
+d_value_3    0.010450
+d_value_4    0.017144
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001702
+d_value_6    0.003254
+d_value_7    0.001730
+d_value_8    0.003060
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005687
+d_value_10    0.008798
+d_value_11    0.005531
+d_value_12    0.008573
+dtype: float64
+pars =  [6.68793195 1.49113421 0.96504752 0.05811593 0.         1.
+ 0.31298041 0.26348307]
+- function call summary
+ssd =  7893.018042604013  sigmas =  [[ 19.86490324  19.86490324]
+ [163.28299218 163.28299218]
+ [ 32.59652603  32.59652603]]
+pars =  [6.68793195 1.49113421 0.96504752 0.05811593 0.         1.
+ 0.31298041 0.26348307]
+std.dev of utility differences - annuities d_value_1    0.008838
+d_value_2    0.015151
+d_value_3    0.008997
+d_value_4    0.014918
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001499
+d_value_6    0.002885
+d_value_7    0.001527
+d_value_8    0.002714
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005044
+d_value_10    0.007785
+d_value_11    0.004900
+d_value_12    0.007543
+dtype: float64
+pars =  [6.51804431 1.50372247 0.97557734 0.05236103 0.         1.
+ 0.30545818 0.23680383]
+- function call summary
+ssd =  7888.877343720379  sigmas =  [[ 17.1699068   17.1699068 ]
+ [139.99562782 139.99562782]
+ [ 28.2124434   28.2124434 ]]
+pars =  [6.51804431 1.50372247 0.97557734 0.05236103 0.         1.
+ 0.30545818 0.23680383]
+std.dev of utility differences - annuities d_value_1    0.009991
+d_value_2    0.017432
+d_value_3    0.010227
+d_value_4    0.017170
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001759
+d_value_6    0.003389
+d_value_7    0.001795
+d_value_8    0.003181
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005877
+d_value_10    0.009121
+d_value_11    0.005706
+d_value_12    0.008771
+dtype: float64
+pars =  [6.80193256 1.48640492 0.98006148 0.0498944  0.         1.
+ 0.36343555 0.31558647]
+- function call summary
+ssd =  7889.226537159288  sigmas =  [[ 21.6693569   21.6693569 ]
+ [176.5831182  176.5831182 ]
+ [ 36.09611401  36.09611401]]
+pars =  [6.80193256 1.48640492 0.98006148 0.0498944  0.         1.
+ 0.36343555 0.31558647]
+std.dev of utility differences - annuities d_value_1    0.007844
+d_value_2    0.013772
+d_value_3    0.008047
+d_value_4    0.013543
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001404
+d_value_6    0.002694
+d_value_7    0.001430
+d_value_8    0.002532
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.004646
+d_value_10    0.007150
+d_value_11    0.004480
+d_value_12    0.006894
+dtype: float64
+pars =  [6.57779846 1.37358953 0.97552118 0.05209628 0.         1.
+ 0.31598949 0.23134783]
+- function call summary
+ssd =  7894.596448494615  sigmas =  [[ 157.19638015  157.19638015]
+ [1210.23758294 1210.23758294]
+ [ 267.42898351  267.42898351]]
+pars =  [6.57779846 1.37358953 0.97552118 0.05209628 0.         1.
+ 0.31598949 0.23134783]
+std.dev of utility differences - annuities d_value_1    0.001049
+d_value_2    0.001910
+d_value_3    0.001086
+d_value_4    0.001836
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000197
+d_value_6    0.000385
+d_value_7    0.000202
+d_value_8    0.000360
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.000628
+d_value_10    0.001020
+d_value_11    0.000626
+d_value_12    0.000984
+dtype: float64
+pars =  [6.89171654 1.44987493 0.97758531 0.04986897 0.         1.
+ 0.26522088 0.25505969]
+- function call summary
+ssd =  7888.303992711379  sigmas =  [[ 36.86150212  36.86150212]
+ [290.10269246 290.10269246]
+ [ 60.94397151  60.94397151]]
+pars =  [6.89171654 1.44987493 0.97758531 0.04986897 0.         1.
+ 0.26522088 0.25505969]
+std.dev of utility differences - annuities d_value_1    0.004613
+d_value_2    0.008152
+d_value_3    0.004729
+d_value_4    0.007967
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000817
+d_value_6    0.001592
+d_value_7    0.000837
+d_value_8    0.001497
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.002725
+d_value_10    0.004274
+d_value_11    0.002673
+d_value_12    0.004116
+dtype: float64
+pars =  [7.45500544 1.47255437 0.97745366 0.04862372 0.         1.
+ 0.26284222 0.24184559]
+- function call summary
+ssd =  7887.028832130122  sigmas =  [[ 26.38135561  26.38135561]
+ [208.2372151  208.2372151 ]
+ [ 44.05575867  44.05575867]]
+pars =  [7.45500544 1.47255437 0.97745366 0.04862372 0.         1.
+ 0.26284222 0.24184559]
+std.dev of utility differences - annuities d_value_1    0.006475
+d_value_2    0.011338
+d_value_3    0.006645
+d_value_4    0.011162
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001127
+d_value_6    0.002196
+d_value_7    0.001147
+d_value_8    0.002068
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003823
+d_value_10    0.005854
+d_value_11    0.003696
+d_value_12    0.005656
+dtype: float64
+pars =  [7.22250007 1.46152824 0.97800469 0.04571433 0.         1.
+ 0.28075703 0.23895299]
+- function call summary
+ssd =  7885.869451593482  sigmas =  [[ 31.04571004  31.04571004]
+ [245.12699736 245.12699736]
+ [ 51.72336754  51.72336754]]
+pars =  [7.22250007 1.46152824 0.97800469 0.04571433 0.         1.
+ 0.28075703 0.23895299]
+std.dev of utility differences - annuities d_value_1    0.005474
+d_value_2    0.009654
+d_value_3    0.005625
+d_value_4    0.009465
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000964
+d_value_6    0.001875
+d_value_7    0.000991
+d_value_8    0.001772
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003246
+d_value_10    0.005018
+d_value_11    0.003158
+d_value_12    0.004838
+dtype: float64
+pars =  [7.25140492 1.47523696 0.9792505  0.04670025 0.         1.
+ 0.29826253 0.25051679]
+- function call summary
+ssd =  7887.819503864067  sigmas =  [[ 25.43808748  25.43808748]
+ [202.14867435 202.14867435]
+ [ 42.47892026  42.47892026]]
+pars =  [7.25140492 1.47523696 0.9792505  0.04670025 0.         1.
+ 0.29826253 0.25051679]
+std.dev of utility differences - annuities d_value_1    0.006688
+d_value_2    0.011753
+d_value_3    0.006868
+d_value_4    0.011557
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001176
+d_value_6    0.002281
+d_value_7    0.001210
+d_value_8    0.002154
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003966
+d_value_10    0.006082
+d_value_11    0.003830
+d_value_12    0.005872
+dtype: float64
+pars =  [6.97995195 1.46618435 0.97934603 0.04697485 0.         1.
+ 0.27571876 0.2249967 ]
+- function call summary
+ssd =  7888.627270447621  sigmas =  [[ 28.94099134  28.94099134]
+ [228.77213902 228.77213902]
+ [ 47.86106288  47.86106288]]
+pars =  [6.97995195 1.46618435 0.97934603 0.04697485 0.         1.
+ 0.27571876 0.2249967 ]
+std.dev of utility differences - annuities d_value_1    0.005858
+d_value_2    0.010350
+d_value_3    0.006020
+d_value_4    0.010148
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001036
+d_value_6    0.002016
+d_value_7    0.001064
+d_value_8    0.001903
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003477
+d_value_10    0.005419
+d_value_11    0.003394
+d_value_12    0.005214
+dtype: float64
+pars =  [7.23428933 1.47085979 0.97781133 0.04192727 0.         1.
+ 0.27064754 0.24683759]
+- function call summary
+ssd =  7886.196702420926  sigmas =  [[ 27.00759951  27.00759951]
+ [213.53804887 213.53804887]
+ [ 44.94651805  44.94651805]]
+pars =  [7.23428933 1.47085979 0.97781133 0.04192727 0.         1.
+ 0.27064754 0.24683759]
+std.dev of utility differences - annuities d_value_1    0.006318
+d_value_2    0.011103
+d_value_3    0.006484
+d_value_4    0.010904
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001103
+d_value_6    0.002152
+d_value_7    0.001135
+d_value_8    0.002030
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003734
+d_value_10    0.005762
+d_value_11    0.003627
+d_value_12    0.005556
+dtype: float64
+pars =  [6.92355525 1.44090479 0.97632623 0.0455295  0.         1.
+ 0.26921489 0.23332099]
+- function call summary
+ssd =  7888.591648167605  sigmas =  [[ 42.6546046   42.6546046 ]
+ [335.47897695 335.47897695]
+ [ 70.82568715  70.82568715]]
+pars =  [6.92355525 1.44090479 0.97632623 0.0455295  0.         1.
+ 0.26921489 0.23332099]
+std.dev of utility differences - annuities d_value_1    0.003977
+d_value_2    0.007042
+d_value_3    0.004079
+d_value_4    0.006872
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000703
+d_value_6    0.001377
+d_value_7    0.000722
+d_value_8    0.001291
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.002347
+d_value_10    0.003696
+d_value_11    0.002304
+d_value_12    0.003559
+dtype: float64
+pars =  [7.32544525 1.45979209 0.97858968 0.04240285 0.         1.
+ 0.28489405 0.25279399]
+- function call summary
+ssd =  7886.172199585586  sigmas =  [[ 31.88233098  31.88233098]
+ [251.55291187 251.55291187]
+ [ 53.15625181  53.15625181]]
+pars =  [7.32544525 1.45979209 0.97858968 0.04240285 0.         1.
+ 0.28489405 0.25279399]
+std.dev of utility differences - annuities d_value_1    0.005328
+d_value_2    0.009394
+d_value_3    0.005471
+d_value_4    0.009210
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000938
+d_value_6    0.001826
+d_value_7    0.000963
+d_value_8    0.001726
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003157
+d_value_10    0.004875
+d_value_11    0.003070
+d_value_12    0.004700
+dtype: float64
+pars =  [7.31605197 1.45775051 0.97669295 0.04474806 0.         1.
+ 0.29156055 0.2554039 ]
+- function call summary
+ssd =  7887.499810984188  sigmas =  [[ 32.81652856  32.81652856]
+ [259.23219341 259.23219341]
+ [ 54.65843712  54.65843712]]
+pars =  [7.31605197 1.45775051 0.97669295 0.04474806 0.         1.
+ 0.29156055 0.2554039 ]
+std.dev of utility differences - annuities d_value_1    0.005196
+d_value_2    0.009133
+d_value_3    0.005333
+d_value_4    0.008952
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000911
+d_value_6    0.001771
+d_value_7    0.000933
+d_value_8    0.001674
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003064
+d_value_10    0.004734
+d_value_11    0.002980
+d_value_12    0.004565
+dtype: float64
+pars =  [7.4322148  1.47106904 0.97825052 0.04292961 0.         1.
+ 0.26663562 0.22754516]
+- function call summary
+ssd =  7886.547722461218  sigmas =  [[ 27.03320283  27.03320283]
+ [213.08340357 213.08340357]
+ [ 45.13594661  45.13594661]]
+pars =  [7.4322148  1.47106904 0.97825052 0.04292961 0.         1.
+ 0.26663562 0.22754516]
+std.dev of utility differences - annuities d_value_1    0.006295
+d_value_2    0.011066
+d_value_3    0.006466
+d_value_4    0.010880
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001101
+d_value_6    0.002146
+d_value_7    0.001127
+d_value_8    0.002030
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003729
+d_value_10    0.005733
+d_value_11    0.003617
+d_value_12    0.005527
+dtype: float64
+pars =  [7.73379966 1.49541011 0.97920786 0.0449564  0.         1.
+ 0.28948353 0.2350191 ]
+- function call summary
+ssd =  7886.768915591712  sigmas =  [[ 19.39825508  19.39825508]
+ [154.79294554 154.79294554]
+ [ 32.5297516   32.5297516 ]]
+pars =  [7.73379966 1.49541011 0.97920786 0.0449564  0.         1.
+ 0.28948353 0.2350191 ]
+std.dev of utility differences - annuities d_value_1    0.008784
+d_value_2    0.015333
+d_value_3    0.009018
+d_value_4    0.015165
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001534
+d_value_6    0.002964
+d_value_7    0.001558
+d_value_8    0.002800
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005208
+d_value_10    0.007831
+d_value_11    0.004978
+d_value_12    0.007601
+dtype: float64
+pars =  [7.42851387 1.47941921 0.97696621 0.04657235 0.         1.
+ 0.29289278 0.22312489]
+- function call summary
+ssd =  7889.103697562122  sigmas =  [[ 24.03741038  24.03741038]
+ [190.74686467 190.74686467]
+ [ 40.09088216  40.09088216]]
+pars =  [7.42851387 1.47941921 0.97696621 0.04657235 0.         1.
+ 0.29289278 0.22312489]
+std.dev of utility differences - annuities d_value_1    0.007106
+d_value_2    0.012426
+d_value_3    0.007287
+d_value_4    0.012244
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001240
+d_value_6    0.002406
+d_value_7    0.001263
+d_value_8    0.002272
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.004197
+d_value_10    0.006407
+d_value_11    0.004042
+d_value_12    0.006192
+dtype: float64
+pars =  [6.92046086 1.58366904 0.97742992 0.04691585 0.         1.
+ 0.28616469 0.23894534]
+- function call summary
+ssd =  7889.840792943055  sigmas =  [[ 7.21242398  7.21242398]
+ [60.08714674 60.08714674]
+ [11.88908448 11.88908448]]
+pars =  [6.92046086 1.58366904 0.97742992 0.04691585 0.         1.
+ 0.28616469 0.23894534]
+std.dev of utility differences - annuities d_value_1    0.024127
+d_value_2    0.041334
+d_value_3    0.024661
+d_value_4    0.041288
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.004143
+d_value_6    0.007969
+d_value_7    0.004218
+d_value_8    0.007466
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.014168
+d_value_10    0.020870
+d_value_11    0.013409
+d_value_12    0.020312
+dtype: float64
+pars =  [7.36929283 1.50447646 0.97923058 0.04325595 0.         1.
+ 0.27020639 0.24580665]
+- function call summary
+ssd =  7889.153444730904  sigmas =  [[ 17.16591883  17.16591883]
+ [137.2247195  137.2247195 ]
+ [ 28.54317364  28.54317364]]
+pars =  [7.36929283 1.50447646 0.97923058 0.04325595 0.         1.
+ 0.27020639 0.24580665]
+std.dev of utility differences - annuities d_value_1    0.009960
+d_value_2    0.017382
+d_value_3    0.010214
+d_value_4    0.017187
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001732
+d_value_6    0.003351
+d_value_7    0.001774
+d_value_8    0.003162
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.005882
+d_value_10    0.008919
+d_value_11    0.005650
+d_value_12    0.008623
+dtype: float64
+pars =  [7.08323748 1.48481272 0.977984   0.04457816 0.         1.
+ 0.29067912 0.24027734]
+- function call summary
+ssd =  7889.3282340002725  sigmas =  [[ 22.19659961  22.19659961]
+ [177.37572654 177.37572654]
+ [ 36.85363838  36.85363838]]
+pars =  [7.08323748 1.48481272 0.977984   0.04457816 0.         1.
+ 0.29067912 0.24027734]
+std.dev of utility differences - annuities d_value_1    0.007694
+d_value_2    0.013477
+d_value_3    0.007891
+d_value_4    0.013267
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001347
+d_value_6    0.002611
+d_value_7    0.001377
+d_value_8    0.002461
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.004539
+d_value_10    0.006992
+d_value_11    0.004402
+d_value_12    0.006739
+dtype: float64
+pars =  [7.25188537 1.46376531 0.97786777 0.04570795 0.         1.
+ 0.28126591 0.24042288]
+- function call summary
+ssd =  7886.345830136068  sigmas =  [[ 30.01612212  30.01612212]
+ [237.25030346 237.25030346]
+ [ 50.00614445  50.00614445]]
+pars =  [7.25188537 1.46376531 0.97786777 0.04570795 0.         1.
+ 0.28126591 0.24042288]
+std.dev of utility differences - annuities d_value_1    0.005668
+d_value_2    0.009984
+d_value_3    0.005824
+d_value_4    0.009791
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000994
+d_value_6    0.001936
+d_value_7    0.001021
+d_value_8    0.001831
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003357
+d_value_10    0.005179
+d_value_11    0.003262
+d_value_12    0.004995
+dtype: float64
+pars =  [7.21065351 1.46020687 0.97811793 0.0466055  0.         1.
+ 0.27822312 0.23615543]
+- function call summary
+ssd =  7885.217312361881  sigmas =  [[ 31.67436634  31.67436634]
+ [250.0233877  250.0233877 ]
+ [ 52.75313724  52.75313724]]
+pars =  [7.21065351 1.46020687 0.97811793 0.0466055  0.         1.
+ 0.27822312 0.23615543]
+std.dev of utility differences - annuities d_value_1    0.005362
+d_value_2    0.009465
+d_value_3    0.005511
+d_value_4    0.009275
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000945
+d_value_6    0.001839
+d_value_7    0.000971
+d_value_8    0.001739
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003181
+d_value_10    0.004923
+d_value_11    0.003097
+d_value_12    0.004745
+dtype: float64
+pars =  [7.28934357 1.44232416 0.97834322 0.04601266 0.         1.
+ 0.27615964 0.23499852]
+- function call summary
+ssd =  7887.679306451202  sigmas =  [[ 41.99637694  41.99637694]
+ [328.58603664 328.58603664]
+ [ 70.37498618  70.37498618]]
+pars =  [7.28934357 1.44232416 0.97834322 0.04601266 0.         1.
+ 0.27615964 0.23499852]
+std.dev of utility differences - annuities d_value_1    0.004026
+d_value_2    0.007131
+d_value_3    0.004139
+d_value_4    0.006970
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000712
+d_value_6    0.001396
+d_value_7    0.000730
+d_value_8    0.001311
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.002387
+d_value_10    0.003722
+d_value_11    0.002333
+d_value_12    0.003582
+dtype: float64
+pars =  [7.20291098 1.45579127 0.97821991 0.0467637  0.         1.
+ 0.27930949 0.23765748]
+- function call summary
+ssd =  7885.561157753478  sigmas =  [[ 33.88972315  33.88972315]
+ [267.01497831 267.01497831]
+ [ 56.41690699  56.41690699]]
+pars =  [7.20291098 1.45579127 0.97821991 0.0467637  0.         1.
+ 0.27930949 0.23765748]
+std.dev of utility differences - annuities d_value_1    0.005007
+d_value_2    0.008846
+d_value_3    0.005146
+d_value_4    0.008663
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000887
+d_value_6    0.001723
+d_value_7    0.000911
+d_value_8    0.001626
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.002970
+d_value_10    0.004609
+d_value_11    0.002897
+d_value_12    0.004439
+dtype: float64
+pars =  [7.18083946 1.47292206 0.97812065 0.04666731 0.         1.
+ 0.27755859 0.23625325]
+- function call summary
+ssd =  7886.136987302642  sigmas =  [[ 26.25969469  26.25969469]
+ [208.13173325 208.13173325]
+ [ 43.67873328  43.67873328]]
+pars =  [7.18083946 1.47292206 0.97812065 0.04666731 0.         1.
+ 0.27755859 0.23625325]
+std.dev of utility differences - annuities d_value_1    0.006490
+d_value_2    0.011416
+d_value_3    0.006665
+d_value_4    0.011212
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001141
+d_value_6    0.002213
+d_value_7    0.001173
+d_value_8    0.002090
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003849
+d_value_10    0.005924
+d_value_11    0.003730
+d_value_12    0.005712
+dtype: float64
+pars =  [7.25803502 1.46652499 0.97819802 0.04661272 0.         1.
+ 0.2795195  0.23576244]
+- function call summary
+ssd =  7886.299355122587  sigmas =  [[ 28.84400515  28.84400515]
+ [227.98986197 227.98986197]
+ [ 48.07661315  48.07661315]]
+pars =  [7.25803502 1.46652499 0.97819802 0.04661272 0.         1.
+ 0.2795195  0.23576244]
+std.dev of utility differences - annuities d_value_1    0.005897
+d_value_2    0.010388
+d_value_3    0.006061
+d_value_4    0.010194
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.001034
+d_value_6    0.002014
+d_value_7    0.001064
+d_value_8    0.001904
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003498
+d_value_10    0.005387
+d_value_11    0.003393
+d_value_12    0.005195
+dtype: float64
+pars =  [7.18120545 1.45347184 0.97799635 0.04667557 0.         1.
+ 0.27926876 0.23529057]
+- function call summary
+ssd =  7887.0429850159  sigmas =  [[ 35.11750179  35.11750179]
+ [276.31229536 276.31229536]
+ [ 58.3439593   58.3439593 ]]
+pars =  [7.18120545 1.45347184 0.97799635 0.04667557 0.         1.
+ 0.27926876 0.23529057]
+std.dev of utility differences - annuities d_value_1    0.004829
+d_value_2    0.008537
+d_value_3    0.004963
+d_value_4    0.008356
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000856
+d_value_6    0.001665
+d_value_7    0.000879
+d_value_8    0.001570
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.002865
+d_value_10    0.004452
+d_value_11    0.002796
+d_value_12    0.004287
+dtype: float64
+pars =  [7.18590209 1.45822218 0.97797364 0.04647313 0.         1.
+ 0.27662884 0.23610102]
+- function call summary
+ssd =  7885.518709242943  sigmas =  [[ 32.63098116  32.63098116]
+ [257.23858819 257.23858819]
+ [ 54.30963849  54.30963849]]
+pars =  [7.18590209 1.45822218 0.97797364 0.04647313 0.         1.
+ 0.27662884 0.23610102]
+std.dev of utility differences - annuities d_value_1    0.005204
+d_value_2    0.009190
+d_value_3    0.005349
+d_value_4    0.009002
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000919
+d_value_6    0.001788
+d_value_7    0.000944
+d_value_8    0.001689
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003087
+d_value_10    0.004786
+d_value_11    0.003008
+d_value_12    0.004611
+dtype: float64
+pars =  [7.21147782 1.45849558 0.97821244 0.04667629 0.         1.
+ 0.27588742 0.23671764]
+- function call summary
+ssd =  7884.839377889545  sigmas =  [[ 32.51072856  32.51072856]
+ [256.43277295 256.43277295]
+ [ 54.12834009  54.12834009]]
+pars =  [7.21147782 1.45849558 0.97821244 0.04667629 0.         1.
+ 0.27588742 0.23671764]
+std.dev of utility differences - annuities d_value_1    0.005223
+d_value_2    0.009222
+d_value_3    0.005370
+d_value_4    0.009036
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000922
+d_value_6    0.001794
+d_value_7    0.000948
+d_value_8    0.001696
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003099
+d_value_10    0.004801
+d_value_11    0.003019
+d_value_12    0.004626
+dtype: float64
+pars =  [7.20982559 1.45632868 0.97819646 0.04652796 0.         1.
+ 0.27580062 0.23893523]
+- function call summary
+ssd =  7885.435641092027  sigmas =  [[ 33.5947309   33.5947309 ]
+ [264.58421306 264.58421306]
+ [ 55.95582741  55.95582741]]
+pars =  [7.20982559 1.45632868 0.97819646 0.04652796 0.         1.
+ 0.27580062 0.23893523]
+std.dev of utility differences - annuities d_value_1    0.005051
+d_value_2    0.008925
+d_value_3    0.005193
+d_value_4    0.008740
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000894
+d_value_6    0.001738
+d_value_7    0.000919
+d_value_8    0.001641
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.002998
+d_value_10    0.004651
+d_value_11    0.002924
+d_value_12    0.004481
+dtype: float64
+pars =  [7.24782429 1.45992951 0.97810494 0.0469279  0.         1.
+ 0.27485001 0.23726542]
+- function call summary
+ssd =  7886.095675280876  sigmas =  [[ 31.80188318  31.80188318]
+ [250.50588803 250.50588803]
+ [ 53.00477364  53.00477364]]
+pars =  [7.24782429 1.45992951 0.97810494 0.0469279  0.         1.
+ 0.27485001 0.23726542]
+std.dev of utility differences - annuities d_value_1    0.005342
+d_value_2    0.009423
+d_value_3    0.005490
+d_value_4    0.009236
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000942
+d_value_6    0.001830
+d_value_7    0.000966
+d_value_8    0.001732
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003167
+d_value_10    0.004900
+d_value_11    0.003084
+d_value_12    0.004724
+dtype: float64
+pars =  [7.16580302 1.45602186 0.97835024 0.04655254 0.         1.
+ 0.27563078 0.23610239]
+- function call summary
+ssd =  7886.170746933728  sigmas =  [[ 33.75538521  33.75538521]
+ [265.7332996  265.7332996 ]
+ [ 56.08116012  56.08116012]]
+pars =  [7.16580302 1.45602186 0.97835024 0.04655254 0.         1.
+ 0.27563078 0.23610239]
+std.dev of utility differences - annuities d_value_1    0.005026
+d_value_2    0.008884
+d_value_3    0.005166
+d_value_4    0.008699
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000889
+d_value_6    0.001731
+d_value_7    0.000914
+d_value_8    0.001633
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.002982
+d_value_10    0.004633
+d_value_11    0.002909
+d_value_12    0.004463
+dtype: float64
+pars =  [7.20632677 1.46071018 0.97833315 0.04682136 0.         1.
+ 0.27614531 0.23497764]
+- function call summary
+ssd =  7885.39551780305  sigmas =  [[ 31.43868304  31.43868304]
+ [248.00187837 248.00187837]
+ [ 52.34822053  52.34822053]]
+pars =  [7.20632677 1.46071018 0.97833315 0.04682136 0.         1.
+ 0.27614531 0.23497764]
+std.dev of utility differences - annuities d_value_1    0.005399
+d_value_2    0.009534
+d_value_3    0.005551
+d_value_4    0.009344
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000953
+d_value_6    0.001853
+d_value_7    0.000979
+d_value_8    0.001753
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003207
+d_value_10    0.004960
+d_value_11    0.003121
+d_value_12    0.004781
+dtype: float64
+pars =  [7.25128991 1.45997009 0.9781122  0.0463657  0.         1.
+ 0.27606369 0.23641202]
+- function call summary
+ssd =  7885.877106473142  sigmas =  [[ 31.79194761  31.79194761]
+ [250.58397587 250.58397587]
+ [ 52.97624174  52.97624174]]
+pars =  [7.25128991 1.45997009 0.9781122  0.0463657  0.         1.
+ 0.27606369 0.23641202]
+std.dev of utility differences - annuities d_value_1    0.005343
+d_value_2    0.009426
+d_value_3    0.005491
+d_value_4    0.009239
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000942
+d_value_6    0.001831
+d_value_7    0.000967
+d_value_8    0.001733
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003168
+d_value_10    0.004900
+d_value_11    0.003085
+d_value_12    0.004725
+dtype: float64
+pars =  [7.23958758 1.44760237 0.97827957 0.0465081  0.         1.
+ 0.27595679 0.23615714]
+- function call summary
+ssd =  7887.010341210866  sigmas =  [[ 38.53875648  38.53875648]
+ [302.29200795 302.29200795]
+ [ 64.27812598  64.27812598]]
+pars =  [7.23958758 1.44760237 0.97827957 0.0465081  0.         1.
+ 0.27595679 0.23615714]
+std.dev of utility differences - annuities d_value_1    0.004396
+d_value_2    0.007773
+d_value_3    0.004516
+d_value_4    0.007605
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000779
+d_value_6    0.001517
+d_value_7    0.000799
+d_value_8    0.001429
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.002605
+d_value_10    0.004056
+d_value_11    0.002543
+d_value_12    0.003906
+dtype: float64
+pars =  [7.16960091 1.45868204 0.97823364 0.04701825 0.         1.
+ 0.27543726 0.23743379]
+- function call summary
+ssd =  7886.179296868181  sigmas =  [[ 32.39159334  32.39159334]
+ [255.21886794 255.21886794]
+ [ 53.85611865  53.85611865]]
+pars =  [7.16960091 1.45868204 0.97823364 0.04701825 0.         1.
+ 0.27543726 0.23743379]
+std.dev of utility differences - annuities d_value_1    0.005242
+d_value_2    0.009255
+d_value_3    0.005387
+d_value_4    0.009067
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000926
+d_value_6    0.001801
+d_value_7    0.000951
+d_value_8    0.001701
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003108
+d_value_10    0.004825
+d_value_11    0.003031
+d_value_12    0.004646
+dtype: float64
+pars =  [7.21267772 1.46175639 0.97817747 0.0466343  0.         1.
+ 0.27677573 0.23730554]
+- function call summary
+ssd =  7885.620406305976  sigmas =  [[ 30.93265981  30.93265981]
+ [244.18444338 244.18444338]
+ [ 51.54965734  51.54965734]]
+pars =  [7.21267772 1.46175639 0.97817747 0.0466343  0.         1.
+ 0.27677573 0.23730554]
+std.dev of utility differences - annuities d_value_1    0.005491
+d_value_2    0.009688
+d_value_3    0.005644
+d_value_4    0.009498
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000967
+d_value_6    0.001882
+d_value_7    0.000994
+d_value_8    0.001779
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003258
+d_value_10    0.005037
+d_value_11    0.003170
+d_value_12    0.004857
+dtype: float64
+pars =  [7.20993961 1.45750118 0.97821901 0.04669614 0.         1.
+ 0.27610895 0.23680359]
+- function call summary
+ssd =  7885.228444085442  sigmas =  [[ 33.00943116  33.00943116]
+ [260.1031419  260.1031419 ]
+ [ 54.94117818  54.94117818]]
+pars =  [7.20993961 1.45750118 0.97821901 0.04669614 0.         1.
+ 0.27610895 0.23680359]
+std.dev of utility differences - annuities d_value_1    0.005142
+d_value_2    0.009084
+d_value_3    0.005287
+d_value_4    0.008898
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000909
+d_value_6    0.001768
+d_value_7    0.000934
+d_value_8    0.001671
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003053
+d_value_10    0.004731
+d_value_11    0.002975
+d_value_12    0.004559
+dtype: float64
+pars =  [7.20763909 1.4593348  0.97820404 0.04665529 0.         1.
+ 0.2753008  0.23651311]
+- function call summary
+ssd =  7884.867461914864  sigmas =  [[ 32.08768317  32.08768317]
+ [253.16130413 253.16130413]
+ [ 53.44625787  53.44625787]]
+pars =  [7.20763909 1.4593348  0.97820404 0.04665529 0.         1.
+ 0.2753008  0.23651311]
+std.dev of utility differences - annuities d_value_1    0.005292
+d_value_2    0.009343
+d_value_3    0.005440
+d_value_4    0.009154
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000934
+d_value_6    0.001817
+d_value_7    0.000960
+d_value_8    0.001718
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003140
+d_value_10    0.004863
+d_value_11    0.003058
+d_value_12    0.004687
+dtype: float64
+pars =  [7.20756448 1.45816581 0.97819565 0.04667313 0.         1.
+ 0.27591069 0.23668205]
+- function call summary
+ssd =  7885.178085717206  sigmas =  [[ 32.67309906  32.67309906]
+ [257.60537187 257.60537187]
+ [ 54.38788781  54.38788781]]
+pars =  [7.20756448 1.45816581 0.97819565 0.04667313 0.         1.
+ 0.27591069 0.23668205]
+std.dev of utility differences - annuities d_value_1    0.005197
+d_value_2    0.009176
+d_value_3    0.005342
+d_value_4    0.008991
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000918
+d_value_6    0.001786
+d_value_7    0.000944
+d_value_8    0.001687
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003084
+d_value_10    0.004778
+d_value_11    0.003005
+d_value_12    0.004605
+dtype: float64
+pars =  [7.21369207 1.45953551 0.97822368 0.04666536 0.         1.
+ 0.27582025 0.23673519]
+- function call summary
+ssd =  7884.647991496277  sigmas =  [[ 31.9942459   31.9942459 ]
+ [252.50407697 252.50407697]
+ [ 53.28473699  53.28473699]]
+pars =  [7.21369207 1.45953551 0.97822368 0.04666536 0.         1.
+ 0.27582025 0.23673519]
+std.dev of utility differences - annuities d_value_1    0.005307
+d_value_2    0.009370
+d_value_3    0.005455
+d_value_4    0.009181
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000936
+d_value_6    0.001821
+d_value_7    0.000963
+d_value_8    0.001723
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003149
+d_value_10    0.004876
+d_value_11    0.003067
+d_value_12    0.004700
+dtype: float64
+pars =  [7.21768607 1.45918992 0.9782329  0.04668022 0.         1.
+ 0.27565772 0.23674383]
+- function call summary
+ssd =  7884.635171285376  sigmas =  [[ 32.16734762  32.16734762]
+ [253.80948268 253.80948268]
+ [ 53.57272734  53.57272734]]
+pars =  [7.21768607 1.45918992 0.9782329  0.04668022 0.         1.
+ 0.27565772 0.23674383]
+std.dev of utility differences - annuities d_value_1    0.005280
+d_value_2    0.009318
+d_value_3    0.005427
+d_value_4    0.009132
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000931
+d_value_6    0.001812
+d_value_7    0.000957
+d_value_8    0.001714
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003132
+d_value_10    0.004850
+d_value_11    0.003050
+d_value_12    0.004675
+dtype: float64
+pars =  [7.21406694 1.45957625 0.9782321  0.04671547 0.         1.
+ 0.27561852 0.23681358]
+- function call summary
+ssd =  7884.766254104512  sigmas =  [[ 31.97385322  31.97385322]
+ [252.349589   252.349589  ]
+ [ 53.24546797  53.24546797]]
+pars =  [7.21406694 1.45957625 0.9782321  0.04671547 0.         1.
+ 0.27561852 0.23681358]
+std.dev of utility differences - annuities d_value_1    0.005311
+d_value_2    0.009375
+d_value_3    0.005460
+d_value_4    0.009187
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000937
+d_value_6    0.001822
+d_value_7    0.000963
+d_value_8    0.001724
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003151
+d_value_10    0.004879
+d_value_11    0.003069
+d_value_12    0.004702
+dtype: float64
+pars =  [7.21517851 1.45878067 0.97824202 0.04664937 0.         1.
+ 0.27563309 0.23664573]
+- function call summary
+ssd =  7884.705386452173  sigmas =  [[ 32.37137127  32.37137127]
+ [255.35697655 255.35697655]
+ [ 53.89946072  53.89946072]]
+pars =  [7.21517851 1.45878067 0.97824202 0.04664937 0.         1.
+ 0.27563309 0.23664573]
+std.dev of utility differences - annuities d_value_1    0.005245
+d_value_2    0.009261
+d_value_3    0.005393
+d_value_4    0.009075
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000926
+d_value_6    0.001802
+d_value_7    0.000952
+d_value_8    0.001703
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003113
+d_value_10    0.004821
+d_value_11    0.003031
+d_value_12    0.004646
+dtype: float64
+pars =  [7.21649716 1.4588688  0.97823046 0.04666185 0.         1.
+ 0.27559672 0.23694304]
+- function call summary
+ssd =  7884.857381521577  sigmas =  [[ 32.32564966  32.32564966]
+ [254.944577   254.944577  ]
+ [ 53.82326407  53.82326407]]
+pars =  [7.21649716 1.4588688  0.97823046 0.04666185 0.         1.
+ 0.27559672 0.23694304]
+std.dev of utility differences - annuities d_value_1    0.005253
+d_value_2    0.009274
+d_value_3    0.005401
+d_value_4    0.009088
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000927
+d_value_6    0.001804
+d_value_7    0.000953
+d_value_8    0.001706
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003117
+d_value_10    0.004827
+d_value_11    0.003036
+d_value_12    0.004652
+dtype: float64
+pars =  [7.22123635 1.45959195 0.97822556 0.04668302 0.         1.
+ 0.27574704 0.23658419]
+- function call summary
+ssd =  7884.783378790093  sigmas =  [[ 31.96831885  31.96831885]
+ [252.26499205 252.26499205]
+ [ 53.24583035  53.24583035]]
+pars =  [7.22123635 1.45959195 0.97822556 0.04668302 0.         1.
+ 0.27574704 0.23658419]
+std.dev of utility differences - annuities d_value_1    0.005313
+d_value_2    0.009376
+d_value_3    0.005460
+d_value_4    0.009188
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000937
+d_value_6    0.001822
+d_value_7    0.000963
+d_value_8    0.001724
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003152
+d_value_10    0.004878
+d_value_11    0.003068
+d_value_12    0.004702
+dtype: float64
+pars =  [7.22111612 1.45925395 0.97821886 0.04670107 0.         1.
+ 0.27558963 0.23680963]
+- function call summary
+ssd =  7884.604357339036  sigmas =  [[ 32.13582871  32.13582871]
+ [253.58450639 253.58450639]
+ [ 53.52503869  53.52503869]]
+pars =  [7.22111612 1.45925395 0.97821886 0.04670107 0.         1.
+ 0.27558963 0.23680963]
+std.dev of utility differences - annuities d_value_1    0.005284
+d_value_2    0.009327
+d_value_3    0.005432
+d_value_4    0.009140
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001813
+d_value_7    0.000958
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003136
+d_value_10    0.004854
+d_value_11    0.003054
+d_value_12    0.004679
+dtype: float64
+pars =  [7.22587872 1.45857453 0.97821544 0.04671916 0.         1.
+ 0.27555603 0.23690377]
+- function call summary
+ssd =  7885.246613418452  sigmas =  [[ 32.47172644  32.47172644]
+ [255.99891862 255.99891862]
+ [ 54.06167065  54.06167065]]
+pars =  [7.22587872 1.45857453 0.97821544 0.04671916 0.         1.
+ 0.27555603 0.23690377]
+std.dev of utility differences - annuities d_value_1    0.005229
+d_value_2    0.009231
+d_value_3    0.005376
+d_value_4    0.009045
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000924
+d_value_6    0.001796
+d_value_7    0.000949
+d_value_8    0.001698
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003103
+d_value_10    0.004804
+d_value_11    0.003023
+d_value_12    0.004630
+dtype: float64
+pars =  [7.21973733 1.45955823 0.97821293 0.04669109 0.         1.
+ 0.27581424 0.23689606]
+- function call summary
+ssd =  7884.735261543352  sigmas =  [[ 31.98362831  31.98362831]
+ [252.39980745 252.39980745]
+ [ 53.26844931  53.26844931]]
+pars =  [7.21973733 1.45955823 0.97821293 0.04669109 0.         1.
+ 0.27581424 0.23689606]
+std.dev of utility differences - annuities d_value_1    0.005310
+d_value_2    0.009372
+d_value_3    0.005458
+d_value_4    0.009184
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000936
+d_value_6    0.001821
+d_value_7    0.000962
+d_value_8    0.001723
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003150
+d_value_10    0.004876
+d_value_11    0.003067
+d_value_12    0.004700
+dtype: float64
+pars =  [7.22063    1.46011417 0.97820987 0.04669184 0.         1.
+ 0.2754106  0.23678713]
+- function call summary
+ssd =  7885.093178378911  sigmas =  [[ 31.71307021  31.71307021]
+ [250.22849232 250.22849232]
+ [ 52.82357848  52.82357848]]
+pars =  [7.22063    1.46011417 0.97820987 0.04669184 0.         1.
+ 0.2754106  0.23678713]
+std.dev of utility differences - annuities d_value_1    0.005357
+d_value_2    0.009452
+d_value_3    0.005505
+d_value_4    0.009263
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000944
+d_value_6    0.001836
+d_value_7    0.000970
+d_value_8    0.001737
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003177
+d_value_10    0.004917
+d_value_11    0.003093
+d_value_12    0.004740
+dtype: float64
+pars =  [7.22428148 1.46024989 0.97822582 0.04670755 0.         1.
+ 0.27548095 0.2368681 ]
+- function call summary
+ssd =  7885.16660551329  sigmas =  [[ 31.65274523  31.65274523]
+ [249.70669267 249.70669267]
+ [ 52.72413429  52.72413429]]
+pars =  [7.22428148 1.46024989 0.97822582 0.04670755 0.         1.
+ 0.27548095 0.2368681 ]
+std.dev of utility differences - annuities d_value_1    0.005367
+d_value_2    0.009470
+d_value_3    0.005516
+d_value_4    0.009282
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000946
+d_value_6    0.001840
+d_value_7    0.000972
+d_value_8    0.001740
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003184
+d_value_10    0.004926
+d_value_11    0.003099
+d_value_12    0.004749
+dtype: float64
+pars =  [7.21822356 1.45883399 0.978216   0.04672902 0.         1.
+ 0.27560754 0.23666436]
+- function call summary
+ssd =  7884.986897327835  sigmas =  [[ 32.34376178  32.34376178]
+ [255.04338988 255.04338988]
+ [ 53.85257206  53.85257206]]
+pars =  [7.21822356 1.45883399 0.978216   0.04672902 0.         1.
+ 0.27560754 0.23666436]
+std.dev of utility differences - annuities d_value_1    0.005249
+d_value_2    0.009269
+d_value_3    0.005397
+d_value_4    0.009081
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000927
+d_value_6    0.001803
+d_value_7    0.000952
+d_value_8    0.001705
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003116
+d_value_10    0.004824
+d_value_11    0.003035
+d_value_12    0.004650
+dtype: float64
+pars =  [7.21930085 1.45837712 0.97822442 0.0467072  0.         1.
+ 0.27578145 0.23682815]
+- function call summary
+ssd =  7885.071310336423  sigmas =  [[ 32.57094807  32.57094807]
+ [256.83167998 256.83167998]
+ [ 54.20790135  54.20790135]]
+pars =  [7.21930085 1.45837712 0.97822442 0.0467072  0.         1.
+ 0.27578145 0.23682815]
+std.dev of utility differences - annuities d_value_1    0.005212
+d_value_2    0.009205
+d_value_3    0.005360
+d_value_4    0.009018
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000920
+d_value_6    0.001790
+d_value_7    0.000945
+d_value_8    0.001693
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003093
+d_value_10    0.004791
+d_value_11    0.003014
+d_value_12    0.004618
+dtype: float64
+pars =  [7.21826459 1.45864538 0.97821552 0.04666687 0.         1.
+ 0.27559217 0.23673158]
+- function call summary
+ssd =  7884.964290546823  sigmas =  [[ 32.43653347  32.43653347]
+ [255.7862121  255.7862121 ]
+ [ 54.01155896  54.01155896]]
+pars =  [7.21826459 1.45864538 0.97821552 0.04666687 0.         1.
+ 0.27559217 0.23673158]
+std.dev of utility differences - annuities d_value_1    0.005234
+d_value_2    0.009242
+d_value_3    0.005382
+d_value_4    0.009055
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000924
+d_value_6    0.001798
+d_value_7    0.000949
+d_value_8    0.001700
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003107
+d_value_10    0.004810
+d_value_11    0.003026
+d_value_12    0.004637
+dtype: float64
+pars =  [7.21862386 1.45958452 0.97821992 0.0466994  0.         1.
+ 0.275665   0.23680211]
+- function call summary
+ssd =  7884.707476678001  sigmas =  [[ 31.97065489  31.97065489]
+ [252.30352358 252.30352358]
+ [ 53.2451335   53.2451335 ]]
+pars =  [7.21862386 1.45958452 0.97821992 0.0466994  0.         1.
+ 0.275665   0.23680211]
+std.dev of utility differences - annuities d_value_1    0.005312
+d_value_2    0.009376
+d_value_3    0.005460
+d_value_4    0.009188
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000937
+d_value_6    0.001822
+d_value_7    0.000963
+d_value_8    0.001724
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003151
+d_value_10    0.004878
+d_value_11    0.003068
+d_value_12    0.004702
+dtype: float64
+pars =  [7.22082488 1.45923121 0.97821934 0.04669906 0.         1.
+ 0.27558136 0.23683389]
+- function call summary
+ssd =  7884.580265134359  sigmas =  [[ 32.14664249  32.14664249]
+ [253.67886783 253.67886783]
+ [ 53.54405912  53.54405912]]
+pars =  [7.22082488 1.45923121 0.97821934 0.04669906 0.         1.
+ 0.27558136 0.23683389]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009325
+d_value_3    0.005430
+d_value_4    0.009137
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004852
+d_value_11    0.003053
+d_value_12    0.004678
+dtype: float64
+pars =  [7.22022387 1.4591298  0.97822235 0.04669598 0.         1.
+ 0.27553673 0.23683671]
+- function call summary
+ssd =  7884.741763592097  sigmas =  [[ 32.19443888  32.19443888]
+ [254.00220564 254.00220564]
+ [ 53.62915586  53.62915586]]
+pars =  [7.22022387 1.4591298  0.97822235 0.04669598 0.         1.
+ 0.27553673 0.23683671]
+std.dev of utility differences - annuities d_value_1    0.005274
+d_value_2    0.009310
+d_value_3    0.005422
+d_value_4    0.009123
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000931
+d_value_6    0.001810
+d_value_7    0.000956
+d_value_8    0.001712
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003130
+d_value_10    0.004845
+d_value_11    0.003048
+d_value_12    0.004671
+dtype: float64
+pars =  [7.2204146  1.45924313 0.97821934 0.04670273 0.         1.
+ 0.27557705 0.2368379 ]
+- function call summary
+ssd =  7884.605087436531  sigmas =  [[ 32.14106694  32.14106694]
+ [253.6183448  253.6183448 ]
+ [ 53.5322827   53.5322827 ]]
+pars =  [7.2204146  1.45924313 0.97821934 0.04670273 0.         1.
+ 0.27557705 0.2368379 ]
+std.dev of utility differences - annuities d_value_1    0.005284
+d_value_2    0.009326
+d_value_3    0.005432
+d_value_4    0.009140
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001813
+d_value_7    0.000958
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003135
+d_value_10    0.004853
+d_value_11    0.003052
+d_value_12    0.004678
+dtype: float64
+pars =  [7.22098626 1.45926678 0.97821815 0.04669726 0.         1.
+ 0.27559214 0.2368463 ]
+- function call summary
+ssd =  7884.6061769220505  sigmas =  [[ 32.12850003  32.12850003]
+ [253.53497923 253.53497923]
+ [ 53.51334418  53.51334418]]
+pars =  [7.22098626 1.45926678 0.97821815 0.04669726 0.         1.
+ 0.27559214 0.2368463 ]
+std.dev of utility differences - annuities d_value_1    0.005285
+d_value_2    0.009330
+d_value_3    0.005433
+d_value_4    0.009142
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001814
+d_value_7    0.000958
+d_value_8    0.001716
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003136
+d_value_10    0.004855
+d_value_11    0.003054
+d_value_12    0.004680
+dtype: float64
+pars =  [7.22049907 1.45916449 0.97821833 0.04669959 0.         1.
+ 0.27557304 0.23682179]
+- function call summary
+ssd =  7884.738507021591  sigmas =  [[ 32.17831294  32.17831294]
+ [253.87586686 253.87586686]
+ [ 53.60124628  53.60124628]]
+pars =  [7.22049907 1.45916449 0.97821833 0.04669959 0.         1.
+ 0.27557304 0.23682179]
+std.dev of utility differences - annuities d_value_1    0.005277
+d_value_2    0.009315
+d_value_3    0.005425
+d_value_4    0.009128
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000931
+d_value_6    0.001811
+d_value_7    0.000956
+d_value_8    0.001713
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003131
+d_value_10    0.004847
+d_value_11    0.003050
+d_value_12    0.004673
+dtype: float64
+pars =  [7.22104197 1.45927502 0.978221   0.04669929 0.         1.
+ 0.27559261 0.23683891]
+- function call summary
+ssd =  7884.599635923454  sigmas =  [[ 32.12464115  32.12464115]
+ [253.50676494 253.50676494]
+ [ 53.50768321  53.50768321]]
+pars =  [7.22104197 1.45927502 0.978221   0.04669929 0.         1.
+ 0.27559261 0.23683891]
+std.dev of utility differences - annuities d_value_1    0.005286
+d_value_2    0.009331
+d_value_3    0.005434
+d_value_4    0.009143
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001814
+d_value_7    0.000958
+d_value_8    0.001716
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003137
+d_value_10    0.004855
+d_value_11    0.003055
+d_value_12    0.004681
+dtype: float64
+pars =  [7.2208049  1.45933473 0.97821876 0.04669827 0.         1.
+ 0.27556482 0.23682962]
+- function call summary
+ssd =  7884.606037623332  sigmas =  [[ 32.09241772  32.09241772]
+ [253.29198528 253.29198528]
+ [ 53.45530222  53.45530222]]
+pars =  [7.2208049  1.45933473 0.97821876 0.04669827 0.         1.
+ 0.27556482 0.23682962]
+std.dev of utility differences - annuities d_value_1    0.005291
+d_value_2    0.009340
+d_value_3    0.005439
+d_value_4    0.009153
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001815
+d_value_7    0.000959
+d_value_8    0.001717
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003139
+d_value_10    0.004860
+d_value_11    0.003057
+d_value_12    0.004685
+dtype: float64
+pars =  [7.22134393 1.45926017 0.97821944 0.04669984 0.         1.
+ 0.2755664  0.23684206]
+- function call summary
+ssd =  7884.607852075206  sigmas =  [[ 32.13158656  32.13158656]
+ [253.55914339 253.55914339]
+ [ 53.51958588  53.51958588]]
+pars =  [7.22134393 1.45926017 0.97821944 0.04669984 0.         1.
+ 0.2755664  0.23684206]
+std.dev of utility differences - annuities d_value_1    0.005285
+d_value_2    0.009329
+d_value_3    0.005433
+d_value_4    0.009141
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001814
+d_value_7    0.000958
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003136
+d_value_10    0.004854
+d_value_11    0.003054
+d_value_12    0.004680
+dtype: float64
+pars =  [7.2207758  1.45912533 0.97821968 0.04670006 0.         1.
+ 0.27559867 0.23683527]
+- function call summary
+ssd =  7884.724380078236  sigmas =  [[ 32.1979291   32.1979291 ]
+ [254.02659417 254.02659417]
+ [ 53.63510417  53.63510417]]
+pars =  [7.2207758  1.45912533 0.97821968 0.04670006 0.         1.
+ 0.27559867 0.23683527]
+std.dev of utility differences - annuities d_value_1    0.005274
+d_value_2    0.009309
+d_value_3    0.005422
+d_value_4    0.009122
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000931
+d_value_6    0.001810
+d_value_7    0.000956
+d_value_8    0.001712
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003129
+d_value_10    0.004845
+d_value_11    0.003048
+d_value_12    0.004670
+dtype: float64
+pars =  [7.22057211 1.45929205 0.97822018 0.0466963  0.         1.
+ 0.27558892 0.23682561]
+- function call summary
+ssd =  7884.620225918685  sigmas =  [[ 32.11644356  32.11644356]
+ [253.43225887 253.43225887]
+ [ 53.49179366  53.49179366]]
+pars =  [7.22057211 1.45929205 0.97822018 0.0466963  0.         1.
+ 0.27558892 0.23682561]
+std.dev of utility differences - annuities d_value_1    0.005288
+d_value_2    0.009333
+d_value_3    0.005436
+d_value_4    0.009147
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001814
+d_value_7    0.000959
+d_value_8    0.001716
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003137
+d_value_10    0.004857
+d_value_11    0.003055
+d_value_12    0.004682
+dtype: float64
+pars =  [7.22037053 1.45915903 0.97821871 0.04669823 0.         1.
+ 0.27559436 0.23683084]
+- function call summary
+ssd =  7884.724911691503  sigmas =  [[ 32.1809722   32.1809722 ]
+ [253.90041493 253.90041493]
+ [ 53.60629818  53.60629818]]
+pars =  [7.22037053 1.45915903 0.97821871 0.04669823 0.         1.
+ 0.27559436 0.23683084]
+std.dev of utility differences - annuities d_value_1    0.005277
+d_value_2    0.009314
+d_value_3    0.005425
+d_value_4    0.009127
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000931
+d_value_6    0.001811
+d_value_7    0.000956
+d_value_8    0.001713
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003131
+d_value_10    0.004847
+d_value_11    0.003049
+d_value_12    0.004673
+dtype: float64
+pars =  [7.220719   1.45935475 0.97821958 0.04670116 0.         1.
+ 0.27558741 0.23683392]
+- function call summary
+ssd =  7884.584760359083  sigmas =  [[ 32.08300771  32.08300771]
+ [253.22114707 253.22114707]
+ [ 53.43837398  53.43837398]]
+pars =  [7.220719   1.45935475 0.97821958 0.04670116 0.         1.
+ 0.27558741 0.23683392]
+std.dev of utility differences - annuities d_value_1    0.005293
+d_value_2    0.009343
+d_value_3    0.005441
+d_value_4    0.009156
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001816
+d_value_7    0.000959
+d_value_8    0.001718
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003140
+d_value_10    0.004861
+d_value_11    0.003057
+d_value_12    0.004686
+dtype: float64
+pars =  [7.22057604 1.45918977 0.9782206  0.04669779 0.         1.
+ 0.27556483 0.23683689]
+- function call summary
+ssd =  7884.679882265393  sigmas =  [[ 32.16615317  32.16615317]
+ [253.78393175 253.78393175]
+ [ 53.57988901  53.57988901]]
+pars =  [7.22057604 1.45918977 0.9782206  0.04669779 0.         1.
+ 0.27556483 0.23683689]
+std.dev of utility differences - annuities d_value_1    0.005279
+d_value_2    0.009319
+d_value_3    0.005427
+d_value_4    0.009131
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001812
+d_value_7    0.000957
+d_value_8    0.001714
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003133
+d_value_10    0.004849
+d_value_11    0.003051
+d_value_12    0.004675
+dtype: float64
+pars =  [7.22131286 1.45927137 0.97821963 0.04669711 0.         1.
+ 0.27558268 0.23682157]
+- function call summary
+ssd =  7884.60262217601  sigmas =  [[ 32.12626655  32.12626655]
+ [253.52057674 253.52057674]
+ [ 53.51065797  53.51065797]]
+pars =  [7.22131286 1.45927137 0.97821963 0.04669711 0.         1.
+ 0.27558268 0.23682157]
+std.dev of utility differences - annuities d_value_1    0.005286
+d_value_2    0.009330
+d_value_3    0.005434
+d_value_4    0.009143
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001814
+d_value_7    0.000958
+d_value_8    0.001716
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003136
+d_value_10    0.004855
+d_value_11    0.003054
+d_value_12    0.004680
+dtype: float64
+pars =  [7.22076846 1.45928088 0.97821943 0.04669899 0.         1.
+ 0.27557927 0.2368421 ]
+- function call summary
+ssd =  7884.616567759415  sigmas =  [[ 32.12184503  32.12184503]
+ [253.47282249 253.47282249]
+ [ 53.50175307  53.50175307]]
+pars =  [7.22076846 1.45928088 0.97821943 0.04669899 0.         1.
+ 0.27557927 0.2368421 ]
+std.dev of utility differences - annuities d_value_1    0.005287
+d_value_2    0.009332
+d_value_3    0.005435
+d_value_4    0.009145
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001814
+d_value_7    0.000958
+d_value_8    0.001716
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003137
+d_value_10    0.004856
+d_value_11    0.003054
+d_value_12    0.004681
+dtype: float64
+pars =  [7.22081827 1.45922106 0.97821936 0.04669908 0.         1.
+ 0.27558318 0.23683446]
+- function call summary
+ssd =  7884.581504234637  sigmas =  [[ 32.15103679  32.15103679]
+ [253.71777485 253.71777485]
+ [ 53.55295681  53.55295681]]
+pars =  [7.22081827 1.45922106 0.97821936 0.04669908 0.         1.
+ 0.27558318 0.23683446]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009323
+d_value_3    0.005430
+d_value_4    0.009136
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001812
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004852
+d_value_11    0.003052
+d_value_12    0.004677
+dtype: float64
+pars =  [7.22090504 1.45924092 0.97821944 0.04669982 0.         1.
+ 0.27558367 0.23683147]
+- function call summary
+ssd =  7884.594849690116  sigmas =  [[ 32.14200739  32.14200739]
+ [253.63552717 253.63552717]
+ [ 53.53517728  53.53517728]]
+pars =  [7.22090504 1.45924092 0.97821944 0.04669982 0.         1.
+ 0.27558367 0.23683147]
+std.dev of utility differences - annuities d_value_1    0.005283
+d_value_2    0.009326
+d_value_3    0.005431
+d_value_4    0.009138
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003135
+d_value_10    0.004853
+d_value_11    0.003053
+d_value_12    0.004678
+dtype: float64
+pars =  [7.22087236 1.45922639 0.97821933 0.04669919 0.         1.
+ 0.27558005 0.23683483]
+- function call summary
+ssd =  7884.574613382205  sigmas =  [[ 32.14903226  32.14903226]
+ [253.6975767  253.6975767 ]
+ [ 53.54861253  53.54861253]]
+pars =  [7.22087236 1.45922639 0.97821933 0.04669919 0.         1.
+ 0.27558005 0.23683483]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009324
+d_value_3    0.005430
+d_value_4    0.009136
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004852
+d_value_11    0.003052
+d_value_12    0.004677
+dtype: float64
+pars =  [7.22091224 1.45922269 0.97821931 0.04669891 0.         1.
+ 0.27557902 0.23683574]
+- function call summary
+ssd =  7884.582357448887  sigmas =  [[ 32.15025579  32.15025579]
+ [253.71133928 253.71133928]
+ [ 53.5518136   53.5518136 ]]
+pars =  [7.22091224 1.45922269 0.97821931 0.04669891 0.         1.
+ 0.27557902 0.23683574]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009323
+d_value_3    0.005430
+d_value_4    0.009136
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004852
+d_value_11    0.003052
+d_value_12    0.004677
+dtype: float64
+pars =  [7.22086078 1.45921933 0.97821918 0.04669921 0.         1.
+ 0.2755796  0.23683363]
+- function call summary
+ssd =  7884.584688485997  sigmas =  [[ 32.15175029  32.15175029]
+ [253.72379413 253.72379413]
+ [ 53.55433665  53.55433665]]
+pars =  [7.22086078 1.45921933 0.97821918 0.04669921 0.         1.
+ 0.2755796  0.23683363]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009323
+d_value_3    0.005430
+d_value_4    0.009136
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001812
+d_value_7    0.000957
+d_value_8    0.001714
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004851
+d_value_11    0.003052
+d_value_12    0.004677
+dtype: float64
+pars =  [7.22085685 1.45922559 0.97821943 0.0466995  0.         1.
+ 0.27557931 0.23683591]
+- function call summary
+ssd =  7884.576178958926  sigmas =  [[ 32.14950557  32.14950557]
+ [253.6999052  253.6999052 ]
+ [ 53.54920165  53.54920165]]
+pars =  [7.22085685 1.45922559 0.97821943 0.0466995  0.         1.
+ 0.27557931 0.23683591]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009324
+d_value_3    0.005430
+d_value_4    0.009136
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004852
+d_value_11    0.003052
+d_value_12    0.004677
+dtype: float64
+pars =  [7.22086721 1.45923593 0.97821928 0.04669915 0.         1.
+ 0.27557823 0.23683415]
+- function call summary
+ssd =  7884.595084653302  sigmas =  [[ 32.14434417  32.14434417]
+ [253.65360825 253.65360825]
+ [ 53.5392175   53.5392175 ]]
+pars =  [7.22086721 1.45923593 0.97821928 0.04669915 0.         1.
+ 0.27557823 0.23683415]
+std.dev of utility differences - annuities d_value_1    0.005283
+d_value_2    0.009325
+d_value_3    0.005431
+d_value_4    0.009138
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003135
+d_value_10    0.004853
+d_value_11    0.003053
+d_value_12    0.004678
+dtype: float64
+pars =  [7.22091397 1.45922766 0.97821933 0.04669926 0.         1.
+ 0.27558195 0.23683577]
+- function call summary
+ssd =  7884.575023592537  sigmas =  [[ 32.1484127   32.1484127 ]
+ [253.69270017 253.69270017]
+ [ 53.54769565  53.54769565]]
+pars =  [7.22091397 1.45922766 0.97821933 0.04669926 0.         1.
+ 0.27558195 0.23683577]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009324
+d_value_3    0.005430
+d_value_4    0.009137
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004852
+d_value_11    0.003052
+d_value_12    0.004677
+dtype: float64
+pars =  [7.2208885  1.45922811 0.97821953 0.0466991  0.         1.
+ 0.27558051 0.23683464]
+- function call summary
+ssd =  7884.575285699111  sigmas =  [[ 32.14819148  32.14819148]
+ [253.69091421 253.69091421]
+ [ 53.54716083  53.54716083]]
+pars =  [7.2208885  1.45922811 0.97821953 0.0466991  0.         1.
+ 0.27558051 0.23683464]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009324
+d_value_3    0.005430
+d_value_4    0.009137
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004852
+d_value_11    0.003052
+d_value_12    0.004677
+dtype: float64
+pars =  [7.22083395 1.45922142 0.97821933 0.04669917 0.         1.
+ 0.27558042 0.23683664]
+- function call summary
+ssd =  7884.581315248903  sigmas =  [[ 32.15082983  32.15082983]
+ [253.71625382 253.71625382]
+ [ 53.55258874  53.55258874]]
+pars =  [7.22083395 1.45922142 0.97821933 0.04669917 0.         1.
+ 0.27558042 0.23683664]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009323
+d_value_3    0.005430
+d_value_4    0.009136
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004852
+d_value_11    0.003052
+d_value_12    0.004677
+dtype: float64
+pars =  [7.22084087 1.45922198 0.97821944 0.04669902 0.         1.
+ 0.27557853 0.23683484]
+- function call summary
+ssd =  7884.583264213424  sigmas =  [[ 32.15056374  32.15056374]
+ [253.7137076  253.7137076 ]
+ [ 53.55212134  53.55212134]]
+pars =  [7.22084087 1.45922198 0.97821944 0.04669902 0.         1.
+ 0.27557853 0.23683484]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009323
+d_value_3    0.005430
+d_value_4    0.009136
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004852
+d_value_11    0.003052
+d_value_12    0.004677
+dtype: float64
+pars =  [7.22091423 1.45921877 0.97821936 0.04669929 0.         1.
+ 0.27558081 0.23683367]
+- function call summary
+ssd =  7884.580423221408  sigmas =  [[ 32.15211666  32.15211666]
+ [253.72711817 253.72711817]
+ [ 53.55506568  53.55506568]]
+pars =  [7.22091423 1.45921877 0.97821936 0.04669929 0.         1.
+ 0.27558081 0.23683367]
+std.dev of utility differences - annuities d_value_1    0.005281
+d_value_2    0.009323
+d_value_3    0.005430
+d_value_4    0.009136
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001812
+d_value_7    0.000957
+d_value_8    0.001714
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003134
+d_value_10    0.004851
+d_value_11    0.003052
+d_value_12    0.004677
+dtype: float64
+pars =  [7.22087988 1.45923216 0.97821935 0.04669948 0.         1.
+ 0.27558111 0.2368336 ]
+- function call summary
+ssd =  7884.575055445253  sigmas =  [[ 32.14622323  32.14622323]
+ [253.6759082  253.6759082 ]
+ [ 53.54385431  53.54385431]]
+pars =  [7.22087988 1.45923216 0.97821935 0.04669948 0.         1.
+ 0.27558111 0.2368336 ]
+std.dev of utility differences - annuities d_value_1    0.005282
+d_value_2    0.009325
+d_value_3    0.005431
+d_value_4    0.009137
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000932
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003135
+d_value_10    0.004852
+d_value_11    0.003053
+d_value_12    0.004678
+dtype: float64
+pars =  [7.22088233 1.45923427 0.97821926 0.04669935 0.         1.
+ 0.27558188 0.23683527]
+- function call summary
+ssd =  7884.592505161352  sigmas =  [[ 32.14517983  32.14517983]
+ [253.65997945 253.65997945]
+ [ 53.54124485  53.54124485]]
+pars =  [7.22088233 1.45923427 0.97821926 0.04669935 0.         1.
+ 0.27558188 0.23683527]
+std.dev of utility differences - annuities d_value_1    0.005283
+d_value_2    0.009325
+d_value_3    0.005431
+d_value_4    0.009137
+dtype: float64
+std.dev of utility differences - ltc d_value_5    0.000933
+d_value_6    0.001813
+d_value_7    0.000957
+d_value_8    0.001715
+dtype: float64
+std.dev of utility differences - rmr d_value_9     0.003135
+d_value_10    0.004852
+d_value_11    0.003053
+d_value_12    0.004678
+dtype: float64
+estimates =  [7.22087236 1.45922639 0.97821933 0.04669919 0.         1.
+ 0.27558005 0.23683483]
+final distance =  7884.574613382205

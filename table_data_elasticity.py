@@ -8,12 +8,13 @@ import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 from linearmodels import PanelOLS
+import statsmodels.api as sm
+
 
 
 # # Load Data and Express Long-Form
 
 # In[89]:
-
 
 prices = pd.read_csv('inputs/prices.csv')
 prices.set_index('respid',inplace=True)
@@ -72,15 +73,16 @@ table = pd.DataFrame(index=['prob buy','all zeros','price e','ben e'],columns=pr
 for i,p in enumerate(pairs):
 	df = data.loc[data.index.get_level_values(1).isin(np.arange(p[0],p[1])),:]
 	print(df.describe())
-	y = df.loc[:,'prob']
-	X = df.loc[:,['benfs','price']]
-	table.loc['prob buy',products[i]] = df['prob'].mean()
+        y = np.log(df.loc[:,'prob'])
+        X = np.log(df.loc[:,['benfs','price']])
+        X = sm.add_constant(X)
+        table.loc['prob buy',products[i]] = df['prob'].mean()
 	mod = PanelOLS(y,X,entity_effects=True)
 	results = mod.fit()
-	table.loc['ben e',products[i]] = results.params[0]*df['benfs'].mean()/df['prob'].mean()
-	table.loc['price e',products[i]] = results.params[1]*df['price'].mean()/df['prob'].mean()
+	table.loc['ben e',products[i]] = results.params[1]
+	table.loc['price e',products[i]] = results.params[2]
 	df['prob_zero'] = df.loc[:,'prob']==0
-	table.loc['all zeros',products[i]] = (df.groupby('respid').sum()['prob_zero']==4).mean()
+        table.loc['all zeros',products[i]] = (df.groupby('respid').sum()['prob_zero']==4).mean()
 
 
 # In[98]:

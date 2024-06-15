@@ -78,6 +78,8 @@ def func_solve(row,theta, iann, iltc, irmr):
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
 
     # run the task for this function: get value for all 13 scenarios (12 + baseline)
+    v_t = np.zeros((dims.n_states,dims.T),dtype='float64')
+    v_ref = np.zeros((dims.n_states,dims.T),dtype='float64')
     for i in range(13):
         hhp = hh.copy()
         f_prices, f_benfs = set_scenario(row,i)
@@ -92,24 +94,24 @@ def func_solve(row,theta, iann, iltc, irmr):
                     i_benfs.rmr = 0.0
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         if i==0:
-            row['value_' + str(i)] = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+            row['value_' + str(i)], v_ref = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
-                                         nu_ij_c, rates, dims, prefs)
+                                         nu_ij_c, rates, dims, prefs, v_t)
         if i>=1 and i<=4:
             if iann:
-                row['value_' + str(i)] = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                row['value_' + str(i)], v_t  = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
-                                         nu_ij_c, rates, dims, prefs)
+                                         nu_ij_c, rates, dims, prefs, v_ref)
         if i>=5 and i<=8:
              if iltc:
-                row['value_' + str(i)] = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                row['value_' + str(i)], v_t = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
-                                         nu_ij_c, rates, dims, prefs)
+                                         nu_ij_c, rates, dims, prefs, v_ref)
         if i>=9 & i<=12:
             if irmr:
-                row['value_' + str(i)] = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                row['value_' + str(i)], v_t = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
-                                         nu_ij_c, rates, dims, prefs)
+                                         nu_ij_c, rates, dims, prefs, v_ref)
     return row
 
 
@@ -137,9 +139,10 @@ def func_sim(row,theta):
     i_prices = set_prices(0.0,0.0 , rates.r_h)
     i_benfs = set_benfs(0.0, 0.0, 0.0)
     b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
-    cons_rules, cond_values = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+    v_ref = np.zeros((dims.n_states,dims.T),dtype=np.float64)
+    cons_rules, cond_values,v_ref = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                             p_r, y_ij, med_ij, qs_ij, b_its,
-                                            nu_ij_c,rates, dims, prefs)
+                                            nu_ij_c,rates, dims, prefs, v_ref)
     # record how often wealth is low
     nsim = 1000
     pnone = 0.0
@@ -221,6 +224,16 @@ def func_fair(row,theta):
     row['max_ltci_fair'] = opt_max[1]
     row['max_rmr_fair'] = max(opt_max[2],0.0)
 
+    # find out first values for reference scenario
+    i_prices = set_prices(0.0,0.0 , rates.r_h)
+    i_benfs = set_benfs(0.0, 0.0, 0.0)
+    b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+    values_ref = np.zeros((dims.n_states,dims.T),dtype=np.float64)
+    cons_rules_ref, cond_values_ref, values_ref = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                            p_r, y_ij, med_ij, qs_ij, b_its,
+                                            nu_ij_c,rates, dims, prefs,values_ref)
+
+
     # everything is parametrized to fit into unit cube for demand
     pi = 0.0*np.ones(3,dtype=np.float64)
     pi[2] = 1.0
@@ -240,9 +253,9 @@ def func_fair(row,theta):
                     i_benfs.rmr = 0.0
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         # get decision rules based on fair pricing for annuities and LTCI, candidate rmr
-        cons_rules, cond_values = get_rules(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+        cons_rules, cond_values, values = get_rules(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                             p_r, y_ij, med_ij, qs_ij, b_its,
-                                            nu_ij_c,rates, dims, prefs)
+                                            nu_ij_c,rates, dims, prefs, values_ref)
         # simulate to get the house ownership dynamics
         # house prices
         p_h, f_h, p_r = house_prices(row['g'], row['sig'], base_value, hh['home_value'], rates,
@@ -255,7 +268,7 @@ def func_fair(row,theta):
         nneg = 0.0
         for i in range(nsim):
             cons_path, own_path, wlth_path, home_path     = get_sim_path(i,
-                                        cons_rules,cond_values, hhp, rp, sp, base_value, i_prices,
+                                        cons_rules, cond_values, hhp, rp, sp, base_value, i_prices,
                                         i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
                                         nu_ij_c,rates, dims, prefs)
             for t in range(dims.T):
@@ -313,6 +326,15 @@ def func_joint(row,theta, ixmin = False, dispose_home = False):
     p_l = row['price_ltci_fair']
     i_r = rates.r_h + row['price_rmr_fair']
 
+
+    # find out first values for reference scenario
+    i_prices = set_prices(0.0,0.0 , rates.r_h)
+    i_benfs = set_benfs(0.0, 0.0, 0.0)
+    b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+    values_ref = np.zeros((dims.n_states,dims.T),dtype=np.float64)
+    cons_rules_ref, cond_values_ref, values_ref = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                            p_r, y_ij, med_ij, qs_ij, b_its,
+                                            nu_ij_c,rates, dims, prefs,values_ref)
     # set bounds
     opt_max = np.zeros(3,dtype=np.float64)
     opt_min = np.zeros(3,dtype=np.float64)
@@ -340,9 +362,9 @@ def func_joint(row,theta, ixmin = False, dispose_home = False):
                     i_benfs.rmr = 0.0
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         # get decision rules based on fair pricing for annuities and LTCI, candidate rmr
-        values[i] =  get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+        values[i], v_t =  get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                          p_r, y_ij, med_ij, qs_ij, b_its,
-                                         nu_ij_c, rates, dims, prefs)
+                                         nu_ij_c, rates, dims, prefs, values_ref)
     # joint purchase
     imax = np.argmax(values)
     opt_buy = buy_grid[imax,:]

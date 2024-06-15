@@ -43,9 +43,8 @@ class set_dims(object):
                     n_w = 10, n_h = 2):
         self.T = T
         self.t_last = 33
-        #self.time_t = np.array([0,3,5,7,10,13,15,17,20,23,25,27,30,32], dtype=np.int64)
-        self.time_t = np.array([0,1,3,5,10,15,20,25,30,32], dtype=np.int64)
         #self.time_t = np.arange(self.t_last, dtype=np.int64)
+        self.time_t = np.array([0,1,5,10,20,30,32,33])
         self.nper = self.time_t.shape[0]
         self.e_min = e_min
         self.e_max = e_max
