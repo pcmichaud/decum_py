@@ -1,0 +1,127 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  8 APR 2024 17:02
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**collect_tables.tex
+(./collect_tables.tex
+LaTeX2e <2018-12-01>
+(/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
+(/usr/local/texlive/2019/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+)
+\c@part=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/local/texlive/2019/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2016/04/27 v1.618033 publication quality tables
+\heavyrulewidth=\dimen103
+\lightrulewidth=\dimen104
+\cmidrulewidth=\dimen105
+\belowrulesep=\dimen106
+\belowbottomsep=\dimen107
+\aboverulesep=\dimen108
+\abovetopsep=\dimen109
+\cmidrulesep=\dimen110
+\cmidrulekern=\dimen111
+\defaultaddspace=\dimen112
+\@cmidla=\count88
+\@cmidlb=\count89
+\@aboverulesep=\dimen113
+\@belowrulesep=\dimen114
+\@thisruleclass=\count90
+\@lastruleclass=\count91
+\@thisrulewidth=\dimen115
+)
+(./collect_tables.aux (./output/table_estimates_ez.aux)
+(./output/deltas_by_product_ez.aux) (./output/stats_values_ez.aux)
+(./output/table_simulated_elasticities_ez.aux) (./output/decompose_stats_ez.aux
+) (./output/joint_distribution_extensive_ez.aux))
+\openout1 = `collect_tables.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+\openout2 = `output/table_estimates_ez.aux'.
+
+
+(./output/table_estimates_ez.tex
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 1.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 1.
+)
+\openout2 = `output/deltas_by_product_ez.aux'.
+
+ (./output/deltas_by_product_ez.tex)
+\openout2 = `output/stats_values_ez.aux'.
+
+
+(./output/stats_values_ez.tex)
+\openout2 = `output/table_simulated_elasticities_ez.aux'.
+
+ (./output/table_simulated_elasticities_ez.tex)
+\openout2 = `output/decompose_stats_ez.aux'.
+
+
+(./output/decompose_stats_ez.tex)
+\openout2 = `output/joint_distribution_extensive_ez.aux'.
+
+ (./output/joint_distribution_extensive_ez.tex) [1
+
+{/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+
+
+
+
+
+
+
+]
+[2
+
+
+
+
+] (./collect_tables.aux (./output/table_estimates_ez.aux)
+(./output/deltas_by_product_ez.aux) (./output/stats_values_ez.aux)
+(./output/table_simulated_elasticities_ez.aux) (./output/decompose_stats_ez.aux
+) (./output/joint_distribution_extensive_ez.aux)) ) 
+Here is how much of TeX's memory you used:
+ 316 strings out of 492616
+ 4660 string characters out of 6129482
+ 73000 words of memory out of 5000000
+ 4274 multiletter control sequences out of 15000+600000
+ 3640 words of font info for 14 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 23i,9n,17p,182b,194s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2019/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2019/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2019/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2019/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr7.pfb>
+Output written on collect_tables.pdf (2 pages, 47598 bytes).
+PDF statistics:
+ 27 PDF objects out of 1000 (max. 8388607)
+ 18 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

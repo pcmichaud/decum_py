@@ -2,8 +2,8 @@ clear all
 capture log close 
 set more off
 
-cd ~/decum_py/
-
+capture cd ~/decum_py/
+capture cd ~/ire/Projets/decum/decum_py/
 import delimited  using output/data_with_exhaust_sim.csv, clear
 
 

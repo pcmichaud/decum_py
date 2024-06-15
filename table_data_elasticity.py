@@ -72,17 +72,23 @@ pairs = [(1,5),(5,9),(9,13)]
 table = pd.DataFrame(index=['prob buy','all zeros','price e','ben e'],columns=products)
 for i,p in enumerate(pairs):
 	df = data.loc[data.index.get_level_values(1).isin(np.arange(p[0],p[1])),:]
+	df = df.loc[:,['prob','benfs','price']]
+	#df.loc[df.prob==0,'prob'] = np.nan
+	df = df.dropna(axis=0)
+	#df = df[df.benfs!=0]
 	print(df.describe())
-        y = np.log(df.loc[:,'prob'])
-        X = np.log(df.loc[:,['benfs','price']])
-        X = sm.add_constant(X)
-        table.loc['prob buy',products[i]] = df['prob'].mean()
+	y = df.loc[:,'prob']
+	X = df.loc[:,['benfs','price']]
+	x_mean = X.mean(axis=0)
+	y_mean = y.mean()
+	X = sm.add_constant(X)
+	table.loc['prob buy',products[i]] = df['prob'].mean()
 	mod = PanelOLS(y,X,entity_effects=True)
 	results = mod.fit()
-	table.loc['ben e',products[i]] = results.params[1]
-	table.loc['price e',products[i]] = results.params[2]
+	table.loc['ben e',products[i]] = results.params[1]*x_mean[0]/y_mean
+	table.loc['price e',products[i]] = results.params[2]*x_mean[1]/y_mean
 	df['prob_zero'] = df.loc[:,'prob']==0
-        table.loc['all zeros',products[i]] = (df.groupby('respid').sum()['prob_zero']==4).mean()
+	table.loc['all zeros',products[i]] = (df.groupby('respid').sum()['prob_zero']==4).mean()
 
 
 # In[98]:
