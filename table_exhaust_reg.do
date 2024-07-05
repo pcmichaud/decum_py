@@ -2,8 +2,8 @@ clear all
 capture log close 
 set more off
 
-cd ~/decum_py/
-
+capture cd ~/decum_py/
+capture cd ~/ire/Projets/decum/decum_py/
 import delimited  using output/data_with_exhaust_sim.csv, clear
 
 
@@ -16,7 +16,7 @@ xtile qhome_equity = home_equity, nq(4)
 sum pexhaust pexhaust85_sim, d
 
 global demo "female married" 
-global eco "ib1.qwealth_total ib1.qhome_equity ib1.qretinc"
+global eco "ib1.qwealth_total  ib1.qretinc"
 
 qui: reg pexhaust  $demo $eco 
 estimates store data

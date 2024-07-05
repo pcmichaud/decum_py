@@ -88,7 +88,6 @@ for i,p in enumerate(pairs):
     df['prob_zero'] = df.loc[:,'prob']==0
     table.loc['all zeros',products[i]] = (df.groupby('respid').sum()['prob_zero']==4).mean()
 
-
 # In[98]:
 
 
