@@ -8,9 +8,6 @@ if __name__ == '__main__':
     data = init_data()
     # load estimated parameters
     theta = np.load('output/estimates_ez.npy')
-
-
-
     # load fair prices
     prices = pd.read_csv('output/fair_prices.csv')
     prices.set_index('respid',inplace=True)

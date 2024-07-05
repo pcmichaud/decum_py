@@ -12,4 +12,4 @@ if __name__ == '__main__':
 		values[c] = values[c].astype('float64')
 	print(values[['price_ann_fair','price_ltci_fair','price_rmr_fair']].describe().transpose())
 	values = values[['price_ann_fair','price_ltci_fair','price_rmr_fair']]
-	values.to_csv('output/fair_prices_ez.csv')
+	values.to_csv('output/fair_prices.csv')

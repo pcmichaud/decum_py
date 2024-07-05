@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     #data['retinc'] *= 0.25
 
-    theta[3] = 0.0
+    theta[3] = 1e-3
 
     theta[5] = 1.0
     theta[6] = 1.0

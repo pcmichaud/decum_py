@@ -64,6 +64,8 @@ for c in df_p.columns:
     df_p[c] = np.where(df_p[c]==-999,np.nan,df_p[c])
 df_p.dropna(inplace=True)
 df_p = df_p.loc[df_p.benfs!=0.0,:]
+df_p = df_p.loc[df_p.price!=0.0,:]
+df_p = df_p.loc[df_p.pdata!=0.0,:]
 print(df_p.describe())
 
 depvars = ['pdata','psim','pmodel']

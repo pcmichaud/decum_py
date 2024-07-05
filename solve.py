@@ -264,7 +264,7 @@ def v_t_fun(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
         for i_ee in range(dims.n_e):
             b_e = beq_fun(d_t,w_t,i_hh,p_h[i_ee,t],
                           b_its[i_ee,t],rates.tau_s0,rates.tau_s1)
-            beq += f_h[i_ee]*(bu_fun(b_e,prefs.b_x,prefs.b_k,prefs.gamma))**(1.0-prefs.gamma)
+            beq += f_h[i_ee]*(bu_fun(b_e,prefs.b_x,prefs.b_k,prefs.gamma,prefs.vareps))**(1.0-prefs.gamma)
     amen = (rates.phi + prefs.nu_h * i_h) * p_h[2, 0]
     eqscale = 1.0
     if dims.n_s==16 and dims.a_j[i_s]==1:
@@ -311,7 +311,7 @@ def v_fun(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
                 ev += f_h[i_ee] * q_ss[i_ss] * (pv**(1.0-prefs.gamma))
             else :
                 if prefs.b_x > 0.0:
-                    bu = bu_fun(beq,prefs.b_x,prefs.b_k,prefs.gamma)
+                    bu = bu_fun(beq,prefs.b_x,prefs.b_k,prefs.gamma,prefs.vareps)
                     ev += f_h[i_ee]*q_ss[i_ss] * (bu**(1.0-prefs.gamma))
     amen = (rates.phi + prefs.nu_h * i_h) * p_h[2, 0]
     eqscale = 1.0

@@ -71,18 +71,22 @@ products = ['ann','ltc','rmr']
 pairs = [(1,5),(5,9),(9,13)]
 table = pd.DataFrame(index=['prob buy','all zeros','price e','ben e'],columns=products)
 for i,p in enumerate(pairs):
-	df = data.loc[data.index.get_level_values(1).isin(np.arange(p[0],p[1])),:]
-	print(df.describe())
-        y = np.log(df.loc[:,'prob'])
-        X = np.log(df.loc[:,['benfs','price']])
-        X = sm.add_constant(X)
-        table.loc['prob buy',products[i]] = df['prob'].mean()
-	mod = PanelOLS(y,X,entity_effects=True)
-	results = mod.fit()
-	table.loc['ben e',products[i]] = results.params[1]
-	table.loc['price e',products[i]] = results.params[2]
-	df['prob_zero'] = df.loc[:,'prob']==0
-        table.loc['all zeros',products[i]] = (df.groupby('respid').sum()['prob_zero']==4).mean()
+    df = data.loc[data.index.get_level_values(1).isin(np.arange(p[0],p[1])),:]
+    df_e = df.copy()
+    df_e['prob'] = np.where(df_e['prob']==0,1e-2,df_e['prob'])
+    for c in ['prob','benfs','price']:
+        df_e = df_e[df_e[c]!=0.0]
+        df_e = df_e[df_e[c].isna()==False]
+    y = np.log(df_e.loc[:,'prob'])
+    X = np.log(df_e.loc[:,['benfs','price']])
+    X = sm.add_constant(X)
+    table.loc['prob buy',products[i]] = df['prob'].mean()
+    mod = PanelOLS(y,X,entity_effects=True)
+    results = mod.fit()
+    table.loc['ben e',products[i]] = results.params[1]
+    table.loc['price e',products[i]] = results.params[2]
+    df['prob_zero'] = df.loc[:,'prob']==0
+    table.loc['all zeros',products[i]] = (df.groupby('respid').sum()['prob_zero']==4).mean()
 
 
 # In[98]:

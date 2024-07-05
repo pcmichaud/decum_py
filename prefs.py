@@ -26,24 +26,23 @@ def bo_fun(u,ev,beta,gamma,vareps):
 
 @njit(float64(float64,float64,float64,float64, float64),fastmath=True, cache=True)
 def ez_fun(u,ev,beta,gamma,vareps):
-    present = u**(1.0-vareps)
+    present = (1-beta) *(u**(1.0-vareps))
     ezv = ev**((1.0-vareps)/(1.0-gamma))
     future = beta * ezv
     ez = (present + future)**(1.0/(1.0-vareps))
     return ez
 
-@njit(float64(float64,float64,float64,float64),fastmath=True, cache=True)
-def bu_fun(w,b_x,b_k,gamma):
+@njit(float64(float64,float64,float64,float64, float64),fastmath=True, cache=True)
+def bu_fun(w,b_x,b_k,gamma,vareps):
     b_w = max(w + b_k,1.0)
-    b_u = (b_x**(1/(1.0-gamma))) * b_w
+    b_u = (b_x**(vareps/(1.0-vareps))) * b_w
     return b_u
 
 @njit(float64(float64,float64,float64,float64,float64,float64),fastmath=True,cache=True)
 def cob_fun(cons,amen,nu_c, vareps, rho, eqscale):
     nu = nu_c/eqscale
-    nu = nu**(1.0/(1.0-vareps))
+    nu = nu**(vareps/(1.0-vareps))
     ces = nu*((cons**rho) * (amen**(1.0-rho)) )
-    #ces = nu*cons
     return ces
 
 spec_prefs = [

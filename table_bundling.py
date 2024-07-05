@@ -51,8 +51,11 @@ for c in joint_labels:
 	df[c+'_any'] = df[c]>0
 for c in indp_labels:
 	df[c+'_any'] = df[c]>0
+
 joint = df[[c+'_any' for c in joint_labels]].value_counts(normalize=True).to_frame()
 indp = df[[c+'_any' for c in indp_labels]].value_counts(normalize=True).to_frame()
+print(joint)
+print(indp)
 joint.index.names = products
 indp.index.names = products
 table = joint.merge(indp,left_index=True,right_index=True,how='outer')
@@ -61,5 +64,9 @@ for c in table.columns:
 	table[c] = np.where(table[c].isna(),0.0,table[c])
 print(table)
 table.round(3).to_latex('output/joint_distribution_extensive_ez.tex')
+print(table.groupby('ann').sum())
+print(table.groupby('ltci').sum())
+print(table.groupby('rmr').sum())
+
 
 

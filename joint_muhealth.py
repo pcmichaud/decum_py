@@ -9,7 +9,6 @@ if __name__ == '__main__':
     # load estimated parameters
     theta = np.load('output/estimates_ez.npy')
 
-    theta[5] = 1.0
     theta[6] = 1.0
 
     # load fair prices

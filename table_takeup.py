@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 # Load values which are compared by run_ref.py
 df = pd.read_csv('output/values_ez_with_deltas.csv')
 
-df_l = pd.read_csv('output/values_levels.csv')
+df_l = pd.read_csv('output/values_ez_with_deltas.csv')
 
 pd.set_option('display.max_rows', 500)
 #df  = df.loc[df.married==False,:]

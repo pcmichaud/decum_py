@@ -1,4 +1,11 @@
 python joint_reference.py
+python joint_eu_low.py
+python joint_eu.py
+python joint_high_bequest.py
+python joint_house_none.py
+python joint_ies.py
+python joint_low_averse.py
+python joint_muhealth_high.py
 python joint_nobequest.py
 python joint_muhealth.py
 python joint_house_pref.py
@@ -11,4 +18,4 @@ python joint_lowfloor.py
 python joint_singles.py
 python joint_nomedexp.py
 python joint_yaari.py
-
+python joint_yaari_bequest.py

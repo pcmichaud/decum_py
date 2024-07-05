@@ -10,14 +10,14 @@ if __name__ == '__main__':
         data = init_data()
         #data = data.sample(n=250, random_state=1234)
         maxeval=10000
-        pars = np.array([6.1194,
-                        1.4846,
-                        0.8,
-                        0.102,
-                        0.0,
-                        1.0,
-                        0.35168,
-                        0.259618])
+        pars = np.array([5.89018885,
+                         2.29888801,
+                         0.96276999,
+                         0.07099994,
+                        0.,
+                        1.,
+                        0.13007304,
+                        0.31885028])
         isfree = np.ones(pars.shape[0])
         #isfree[0] = 0
         #isfree[1] = 0
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         dx = np.zeros(n_free_theta)
         dx[0] = 0.25
         dx[1] = 0.25
-        dx[2] = 0.1
+        dx[2] = 0.01
         dx[3] = 0.25
         dx[4] = 0.25
         dx[5] = 0.25
