@@ -9,7 +9,7 @@ if __name__ == '__main__':
     # load estimated parameters
     theta = np.load('output/estimates_ez.npy')
 
-    theta[0] = 2.0
+    theta[0] = 0.4
 
     # load fair prices
     prices = pd.read_csv('output/fair_prices.csv')
@@ -36,4 +36,4 @@ if __name__ == '__main__':
         values[c] = values[c].astype('float64')
     print(values[['buy_ann_joint','buy_ltci_joint','buy_rmr_joint']].describe().transpose())
     print(values[['buy_ann_indp','buy_ltci_indp','buy_rmr_indp']].describe().transpose())
-    values.to_csv('output/joint_averse.csv')
+    values.to_csv('output/joint_low_averse.csv')

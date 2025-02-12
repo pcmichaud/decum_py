@@ -18,7 +18,7 @@ df.rename({'know_ltci':'know_ltc'},axis=1,inplace=True)
 df['know'] = df[['know_ann','know_ltc','know_rmr']].sum(axis=1)
 results = []
 for p in ['ann','ltc','rmr']:
-    Xs = df[['age','female','married','college','university','know_'+p,'anykids','pref_risk_averse','pref_beq_money','pref_home']]
+    Xs = df[['age','female','married','college','university','know_'+p,'anykids','pref_risk_averse','pref_beq_money','pref_home','totinc']]
     Xs = sm.add_constant(Xs)
     model = sm.OLS(df['delta_'+p],Xs,missing='drop')
     results.append(model.fit())
