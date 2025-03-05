@@ -51,7 +51,7 @@ def init_data():
 def load_hh(file='hh.csv'):
     dtypes = {'respid':'Int64','wgt':'float64','cma':'Int64',
               'married':'Int64','own':'Int64','wealth_total':'float64',
-              'mort_balance':'float64','home_value':'float64'}
+              'mort_balance':'float64','home_value':'float64','share_rrsp':'float64'}
     df = pd.read_csv('inputs/'+file,dtype=dtypes)
     df.set_index('respid',inplace=True)
     df['wealth_total'] *= 1e-3
@@ -61,7 +61,7 @@ def load_hh(file='hh.csv'):
 
 def load_rp(file='rp.csv'):
     dtypes = {'respid':'Int64','age':'Int64','totinc':'float64',
-              'retinc':'float64','hlth':'Int64'}
+              'retinc':'float64','hlth':'Int64','atr_w':'float64','atr_r':'float64'}
     df = pd.read_csv('inputs/'+file,dtype=dtypes)
     df.set_index('respid',inplace=True)
     df['totinc'] *= 1e-3
@@ -70,7 +70,7 @@ def load_rp(file='rp.csv'):
 
 def load_sp(file='sp.csv'):
     dtypes = {'respid':'Int64','sp_age':'Int64','sp_totinc':'float64',
-              'sp_retinc':'float64','sp_hlth':'Int64'}
+              'sp_retinc':'float64','sp_hlth':'Int64','sp_atr_w':'float64','sp_atr_r':'float64'}
     df = pd.read_csv('inputs/'+file,dtype=dtypes)
     df.set_index('respid',inplace=True)
     df = df[df.sp_age!=0]

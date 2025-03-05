@@ -7,12 +7,16 @@ from itertools import product
 def get_actors(row):
     # household information
     hh = dict(row[['wgt','cma','married','own','wealth_total',
-                   'mort_balance','home_value']])
-    rp = dict(row[['age','totinc','retinc','hlth']])
+                   'mort_balance','home_value','share_rrsp']])
+    rp = dict(row[['age','totinc','retinc','hlth','atr_w','atr_r']])
     if hh['married'] == 1:
-        sp = dict(row[['sp_age','sp_totinc','sp_retinc','sp_hlth']])
+        sp = dict(row[['sp_age','sp_totinc','sp_retinc','sp_hlth','atr_w','atr_r']])
     else:
         sp = None
+
+    # adjust wealth for taxation
+    hh['wealth_total'] *= (1 - hh['share_rrsp']*rp['atr_r'])
+
     return hh, rp, sp
 
 def get_house_info(row,debias=False,g_fudge=1.0,sig_fudge=1.0):
@@ -92,6 +96,12 @@ def func_solve(row,theta, iann, iltc, irmr):
                     hhp['mort_balance'] = 0
                 else :
                     i_benfs.rmr = 0.0
+        # tax annuity benefits and rescale price
+        if i_benfs.ann>0.0:
+            d = i_prices.ann/(20.0 * i_benfs.ann)
+            eff_rate = rp['atr_r']*(hh['share_rrsp']+(1.0-hh['share_rrsp'])*(1-d))
+            i_benfs.ann *= (1.0 - eff_rate)
+            i_prices.ann *= (1.0 - hh['share_rrsp']*rp['atr_r'])
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         if i==0:
             row['value_' + str(i)], v_ref = get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
@@ -203,6 +213,7 @@ def func_fair(row,theta):
     for i in range(dims.T):
         sx[i] = np.sum(q_n[dims.s_i<=2,i])
     p_a = np.sum([np.exp(-rates.rate*i)*sx[i] for i in range(1,dims.T)])
+
     row['price_ann_fair'] = p_a
     # compute fair price of long-term care insurance (see eq. 3 of paper)
     Lx = np.zeros(dims.T, dtype=np.float64)
@@ -251,6 +262,8 @@ def func_fair(row,theta):
                     hhp['mort_balance'] = 0
                 else :
                     i_benfs.rmr = 0.0
+
+
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         # get decision rules based on fair pricing for annuities and LTCI, candidate rmr
         cons_rules, cond_values, values = get_rules(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
@@ -360,6 +373,12 @@ def func_joint(row,theta, ixmin = False, dispose_home = False):
                     hhp['mort_balance'] = 0
                 else :
                     i_benfs.rmr = 0.0
+         # tax annuity benefits and rescale price
+        if i_benfs.ann>0.0:
+            d = i_prices.ann/(20.0 * i_benfs.ann)
+            eff_rate = rp['atr_r']*(hh['share_rrsp']+(1.0-hh['share_rrsp'])*(1-d))
+            i_benfs.ann *= (1.0 - eff_rate)
+            i_prices.ann *= (1.0 - hh['share_rrsp']*rp['atr_r'])
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         # get decision rules based on fair pricing for annuities and LTCI, candidate rmr
         values[i], v_t =  get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,

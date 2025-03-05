@@ -148,6 +148,8 @@ def get_value(hh, rp, sp, base_value, prices, benfs,
     vsub[1,0] = v[d_up,w_low,s_init,e_init,h_init]
     vsub[1,1] = v[d_up,w_up,s_init,e_init,h_init]
     value = interp2d(du, wu, vsub)
+    #if np.isnan(value):
+    #    print('value = ', value, h_init, e_init, s_init, vsub)
     return value, v_t
 
 def get_sim_path(seed, cons_rules, cond_values, hh, rp, sp, base_value, prices, benfs,
@@ -296,18 +298,37 @@ def v_fun(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
     q_ss = qs_ij[i_s,:,t]
     ev = 0.0
     for i_ee in range(dims.n_e):
+        d_grid = dims.d_h[:,i_ee,t+1]
         d_low, d_up, du = scale(d_t, dims.d_h[:,i_ee,t+1])
         for i_ss in range(dims.n_s):
-            ww_space = dims.w_space[d_low,:,i_ss,i_ee,i_hh,t+1]
-            w_low, w_up, wu = scale(w_t, ww_space)
             beq = beq_fun(d_t,w_t,i_hh,p_h[i_ee,t+1],b_its[i_ee,t+1],
                               rates.tau_s0, rates.tau_s1)
             v = nextv[:,:,i_ss,i_ee,i_hh]
             if i_ss < (dims.n_s-1):
-                pv = v[d_low,w_low] + du*(-v[d_low,w_low]+v[d_up,w_low]) + \
-                     wu*(-v[d_low,w_low] + v[d_low,w_up]) + \
-                     wu*du*(v[d_low, w_low] - v[d_up,w_low]
-                            - v[d_low,w_up] + v[d_up,w_up])
+                w_grid_low = dims.w_space[d_low,:,i_ss,i_ee,i_hh,t+1]
+                if w_t<=w_grid_low[0]:
+                    pv_low = v[d_low,0]
+                elif w_t>=w_grid_low[dims.n_w-1]:
+                    pv_low = v[d_low,dims.n_w-1]
+                else :
+                    pv_low = cubic_interp1d(w_grid_low, v[d_low,:], w_t)
+                    if pv_low<0.0:
+                        w_low, w_up, wu = scale(w_t, w_grid_low)
+                        pv_low = wu*v[d_low,w_up] + (1-wu)*v[d_low,w_low]
+                if d_t!=0.0:
+                    w_grid_up = dims.w_space[d_up,:,i_ss,i_ee,i_hh,t+1]
+                    if w_t<=w_grid_up[0]:
+                        pv_up = v[d_up,0]
+                    elif w_t>=w_grid_up[dims.n_w-1]:
+                        pv_up = v[d_up,dims.n_w-1]
+                    else :
+                        pv_up = cubic_interp1d(w_grid_up, v[d_up,:], w_t)
+                    if pv_up<0.0:
+                        w_low, w_up, wu = scale(w_t, w_grid_up)
+                        pv_up = wu*v[d_up,w_up] + (1-wu)*v[d_up,w_low]
+                else :
+                    pv_up = pv_low
+                pv = du*pv_up + (1-du)*pv_low
                 ev += f_h[i_ee] * q_ss[i_ss] * (pv**(1.0-prefs.gamma))
             else :
                 if prefs.b_x > 0.0:

@@ -1,4 +1,4 @@
-respid,sp_age,sp_totinc,sp_retinc,sp_hlth,atr_w,atr_r
+respid,sp_age,sp_totinc,sp_retinc,sp_hlth,sp_atr_w,sp_atr_r
 87,0,0.0,0.0,0,0.0,0.0
 94,0,0.0,0.0,0,0.0,0.0
 109,70,79020.23156495346,79020.23156495346,3,0.20126619991658462,0.20126619991658462
