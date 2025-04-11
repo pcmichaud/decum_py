@@ -34,13 +34,16 @@ spec_dims = [
     ('is_adm',int64[:]),
     ('n_adm',int64),
     ('adm',int64[:,:]),
-    ('to_states',int64[:])
+    ('to_states',int64[:]),
+    ('n_r',int64),
+    ('r_wgt',float64[:]),
+    ('r_space',float64[:])
 ]
 @jitclass(spec_dims)
 class set_dims(object):
     def __init__(self, married, omega_d, T = 35, e_min = -2.0, e_max = 2.0,
                     n_e = 5, d_min = 0.0, n_d = 5, w_min = 0.0, w_max = 2.0e3,
-                    n_w = 10, n_h = 2):
+                    n_w = 10, n_h = 2, n_r = 1):
         self.T = T
         self.t_last = 33
         #self.time_t = np.arange(self.t_last, dtype=np.int64)
@@ -55,7 +58,9 @@ class set_dims(object):
         self.n_d = n_d
         self.d_space = np.linspace(self.d_min, self.d_max, self.n_d)
         self.d_h = np.empty((self.n_d, self.n_e, self.T))
-
+        self.n_r = n_r
+        self.r_wgt = np.empty(self.n_r)
+        self.r_space = np.empty(self.n_r)
         if married==1:
             self.n_s = 16
             self.s_ij = np.arange(self.n_s,dtype=np.int64)

@@ -10,10 +10,10 @@ from functools import partial
 from scipy.optimize import golden
 from math import floor
 
-def setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp, surv_bias,
+def setup_problem(hh, rp, sp, g, sig, phi, tau_b,  base_value, hc, nh, hp, hp_sp, surv_bias,
                   sp_surv_bias,miss_par=0.0,sp_miss_par=0.0):
     # create rates
-    rates = set_rates()
+    rates = set_rates(phi = phi, tau_b1 = tau_b)
     # create dimensions
     dims = set_dims(hh['married'], rates.omega_d)
     # house price dynamics and matrices
@@ -21,6 +21,8 @@ def setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp, surv_bias,
                                  dims)
     # finish up state space
     dims.set_dspace(p_h)
+    # rates of return (gauss-hermite points and weights)
+    dims.r_space, dims.r_wgt = herm_rates(dims.n_r,rates.eq_prem,rates.sd_prem)
     # income
     if hh['married'] == 1:
         y_ij = set_income(hh['married'], rp['totinc'], rp['retinc'],
@@ -264,9 +266,13 @@ def v_t_fun(cons, x, z, i_hh, p_h, b_its, f_h, nu_ij_c,
     beq = 0.0
     if prefs.b_x>0.0:
         for i_ee in range(dims.n_e):
-            b_e = beq_fun(d_t,w_t,i_hh,p_h[i_ee,t],
+            for i_rr in range(dims.n_r):
+                ww_t = w_t
+                if w_t>0.0:
+                    ww_t *= np.exp(rates.share_r*dims.r_space[i_rr])
+                b_e = beq_fun(d_t,ww_t,i_hh,p_h[i_ee,t],
                           b_its[i_ee,t],rates.tau_s0,rates.tau_s1)
-            beq += f_h[i_ee]*(bu_fun(b_e,prefs.b_x,prefs.b_k,prefs.gamma,prefs.vareps))**(1.0-prefs.gamma)
+            beq += f_h[i_ee]*dims.r_wgt[i_rr]*(bu_fun(b_e,prefs.b_x,prefs.b_k,prefs.gamma,prefs.vareps))**(1.0-prefs.gamma)
     amen = (rates.phi + prefs.nu_h * i_h) * p_h[2, 0]
     eqscale = 1.0
     if dims.n_s==16 and dims.a_j[i_s]==1:
@@ -301,39 +307,43 @@ def v_fun(cons, x, z, t, i_hh, p_h, b_its, f_h, nu_ij_c,
         d_grid = dims.d_h[:,i_ee,t+1]
         d_low, d_up, du = scale(d_t, dims.d_h[:,i_ee,t+1])
         for i_ss in range(dims.n_s):
-            beq = beq_fun(d_t,w_t,i_hh,p_h[i_ee,t+1],b_its[i_ee,t+1],
+            for i_rr in range(dims.n_r):
+                ww_t = w_t
+                if ww_t>0.0:
+                    ww_t *= np.exp(rates.share_r*dims.r_space[i_rr])
+                beq = beq_fun(d_t,ww_t,i_hh,p_h[i_ee,t+1],b_its[i_ee,t+1],
                               rates.tau_s0, rates.tau_s1)
-            v = nextv[:,:,i_ss,i_ee,i_hh]
-            if i_ss < (dims.n_s-1):
-                w_grid_low = dims.w_space[d_low,:,i_ss,i_ee,i_hh,t+1]
-                if w_t<=w_grid_low[0]:
-                    pv_low = v[d_low,0]
-                elif w_t>=w_grid_low[dims.n_w-1]:
-                    pv_low = v[d_low,dims.n_w-1]
-                else :
-                    pv_low = cubic_interp1d(w_grid_low, v[d_low,:], w_t)
-                    if pv_low<0.0:
-                        w_low, w_up, wu = scale(w_t, w_grid_low)
-                        pv_low = wu*v[d_low,w_up] + (1-wu)*v[d_low,w_low]
-                if d_t!=0.0:
-                    w_grid_up = dims.w_space[d_up,:,i_ss,i_ee,i_hh,t+1]
-                    if w_t<=w_grid_up[0]:
-                        pv_up = v[d_up,0]
-                    elif w_t>=w_grid_up[dims.n_w-1]:
-                        pv_up = v[d_up,dims.n_w-1]
+                v = nextv[:,:,i_ss,i_ee,i_hh]
+                if i_ss < (dims.n_s-1):
+                    w_grid_low = dims.w_space[d_low,:,i_ss,i_ee,i_hh,t+1]
+                    if ww_t<=w_grid_low[0]:
+                        pv_low = v[d_low,0]
+                    elif ww_t>=w_grid_low[dims.n_w-1]:
+                        pv_low = v[d_low,dims.n_w-1]
                     else :
-                        pv_up = cubic_interp1d(w_grid_up, v[d_up,:], w_t)
-                    if pv_up<0.0:
-                        w_low, w_up, wu = scale(w_t, w_grid_up)
-                        pv_up = wu*v[d_up,w_up] + (1-wu)*v[d_up,w_low]
+                        pv_low = cubic_interp1d(w_grid_low, v[d_low,:], ww_t)
+                        if pv_low<0.0:
+                            w_low, w_up, wu = scale(ww_t, w_grid_low)
+                            pv_low = wu*v[d_low,w_up] + (1-wu)*v[d_low,w_low]
+                    if d_t!=0.0:
+                        w_grid_up = dims.w_space[d_up,:,i_ss,i_ee,i_hh,t+1]
+                        if ww_t<=w_grid_up[0]:
+                            pv_up = v[d_up,0]
+                        elif ww_t>=w_grid_up[dims.n_w-1]:
+                            pv_up = v[d_up,dims.n_w-1]
+                        else :
+                            pv_up = cubic_interp1d(w_grid_up, v[d_up,:], ww_t)
+                        if pv_up<0.0:
+                            w_low, w_up, wu = scale(ww_t, w_grid_up)
+                            pv_up = wu*v[d_up,w_up] + (1-wu)*v[d_up,w_low]
+                    else :
+                        pv_up = pv_low
+                    pv = du*pv_up + (1-du)*pv_low
+                    ev += f_h[i_ee] * q_ss[i_ss] * dims.r_wgt[i_rr]* (pv**(1.0-prefs.gamma))
                 else :
-                    pv_up = pv_low
-                pv = du*pv_up + (1-du)*pv_low
-                ev += f_h[i_ee] * q_ss[i_ss] * (pv**(1.0-prefs.gamma))
-            else :
-                if prefs.b_x > 0.0:
-                    bu = bu_fun(beq,prefs.b_x,prefs.b_k,prefs.gamma,prefs.vareps)
-                    ev += f_h[i_ee]*q_ss[i_ss] * (bu**(1.0-prefs.gamma))
+                    if prefs.b_x > 0.0:
+                        bu = bu_fun(beq,prefs.b_x,prefs.b_k,prefs.gamma,prefs.vareps)
+                        ev += f_h[i_ee]*q_ss[i_ss] * dims.r_wgt[i_rr]* (bu**(1.0-prefs.gamma))
     amen = (rates.phi + prefs.nu_h * i_h) * p_h[2, 0]
     eqscale = 1.0
     if dims.n_s==16 and dims.a_j[i_s]==1:

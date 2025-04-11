@@ -34,7 +34,7 @@ def ez_fun(u,ev,beta,gamma,vareps):
 
 @njit(float64(float64,float64,float64,float64, float64),fastmath=True, cache=True)
 def bu_fun(w,b_x,b_k,gamma,vareps):
-    b_w = max(w + b_k,1.0)
+    b_w = max(w + b_k,1.01)
     b_u = (b_x**(vareps/(1.0-vareps))) * b_w
     return b_u
 

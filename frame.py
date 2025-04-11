@@ -29,7 +29,9 @@ def get_house_info(row,debias=False,g_fudge=1.0,sig_fudge=1.0):
     g *= g_fudge
     sig *= sig_fudge
     base_value = row['base_value']
-    return g, sig, base_value
+    phi = row['phi']
+    tau_b = row['tau_b']
+    return g, sig, base_value, phi, tau_b
 
 def get_medcosts(row, fudge_hc = 1.0, fudge_nh = 1.0):
     hc = row[['hc_0','hc_1','hc_2']].to_numpy(dtype='float64')
@@ -66,7 +68,7 @@ def func_solve(row,theta, iann, iltc, irmr):
     hh, rp, sp = get_actors(row)
 
     # house price information
-    g, sig, base_value = get_house_info(row)
+    g, sig, base_value, phi, tau_b = get_house_info(row)
 
     # health transition parameters
     hc, nh = get_medcosts(row)
@@ -77,10 +79,10 @@ def func_solve(row,theta, iann, iltc, irmr):
     # setup the problem, depending on whether preferences supplied or not
     prefs = get_prefs(row,theta)
     p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-        setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
+        setup_problem(hh, rp, sp, g, sig, phi, tau_b, base_value, hc, nh, hp, hp_sp,
                     surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
-
+    #print(dims.r_space,dims.r_wgt,rates.share_r)
     # run the task for this function: get value for all 13 scenarios (12 + baseline)
     v_t = np.zeros((dims.n_states,dims.T),dtype='float64')
     v_ref = np.zeros((dims.n_states,dims.T),dtype='float64')
@@ -130,7 +132,7 @@ def func_sim(row,theta):
     hh, rp, sp = get_actors(row)
 
     # house price information
-    g, sig, base_value = get_house_info(row)
+    g, sig, base_value, phi, tau_b  = get_house_info(row)
 
     # health transition parameters
     hc, nh = get_medcosts(row)
@@ -141,7 +143,7 @@ def func_sim(row,theta):
     # setup the problem, depending on whether preferences supplied or not
     prefs = get_prefs(row,theta)
     p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-        setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
+        setup_problem(hh, rp, sp, g, sig, phi, tau_b,  base_value, hc, nh, hp, hp_sp,
                     surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
 
@@ -172,7 +174,7 @@ def func_fair(row,theta):
     hh, rp, sp = get_actors(row)
 
     # house price information
-    g, sig, base_value = get_house_info(row)
+    g, sig, base_value, phi, tau_b = get_house_info(row)
 
     # health transition parameters
     hc, nh = get_medcosts(row)
@@ -183,7 +185,7 @@ def func_fair(row,theta):
     # setup the problem, depending on whether preferences supplied or not
     prefs = get_prefs(row,theta)
     p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-        setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
+        setup_problem(hh, rp, sp, g, sig, phi, tau_b,  base_value, hc, nh, hp, hp_sp,
                     surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
 
@@ -311,7 +313,7 @@ def func_joint(row,theta, ixmin = False, dispose_home = False):
     hh, rp, sp = get_actors(row)
 
     # house price information
-    g, sig, base_value = get_house_info(row)
+    g, sig, base_value, phi, tau_b = get_house_info(row)
 
     # health transition parameters
     hc, nh = get_medcosts(row)
@@ -322,7 +324,7 @@ def func_joint(row,theta, ixmin = False, dispose_home = False):
     # setup the problem, depending on whether preferences supplied or not
     prefs = get_prefs(row,theta)
     p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
-        setup_problem(hh, rp, sp, g, sig, base_value, hc, nh, hp, hp_sp,
+        setup_problem(hh, rp, sp, g, sig, phi, tau_b,  base_value, hc, nh, hp, hp_sp,
                     surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
 
@@ -483,8 +485,6 @@ def solve_sim(data, npartitions=12,theta=None):
         res = pool.map(compress_compute_chunks, list_df)
     df = pd.concat(res)
     return df
-
-
 
 def solve_joint(data, npartitions=12,theta=None, ixmin = False, dispose_home = False):
     # load data

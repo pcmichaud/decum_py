@@ -24,7 +24,10 @@ spec_rates = [
     ('omega_r',float64),
     ('omega_h0',float64),
     ('omega_h1',float64),
-    ('eqscale',float64)
+    ('eqscale',float64),
+    ('eq_prem',float64),
+    ('sd_prem',float64),
+    ('share_r',float64)
 ]
 
 @jitclass(spec_rates)
@@ -33,7 +36,7 @@ class set_rates(object):
               xi_d=0.9622,phi_d = 0.1,x_min = 18.2, tau_s0 = 1.5,tau_s1 = 0.05,
               tau_b0 = 0.5,tau_b1 = 0.01, omega_d = 0.8, omega_rm = 0.55,
               omega_r = 0.329, omega_h0 = 0.65,omega_h1 = 0.8,
-              phi = 0.035, eqscale = 0.55):
+              phi = 0.035, eqscale = 0.55,eq_prem = 0.04, sd_prem = 0.16, share_r = 0.0):
         self.rate = rate
         self.r_r = r_r
         self.r_d = self.rate + r_d
@@ -52,6 +55,9 @@ class set_rates(object):
         self.omega_h0 = omega_h0
         self.omega_h1 = omega_h1
         self.eqscale = eqscale
+        self.eq_prem = eq_prem
+        self.sd_prem = sd_prem
+        self.share_r = share_r
         return
 
 
@@ -254,3 +260,21 @@ def load_costs(file_nh='ncare_costs.csv',file_hc='hcare_costs.csv'):
     for c in df_nh.columns:
         df_nh[c] *= 1e-3
     return df_nh, df_hc
+
+def load_rental(file='rent-ratio.csv'):
+    df = pd.read_csv('inputs/'+file,
+                        dtype='float64')
+    df.columns = ['cma','phi']
+    df['cma'] = df['cma'].astype('int64')
+    df.set_index('cma',inplace=True)
+    return df
+
+def load_ltt(file='ltt_fee.csv'):
+    df = pd.read_csv('inputs/'+file,
+                        dtype='float64')
+    df.columns = ['cma','tau_b']
+    df['cma'] = df['cma'].astype('int64')
+    df.set_index('cma',inplace=True)
+    return df
+
+

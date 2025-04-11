@@ -29,6 +29,8 @@ def init_data():
     # assign costs
     df_nh, df_hc = load_costs()
     df_house_prices = load_house_prices()
+    df_rent = load_rental()
+    df_ltt = load_ltt()
     df[['nh_0','nh_1','nh_2']] = 0.0
     df[['hc_0','hc_1','hc_2']] = 0.0
     df['g'] = 0.0
@@ -44,6 +46,8 @@ def init_data():
         df.loc[i,'sig'] = df_house_prices.loc[df.loc[i,'cma'],'sig']
         df.loc[i,'base_value'] = df_house_prices.loc[df.loc[i,'cma'],
                                                      'base_value']
+        df.loc[i,'phi'] = df_rent.loc[df.loc[i,'cma'],'phi']
+        df.loc[i,'tau_b'] = df_ltt.loc[df.loc[i,'cma'],'tau_b']
     return df
 
 

@@ -1,5 +1,6 @@
 import numpy as np
 from numba import njit
+from numpy.polynomial.hermite_e import hermegauss
 
 @njit(fastmath=True)
 def scale(x,grid):
@@ -78,5 +79,11 @@ def cubic_interp2d(x, y, z, xi, yi):
     # Interpolate along y for the current column
     zi = cubic_interp1d(x, temp_values, xi)
     return zi
+
+def herm_rates(order,eq_prem, sd):
+    rates, wgt = hermegauss(order)
+    wgt /= np.sum(wgt)
+    rates = sd*rates + eq_prem
+    return rates, wgt
 
 

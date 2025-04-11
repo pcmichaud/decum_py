@@ -13,25 +13,20 @@ if __name__ == '__main__':
     data['retinc'] = np.where(data['married']==1,data['retinc']+               data['sp_retinc'], data['retinc'])
     data['married'] = 0
 
-    data[['hc_0','hc_1','hc_2']] = 0.0
-    data[['nh_0','nh_1','nh_2']] = 0.0
+    #data[['hc_0','hc_1','hc_2']] = 0.0
+    #data[['nh_0','nh_1','nh_2']] = 0.0
 
-    #data.loc[data['wealth_total']<100.0,'wealth_total'] = 100.0
-
-    #data['retinc'] *= 0.25
-
-    theta[3] = 1e-3
-
+    theta[3] = 5.0
+    theta[4] = 250.0
     theta[5] = 1.0
-    theta[6] = 1.0
+    #theta[6] = 1.0
 
-    theta[7] = 0.0
+    #theta[7] = 0.0
+    #data['g'] = 0.0
+    #data['sig'] = 0.0
 
-    data['g'] = 0.0
-    data['sig'] = 0.0
-
-    data['xi'] = 0.0
-    data['xi_sp'] = 0.0
+    #data['xi'] = 0.0
+    #data['xi_sp'] = 0.0
 
     # load fair prices
     prices = pd.read_csv('output/fair_prices.csv')
@@ -51,7 +46,7 @@ if __name__ == '__main__':
 
     print(data[['price_ann_fair_avg','price_ltci_fair_avg','price_rmr_fair_avg']].describe().transpose())
     print(data[['price_ann_fair','price_ltci_fair','price_rmr_fair']].describe().transpose())
-    values = solve_joint(data, npartitions=250,theta=theta,ixmin = True, dispose_home = True)
+    values = solve_joint(data, npartitions=250,theta=theta, dispose_home=True)
     for c in ['buy_ann_joint','buy_ltci_joint','buy_rmr_joint']:
         values[c] = values[c].astype('float64')
     for c in ['buy_ann_indp','buy_ltci_indp','buy_rmr_indp']:
