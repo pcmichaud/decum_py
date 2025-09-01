@@ -27,7 +27,11 @@ spec_rates = [
     ('eqscale',float64),
     ('eq_prem',float64),
     ('sd_prem',float64),
-    ('share_r',float64)
+    ('share_r',float64),
+    ('delay_ann',float64),
+    ('delay_ltc',float64),
+    ('delay_rmr_single',float64),
+    ('delay_rmr_couple',float64)
 ]
 
 @jitclass(spec_rates)
@@ -36,7 +40,9 @@ class set_rates(object):
               xi_d=0.9622,phi_d = 0.1,x_min = 18.2, tau_s0 = 1.5,tau_s1 = 0.05,
               tau_b0 = 0.5,tau_b1 = 0.01, omega_d = 0.8, omega_rm = 0.55,
               omega_r = 0.329, omega_h0 = 0.65,omega_h1 = 0.8,
-              phi = 0.035, eqscale = 0.55,eq_prem = 0.04, sd_prem = 0.16, share_r = 0.0):
+              phi = 0.035, eqscale = 0.55, eq_prem = 0.04, sd_prem = 0.16, share_r = 0.0,
+              delay_ann = 0.029, delay_ltc = 0.09, delay_rmr_single = 0.025,
+                delay_rmr_couple = 0.05):
         self.rate = rate
         self.r_r = r_r
         self.r_d = self.rate + r_d
@@ -58,6 +64,10 @@ class set_rates(object):
         self.eq_prem = eq_prem
         self.sd_prem = sd_prem
         self.share_r = share_r
+        self.delay_ann = delay_ann
+        self.delay_ltc = delay_ltc
+        self.delay_rmr_single = delay_rmr_single
+        self.delay_rmr_couple = delay_rmr_couple
         return
 
 
@@ -103,10 +113,10 @@ def beq_fun(d, w, i_hh, p_h, b_its, tau_s0, tau_s1):
 @njit(Tuple((float64,float64,int64))(float64,float64,int64,int64,
     int64,int64,int64,int64,float64,float64,float64,float64,float64,
      set_dims.class_type.instance_type, set_rates.class_type.instance_type,
-     set_prices.class_type.instance_type, set_benfs.class_type.instance_type),
+     set_prices.class_type.instance_type, set_benfs.class_type.instance_type, int64),
       fastmath=True, cache=True)
 def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
-          dims, rates, prices, benfs):
+          dims, rates, prices, benfs, delay_yrs):
     d1 = h1 * (rates.xi_d * h0 * d0 + (1.0 - h0) * rates.omega_d * p_h)
     c_h = (1.0 - h1) * p_r + h1 * p_h - d1
     mc_s = rates.tau_s0 + rates.tau_s1 * p_h
@@ -115,10 +125,10 @@ def x_fun(d0, w0, h0, s_i, s_j, marr, h1, tt, p_h, p_r, b_its, med, y,
     w_h = h0 * (p_h - d0 * np.exp(rates.r_d))
     z_ben = 0.0
     z_prem = 0.0
-    if tt==0:
+    if tt==delay_yrs:
         z_prem += prices.ann + prices.ltc
         z_ben += h0 * h1  * benfs.rmr
-    else :
+    if tt>delay_yrs:
         z_prem += h0 * (1.0-h1) * b_its
         if s_i <= 2:
             z_ben += benfs.ann

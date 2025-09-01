@@ -3,7 +3,7 @@ import numpy as np
 
 
 
-scenarios = ['reference','averse','low_averse','ies','high_ies','eu','eu_low','nobequest','high_bequest','muhealth','muhealth_high','muhealth_beq','house_pref','house_none','no_drift','no_risk','obj_surv','obj_home','lowfloor','loading','singles','nomedexp','yaari','yaari_bequest']
+scenarios = ['reference','heimer','heimer75','low_averse','ies','eu','eu_low','nobequest','high_bequest','muhealth','muhealth_high','house_pref','house_none','no_drift','no_risk','obj_surv','obj_home','lowfloor','loading','singles','nomedexp','yaari','yaari_bequest','shocks','kappa','high_risk']
 
 products = ['ann','ltci','rmr']
 indp_labels = ['buy_'+p+'_indp' for p in products]

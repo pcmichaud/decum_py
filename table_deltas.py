@@ -27,3 +27,11 @@ print(summary_col(results,stars=True))
 
 
 print(df[['delta_ann','delta_ltc','delta_rmr']].corr())
+
+print(df[['delta_ann','delta_ltc','delta_rmr']].describe())
+
+
+
+
+
+

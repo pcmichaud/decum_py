@@ -19,3 +19,6 @@ python joint_singles.py
 python joint_nomedexp.py
 python joint_yaari.py
 python joint_yaari_bequest.py
+python joint_heimer.py
+python joint_heimer75.py
+

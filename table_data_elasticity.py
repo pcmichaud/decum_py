@@ -77,14 +77,16 @@ for i,p in enumerate(pairs):
     for c in ['prob','benfs','price']:
         df_e = df_e[df_e[c]!=0.0]
         df_e = df_e[df_e[c].isna()==False]
-    y = np.log(df_e.loc[:,'prob'])
+    y = df_e.loc[:,'prob']
     X = np.log(df_e.loc[:,['benfs','price']])
+    y_mean = y.mean()
+    x_mean = X.mean()
     X = sm.add_constant(X)
     table.loc['prob buy',products[i]] = df['prob'].mean()
     mod = PanelOLS(y,X,entity_effects=True)
     results = mod.fit()
-    table.loc['ben e',products[i]] = results.params[1]
-    table.loc['price e',products[i]] = results.params[2]
+    table.loc['ben e',products[i]] = results.params[1]/y_mean
+    table.loc['price e',products[i]] = results.params[2]/y_mean
     df['prob_zero'] = df.loc[:,'prob']==0
     table.loc['all zeros',products[i]] = (df.groupby('respid').sum()['prob_zero']==4).mean()
 

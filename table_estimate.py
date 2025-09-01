@@ -1,11 +1,16 @@
 import numpy as np
 import pandas as pd
-
+from optim import *
 # estimates
 ssd =  7885.29
 sigmas = np.load('output/sigmas_ez.npy')
 sigmas = sigmas[:,0]
 pars =  np.load('output/estimates_ez.npy')
+
+isfree = np.ones(pars.shape[0])
+isfree[4] = 0
+isfree[5] = 0
+theta = set_theta(pars,isfree)
 
 # standard errors
 es = pd.read_csv('output/within_residuals_ez.csv',dtype=np.float64)
@@ -31,10 +36,18 @@ for i in es.index:
     ji = g_i.shape[0]
     A = A + g_i.T @ g_i
     B = B + g_i.T @ (e_i.T @ e_i) @ g_i
-print(A)
 Ainv = np.linalg.inv(A)
 cov = Ainv @ B @ Ainv
 se = np.sqrt(np.diag(cov))
+
+print(cov)
+# Wald test for EU vs. VNM restriction : gamma = varepsilon
+cov_theta = cov[:6,:6]
+R = np.array([1,-1,0,0,0,0]).reshape((1,6))
+theta = theta.reshape((6,1))
+W = (R @ theta).T @ np.linalg.inv(R @ cov_theta @ R.T) @ (R @ theta)
+print((R @ theta))
+print(W)
 
 labels= ['$\\gamma$','$\\varepsilon$',
          '$\\rho$','$b_X$','$\\nu_{c,3}$',

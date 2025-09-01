@@ -17,7 +17,7 @@ def parse_surv(pars):
     deltas[2, 3] = pars['delta(3,4)']
     return gammas, deltas
 
-def transition_rates(base_age, gammas, deltas, xi, miss, miss_par, T):
+def transition_rates(base_age, gammas, deltas, xi,  miss, miss_par, T, h = 0.0):
     qs = np.zeros((4, 4, T), dtype=np.float64)
     # apply multinomial logit formula
     for i in range(T):
@@ -33,6 +33,8 @@ def transition_rates(base_age, gammas, deltas, xi, miss, miss_par, T):
                     if miss == 1:
                         qs[j, k, i] = np.exp(gammas[k] * float(base_age + i -
                                     60) + deltas[j, k] + miss_par)
+                    if (base_age + i) >= 85:
+                        qs[j, k, i] *= np.exp(h*gammas[k]*float(base_age + i-85))
             denom = np.sum(qs[j, :, i])
             qs[j,:,i] = qs[j, :, i] / denom
         qs[3, 3, i] = 1.0

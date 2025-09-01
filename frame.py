@@ -63,7 +63,7 @@ def get_prefs(row,theta):
     return prefs
 
 # function used to solve for expected value across scenarios
-def func_solve(row,theta, iann, iltc, irmr):
+def func_solve(row,theta, iann, iltc, irmr, delay = 0, h = 0):
     # household information
     hh, rp, sp = get_actors(row)
 
@@ -80,7 +80,7 @@ def func_solve(row,theta, iann, iltc, irmr):
     prefs = get_prefs(row,theta)
     p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
         setup_problem(hh, rp, sp, g, sig, phi, tau_b, base_value, hc, nh, hp, hp_sp,
-                    surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
+                    surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0, h = h)
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
     #print(dims.r_space,dims.r_wgt,rates.share_r)
     # run the task for this function: get value for all 13 scenarios (12 + baseline)
@@ -155,17 +155,66 @@ def func_sim(row,theta):
     cons_rules, cond_values,v_ref = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
                                             p_r, y_ij, med_ij, qs_ij, b_its,
                                             nu_ij_c,rates, dims, prefs, v_ref)
+
+    #row['xi'] = 0.0
+    #row['xi_sp'] = 0.0
+    #row['mu'] = 1.0
+    #row['zeta'] = 1.0
+
+    # household information
+    hh, rp, sp = get_actors(row)
+
+    # house price information
+    g, sig, base_value, phi, tau_b  = get_house_info(row)
+
+    # health transition parameters
+    hc, nh = get_medcosts(row)
+
+    # health transition parameters
+    hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
+
+    # setup the problem, depending on whether preferences supplied or not
+    prefs = get_prefs(row,theta)
+    p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
+        setup_problem(hh, rp, sp, g, sig, phi, tau_b,  base_value, hc, nh, hp, hp_sp,
+                    surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
+    nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
+
+
+    i_prices = set_prices(0.0,0.0 , rates.r_h)
+    i_benfs = set_benfs(0.0, 0.0, 0.0)
+    b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+
     # record how often wealth is low
     nsim = 1000
     pnone = 0.0
+    wlth = 0.0
+    own = 0.0
+    heloc = 0.0
     target = 85 - rp['age']
+    nsim_alive = 0
+    nsim_comm = 0
     for i in range(nsim):
-        cons_path, own_path, wlth_path, home_path     = get_sim_path(i,
+        cons_path, own_path, wlth_path, home_path, hlth_path = get_sim_path(i,
                                         cons_rules,cond_values, hh, rp, sp, base_value, i_prices,
                                         i_benfs, p_h, f_h, p_r, y_ij, med_ij, qs_ij, b_its,
                                         nu_ij_c,rates, dims, prefs)
-        pnone += np.where(wlth_path[target]<=rates.x_min,1.0,0.0)
-    row['pexhaust85_sim'] = pnone/float(nsim)
+        if np.isnan(wlth_path[target])==False:
+            pnone += np.where(wlth_path[target]<=rates.x_min,1.0,0.0)
+            nsim_alive +=1
+            i_s = int(hlth_path[target-10])
+            if dims.s_i[i_s]<2:
+                if dims.s_j[i_s]<2:
+                    wlth += wlth_path[target-10]
+                    nsim_comm +=1
+                    own += own_path[target-10]
+                    heloc += np.where(((own_path[target-10]==1)*(wlth_path[target-10]<=0.0))==1,1,0)
+    if nsim_alive>0:
+        row['pexhaust85_sim'] = pnone/float(nsim_alive)
+    if nsim_comm>0:
+        row['wealth_sim'] = wlth/float(nsim_comm)
+        row['own_sim'] = own/float(nsim_comm)
+        row['heloc_sim'] = heloc/float(nsim_comm)
     return row
 
 
@@ -264,7 +313,12 @@ def func_fair(row,theta):
                     hhp['mort_balance'] = 0
                 else :
                     i_benfs.rmr = 0.0
-
+        # tax annuity benefits and rescale price
+        if i_benfs.ann>0.0:
+            d = i_prices.ann/(20.0 * i_benfs.ann)
+            eff_rate = rp['atr_r']*(hh['share_rrsp']+(1.0-hh['share_rrsp'])*(1-d))
+            i_benfs.ann *= (1.0 - eff_rate)
+            i_prices.ann *= (1.0 - hh['share_rrsp']*rp['atr_r'])
 
         b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
         # get decision rules based on fair pricing for annuities and LTCI, candidate rmr
@@ -307,8 +361,7 @@ def func_fair(row,theta):
     row['price_rmr_fair'] = i_r_fair
     return row
 
-
-def func_joint(row,theta, ixmin = False, dispose_home = False):
+def func_delay_ann(row, theta, ixmin = False, dispose_home = False, delay_yrs = [0,10]):
     # household information
     hh, rp, sp = get_actors(row)
 
@@ -326,6 +379,172 @@ def func_joint(row,theta, ixmin = False, dispose_home = False):
     p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
         setup_problem(hh, rp, sp, g, sig, phi, tau_b,  base_value, hc, nh, hp, hp_sp,
                     surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
+    nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
+
+    if ixmin:
+        rates.x_min = 1.0
+    if dispose_home:
+        hh['own'] = 0
+        hh['wealth_total'] += hh['home_value'] - hh['mort_balance']
+        hh['home_value'] = 0.0
+        hh['mort_balance'] = 0.0
+
+    i_prices = set_prices(0.0,0.0 , rates.r_h)
+    i_benfs = set_benfs(0.0, 0.0, 0.0)
+    b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+    values_ref = np.zeros((dims.n_states,dims.T),dtype=np.float64)
+    cons_rules_ref, cond_values_ref, values_ref = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                            p_r, y_ij, med_ij, qs_ij, b_its,
+                                            nu_ij_c,rates, dims, prefs,values_ref)
+    v_ref = np.copy(values_ref)
+    row['value_ref'], v_t =  get_value(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                         p_r, y_ij, med_ij, qs_ij, b_its,
+                                         nu_ij_c, rates, dims, prefs, v_ref, delay_yrs=0)
+
+    for i in delay_yrs:
+        v_ref = np.copy(values_ref)
+        price = row['price_ann_fair']
+        adjust = (1.0 + rates.delay_ann)**i
+        i_prices = set_prices(0.5*hh['wealth_total'],0.0 , rates.r_h)
+        i_benfs = set_benfs(0.5*hh['wealth_total']/price * adjust, 0.0, 0.0)
+        yr = 20
+        if i_benfs.ann>0.0:
+            d = i_prices.ann/(yr * i_benfs.ann)
+            eff_rate = rp['atr_r']*(hh['share_rrsp']+(1.0-hh['share_rrsp'])*(1-d))
+            i_benfs.ann *= (1.0 - eff_rate)
+            i_prices.ann *= (1.0 - hh['share_rrsp']*rp['atr_r'])
+        b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+        row['value_delay_'+str(i)], v_t =  get_value(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                         p_r, y_ij, med_ij, qs_ij, b_its,
+                                         nu_ij_c, rates, dims, prefs, v_ref, delay_yrs=i)
+    return row
+
+def func_delay_ltc(row, theta, ixmin = False, dispose_home = False, delay_yrs = [0,10]):
+    # household information
+    hh, rp, sp = get_actors(row)
+
+    # house price information
+    g, sig, base_value, phi, tau_b = get_house_info(row)
+
+    # health transition parameters
+    hc, nh = get_medcosts(row)
+
+    # health transition parameters
+    hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
+
+    # setup the problem, depending on whether preferences supplied or not
+    prefs = get_prefs(row,theta)
+    p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
+        setup_problem(hh, rp, sp, g, sig, phi, tau_b,  base_value, hc, nh, hp, hp_sp,
+                    surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
+    nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
+
+    if ixmin:
+        rates.x_min = 1.0
+    if dispose_home:
+        hh['own'] = 0
+        hh['wealth_total'] += hh['home_value'] - hh['mort_balance']
+        hh['home_value'] = 0.0
+        hh['mort_balance'] = 0.0
+
+    i_prices = set_prices(0.0,0.0 , rates.r_h)
+    i_benfs = set_benfs(0.0, 0.0, 0.0)
+    b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+    values_ref = np.zeros((dims.n_states,dims.T),dtype=np.float64)
+    cons_rules_ref, cond_values_ref, values_ref = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                            p_r, y_ij, med_ij, qs_ij, b_its,
+                                            nu_ij_c,rates, dims, prefs,values_ref)
+    row['value_ref'], v_t =  get_value(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                         p_r, y_ij, med_ij, qs_ij, b_its,
+                                         nu_ij_c, rates, dims, prefs, values_ref, delay_yrs=0)
+    for i in delay_yrs:
+        price = row['price_ltci_fair']
+        adjust = (1.0 + rates.delay_ltc)**i
+        i_prices = set_prices(0.0, 0.5*adjust * price * med_ij[2] , rates.r_h)
+        i_benfs = set_benfs(0.0, 0.5*med_ij[2], 0.0)
+        yr = 20
+        b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+        row['value_delay_'+str(i)], v_t =  get_value(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                         p_r, y_ij, med_ij, qs_ij, b_its,
+                                         nu_ij_c, rates, dims, prefs, values_ref, delay_yrs=i)
+    return row
+
+def func_delay_rmr(row, theta, ixmin = False, dispose_home = False, delay_yrs = [0,10]):
+    # household information
+    hh, rp, sp = get_actors(row)
+
+    # house price information
+    g, sig, base_value, phi, tau_b = get_house_info(row)
+
+    # health transition parameters
+    hc, nh = get_medcosts(row)
+
+    # health transition parameters
+    hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
+
+    # setup the problem, depending on whether preferences supplied or not
+    prefs = get_prefs(row,theta)
+    p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
+        setup_problem(hh, rp, sp, g, sig, phi, tau_b,  base_value, hc, nh, hp, hp_sp,
+                    surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0)
+    nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
+
+    if ixmin:
+        rates.x_min = 1.0
+    if dispose_home:
+        hh['own'] = 0
+        hh['wealth_total'] += hh['home_value'] - hh['mort_balance']
+        hh['home_value'] = 0.0
+        hh['mort_balance'] = 0.0
+
+    i_prices = set_prices(0.0,0.0 , rates.r_h)
+    i_benfs = set_benfs(0.0, 0.0, 0.0)
+    b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+    values_ref = np.zeros((dims.n_states,dims.T),dtype=np.float64)
+    cons_rules_ref, cond_values_ref, values_ref = get_rules(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                            p_r, y_ij, med_ij, qs_ij, b_its,
+                                            nu_ij_c,rates, dims, prefs,values_ref)
+    row['value_ref'], v_t =  get_value(hh, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                         p_r, y_ij, med_ij, qs_ij, b_its,
+                                         nu_ij_c, rates, dims, prefs, values_ref, delay_yrs=0)
+    for i in delay_yrs:
+        hhp = hh.copy()
+        price = row['price_rmr_fair']
+        i_prices = set_prices(0.0, 0.0 , rates.r_h + price)
+        loan = max(rates.omega_rm*(hh['home_value'] - hh['mort_balance']),0.0)
+        i_benfs = set_benfs(0.0,0.0,loan)
+        if i_benfs.rmr>0.0:
+            if hhp['mort_balance']>0:
+                if i_benfs.rmr>hhp['mort_balance']:
+                    i_benfs.rmr -= hhp['mort_balance']
+                    hhp['mort_balance'] = 0
+                else :
+                    i_benfs.rmr = 0.0
+        b_its = reimburse_loan(i_benfs, i_prices, p_h, dims, rates)
+        row['value_delay_'+str(i)], v_t =  get_value(hhp, rp, sp, base_value, i_prices, i_benfs, p_h, f_h,
+                                         p_r, y_ij, med_ij, qs_ij, b_its,
+                                         nu_ij_c, rates, dims, prefs, values_ref, delay_yrs=i)
+    return row
+
+
+def func_joint(row,theta, ixmin = False, dispose_home = False, h = 0.0):
+    # household information
+    hh, rp, sp = get_actors(row)
+
+    # house price information
+    g, sig, base_value, phi, tau_b = get_house_info(row)
+
+    # health transition parameters
+    hc, nh = get_medcosts(row)
+
+    # health transition parameters
+    hp, surv_bias, hp_sp, sp_surv_bias = get_health_params(row)
+
+    # setup the problem, depending on whether preferences supplied or not
+    prefs = get_prefs(row,theta)
+    p_h, f_h, p_r, y_ij, med_ij, qs_ij, dims, rates = \
+        setup_problem(hh, rp, sp, g, sig, phi, tau_b,  base_value, hc, nh, hp, hp_sp,
+                    surv_bias,sp_surv_bias,miss_par=0.0,sp_miss_par=0.0,h = h)
     nu_ij_c = update_nus(hh['married'], dims.s_i, dims.s_j, dims, prefs, rates.eqscale)
 
     if ixmin:
@@ -433,8 +652,17 @@ def set_scenario(row,scn):
     return _prices, _benfs
 
 
-def compute_solve_chunks(df,theta, iann, iltc, irmr):
-    df = df.apply(func_solve,axis=1,args=(theta,iann,iltc,irmr,))
+def compute_solve_chunks(df,theta, iann, iltc, irmr, delay, h = 0.0):
+    df = df.apply(func_solve,axis=1,args=(theta,iann,iltc,irmr, delay, h))
+    return df
+
+def compute_delay_chunks(df,theta, delay_yrs, ixmin = False, dispose_home = False, product = 'ann'):
+    if product=='ann':
+        df = df.apply(func_delay_ann,axis=1,args=(theta,ixmin, dispose_home, delay_yrs))
+    if product=='ltc':
+        df = df.apply(func_delay_ltc,axis=1,args=(theta,ixmin, dispose_home, delay_yrs))
+    if product=='rmr':
+        df = df.apply(func_delay_rmr,axis=1,args=(theta,ixmin, dispose_home, delay_yrs))
     return df
 
 def compute_fair_chunks(df,theta):
@@ -446,17 +674,28 @@ def compute_sim_chunks(df,theta):
     return df
 
 
-def compute_joint_chunks(df,theta, ixmin = False, dispose_home = False):
-    df = df.apply(func_joint,axis=1,args=(theta,ixmin,dispose_home))
+def compute_joint_chunks(df,theta, ixmin = False, dispose_home = False, h =0.0):
+    df = df.apply(func_joint,axis=1,args=(theta,ixmin,dispose_home, h))
     return df
 
-
-def solve_df(data, iann = True, iltc = True, irmr = True, npartitions=12,theta=None):
+def solve_df(data, iann = True, iltc = True, irmr = True, npartitions=12,theta=None, delay = 0, h = 0):
     # load data
     df = data.loc[:,:]
-    df[['value_'+str(x) for x in range(13)]] = np.nan
+    df[['value_'+str(x) for x in range(1,13)]] = np.nan
     list_df = np.array_split(df, npartitions)
-    compress_compute_chunks = partial(compute_solve_chunks,theta=theta, iann = iann, iltc = iltc, irmr = irmr)
+    compress_compute_chunks = partial(compute_solve_chunks,theta=theta, iann = iann, iltc = iltc, irmr = irmr, delay = delay, h = h)
+    with mp.Pool(processes=npartitions) as pool:
+        res = pool.map(compress_compute_chunks, list_df)
+    df = pd.concat(res)
+    return df
+
+def solve_delay(data, ixmin = False, dispose_home = False, npartitions=12,theta=None, delay_yrs = [0,10], product='ann'):
+    # load data
+    df = data.loc[:,:]
+    df[['value_delay_'+str(x) for x in delay_yrs]] = np.nan
+    df['value_ref'] = np.nan
+    list_df = np.array_split(df, npartitions)
+    compress_compute_chunks = partial(compute_delay_chunks,theta=theta, delay_yrs = delay_yrs, ixmin = ixmin, dispose_home = dispose_home, product=product)
     with mp.Pool(processes=npartitions) as pool:
         res = pool.map(compress_compute_chunks, list_df)
     df = pd.concat(res)
@@ -478,6 +717,9 @@ def solve_sim(data, npartitions=12,theta=None):
     # load data
     df = data.loc[:,:]
     df['pexhaust85_sim'] = np.nan
+    df['wealth_sim'] = np.nan
+    df['own_sim'] = np.nan
+    df['heloc_sim'] = np.nan
     df['seed'] = np.random.shuffle(df.index.to_numpy())
     list_df = np.array_split(df, npartitions)
     compress_compute_chunks = partial(compute_sim_chunks,theta=theta)
@@ -486,14 +728,14 @@ def solve_sim(data, npartitions=12,theta=None):
     df = pd.concat(res)
     return df
 
-def solve_joint(data, npartitions=12,theta=None, ixmin = False, dispose_home = False):
+def solve_joint(data, npartitions=12,theta=None, ixmin = False, dispose_home = False, h = 0):
     # load data
     df = data.loc[:,:]
     df[['buy_'+ p + '_joint' for p in ['ann','ltci','rmr']]] = np.nan
     df[['buy_'+ p + '_indp' for p in ['ann','ltci','rmr']]] = np.nan
     df['seed'] = np.random.shuffle(df.index.to_numpy())
     list_df = np.array_split(df, npartitions)
-    compress_compute_chunks = partial(compute_joint_chunks,theta=theta, ixmin = ixmin, dispose_home = dispose_home)
+    compress_compute_chunks = partial(compute_joint_chunks,theta=theta, ixmin = ixmin, dispose_home = dispose_home, h = h)
     with mp.Pool(processes=npartitions) as pool:
         res = pool.map(compress_compute_chunks, list_df)
     df = pd.concat(res)
