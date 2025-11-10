@@ -60,6 +60,7 @@ def extract_pars(theta, isfree, ipars):
                 i +=1
         else :
                 pars[1] = ipars[1]
+                #pars[1] = pars[0]
         # rho
         if isfree[2]==1:
                 pars[2] = 1.0/(1.0+np.exp(-theta[i]))
